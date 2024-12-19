@@ -15,7 +15,7 @@ export default function Footer() {
                     <Link className='font-semibold text-xl text-black hover:text-blue-30 focus:text-blue-30' href="/#main">Про нас</Link>
                 </li>
             </ul>
-            <ButtonBlueLink title='Увійти' link='/login'/>
+            <ButtonBlueLink title='Увійти' link='/authorization?param=true'/>
         </footer>
     )
 }

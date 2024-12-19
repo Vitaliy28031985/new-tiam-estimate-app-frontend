@@ -11,10 +11,7 @@ export default function Authorization() {
   const [valueRadio, setValue] = useState('login');
     const [isShowLogin, setIsShowLogin] = useState(true)
     
-    const StartUrlParams = new URLSearchParams(window.location.search);
-    const startParamValue = StartUrlParams.get('param'); 
-
-    console.log(startParamValue)
+    
     
 
     function chanceParams() {
@@ -30,7 +27,7 @@ export default function Authorization() {
 
    useEffect(() => {
    chanceParams()    
-  }, [startParamValue]);
+  }, []);
      
          const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
        const {name, value,} = e.currentTarget;

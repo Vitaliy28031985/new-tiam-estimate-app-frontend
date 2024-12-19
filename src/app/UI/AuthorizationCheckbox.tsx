@@ -5,7 +5,7 @@ export default function AuthorizationCheckbox({ value, data, changeCheckbox }: I
     return (
         <div className="mb-6 text-center">
             <label
-            className=" text-3xl text-black font-normal ml-6 peer-checked:text-4xl peer-checked:font-bold"
+            className=" text-3xl text-black font-normal ml-6 peer-checked:text-4xl peer-checked:font-bold peer-checked:text-blue-30"
             >
                 <input
                     className="peer sr-only"
@@ -15,7 +15,7 @@ export default function AuthorizationCheckbox({ value, data, changeCheckbox }: I
                 Вхід
             </label>
             <label
-            className=" text-3xl text-black font-normal ml-6 peer-checked:text-4xl peer-checked:font-bold"
+            className=" text-3xl text-black font-normal ml-6 peer-checked:text-4xl peer-checked:font-bold peer-checked:text-blue-30"
             >
                 <input
                     className="peer sr-only"
