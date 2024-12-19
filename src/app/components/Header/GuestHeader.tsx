@@ -11,7 +11,7 @@ export default function GuestHeader() {
     <header className='w-[1249px] ml-auto mr-auto container py-6'>
         <div className='flex gap-[861px]'>
             <Link href="/"><Image src={logo} alt="logo" width={164} height={50} quality={100} /></Link>
-            <ButtonBlueLink title='Увійти' link='/login'/>
+            <ButtonBlueLink title='Увійти' link='/authorization?param=true'/>
         </div>
     </header>
      

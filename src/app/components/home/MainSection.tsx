@@ -5,6 +5,7 @@ import homeOne from '../../assets/home-1.png';
 import homeTwo from '../../assets/home-2.png';
 import homeTree from '../../assets/home-3.png'
 export default function MainSection() {
+    
   return (
     <section id='main' className='flex gap-24 items-center'>
         <div className=''>
@@ -16,7 +17,7 @@ export default function MainSection() {
             З нашим застосунком ви зможете швидко керувати витратами,
             налаштовувати шаблони та мати доступ до кошторисів – просто і безкоштовно!
           </p>
-        <ButtonBlueLink title='Зареєструватися' link='/register' />  
+        <ButtonBlueLink title='Зареєструватися' link='/authorization?param=false' />
         </div>
         <div className='w-full  p-0'>
         <div className='grid grid-cols-[2fr,2fr] gap-3'>
