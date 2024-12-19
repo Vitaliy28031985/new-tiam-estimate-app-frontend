@@ -5,6 +5,7 @@ import ButtonDelete from './UI/Buttons/ButtonDelete';
 import ButtonPrint from './UI/Buttons/ButtonPrint';
 import { Metadata } from 'next';
 import Reviews from './components/home/Reviews';
+import Questions from './components/home/Questions';
 import Footer from './components/Footer/Footer';
 import GuestHeader from './components/Header/GuestHeader';
 
@@ -19,7 +20,7 @@ export default function Home() {
   return (
     <>
       <GuestHeader/>
-    <div className="bg-gray-0 pt-20">
+    <div className="bg-gray-0 pt-20 pb-20">
       <div className='w-[1249px] ml-auto mr-auto container'>
         <MainSection />
         <OrderAs />
@@ -27,6 +28,7 @@ export default function Home() {
         <Reviews />
         <ButtonDelete />
         <ButtonPrint />
+        <Questions/>
       </div>
 
     

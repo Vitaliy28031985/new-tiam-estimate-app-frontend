@@ -24,7 +24,9 @@ export default {
       desktop: '1440px'
     },
       boxShadow: {
-      base: '0px 4px 4px -4px rgba(12, 12, 13, 0.05)'
+        base: '0px 4px 4px -4px rgba(12, 12, 13, 0.05)',
+        questionsSection: '0px 4px 28px 0px rgba(0, 0, 0, 0.25)',
+        questionSectionTwo: '0px 4px 9.8px 0px rgba(0, 0, 0, 0.25)'
     },
       colors: {
         black: 'rgb(9, 9, 11)',
