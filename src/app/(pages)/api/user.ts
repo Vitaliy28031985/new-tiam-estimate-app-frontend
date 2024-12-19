@@ -49,16 +49,16 @@ export async function refreshToken(): Promise<{ token: string; refreshToken: str
 }
 
 
-export async function isLoginUser(): Promise<Boolean | null> {
+export async function isLoginUser(): Promise<boolean | null> {
   const user = await getCurrentUser();
   if (user) { 
     return true;
   } else {
-     const tokens = await refreshToken();
-  if (tokens) {
-    localStorage.setItem('token', tokens.token);
-    return true;
-  } 
+    const tokens = await refreshToken();
+    if (tokens) {
+      localStorage.setItem('token', tokens.token);
+      return true;
+    } 
   }
   
   return false;
