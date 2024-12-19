@@ -1,8 +1,8 @@
 import MainSection from './components/home/MainSection';
 import OrderAs from './components/home/OrderAs';
 import Features from './components/home/Features';
-import ButtonDelete from './UI/Buttons/ButtonDelete';
-import ButtonPrint from './UI/Buttons/ButtonPrint';
+// import ButtonDelete from './UI/Buttons/ButtonDelete';
+// import ButtonPrint from './UI/Buttons/ButtonPrint';
 import { Metadata } from 'next';
 import Reviews from './components/home/Reviews';
 import Questions from './components/home/Questions';
@@ -26,8 +26,8 @@ export default function Home() {
         <OrderAs />
         <Features />
         <Reviews />
-        <ButtonDelete />
-        <ButtonPrint />
+        {/* <ButtonDelete />
+        <ButtonPrint /> */}
         <Questions/>
       </div>
 
