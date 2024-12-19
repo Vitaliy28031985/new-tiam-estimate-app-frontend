@@ -34,7 +34,11 @@ export default function Authorization() {
         switch (name) {            
             case 'authorization':
                 setValue(value);
-                value === 'login' ? setIsShowLogin(true) : setIsShowLogin(false);
+                 if (value === 'login') {
+                setIsShowLogin(true);
+                } else {
+                setIsShowLogin(false);
+                }
                 break;
             
            default:

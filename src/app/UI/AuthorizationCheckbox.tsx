@@ -1,6 +1,6 @@
 import { InputProps } from "../interfaces/inputInterface";
 
-export default function AuthorizationCheckbox({ value, data, changeCheckbox }: InputProps) {
+export default function AuthorizationCheckbox({ changeCheckbox }: InputProps) {
 
     return (
         <div className="mb-6 text-center">
