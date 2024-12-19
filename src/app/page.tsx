@@ -6,6 +6,7 @@ import ButtonPrint from './UI/Buttons/ButtonPrint';
 import { Metadata } from 'next';
 import Reviews from './components/home/Reviews';
 import Footer from './components/Footer/Footer';
+import GuestHeader from './components/Header/GuestHeader';
 
 
 export const metadata: Metadata = {
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
 export default function Home() {
 
   return (
-   <>
+    <>
+      <GuestHeader/>
     <div className="bg-gray-0 pt-20">
       <div className='w-[1249px] ml-auto mr-auto container'>
         <MainSection />

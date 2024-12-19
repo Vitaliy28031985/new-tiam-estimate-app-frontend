@@ -2,8 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import GuestHeader from "./components/Header/GuestHeader";
-import { isLoginUser } from "./(pages)/api/user";
+import { isLoginUser } from "./utils/user";
 import "./globals.css";
 
 // export const metadata: Metadata = {
@@ -41,7 +40,6 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <body>  
-        {!isPrivateRoute && <GuestHeader/>}
         {children}
       </body>
     </html>

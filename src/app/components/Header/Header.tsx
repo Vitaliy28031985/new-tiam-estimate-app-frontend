@@ -5,8 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../../assets/Logo-1.svg';
 import { User } from "@/app/interfaces/user";
-import { getCurrentUser } from "@/app/(pages)/api/user";
-import { logout } from "@/app/(pages)/api/auth";
+import { getCurrentUser } from "@/app/utils/user";
+import { logout } from "@/app/utils/auth";
 
 
 export default function Header() {

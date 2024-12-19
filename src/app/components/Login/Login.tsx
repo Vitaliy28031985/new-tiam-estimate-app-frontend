@@ -2,7 +2,7 @@
 import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import React, { useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
-import { loginApi } from '@/app/(pages)/api/auth'; 
+import { loginApi } from '@/app/utils/auth'; 
 
 import { useRouter } from 'next/navigation'
 

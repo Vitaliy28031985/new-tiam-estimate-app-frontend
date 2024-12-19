@@ -1,6 +1,6 @@
 import axios from 'axios';
 import BASE_URL from './base';
-import { RegisterDataInterface, LoginDataInterface } from '../../interfaces/registerData';
+import { RegisterDataInterface, LoginDataInterface } from '../interfaces/registerData';
 
 
 export async function registerApi(data: RegisterDataInterface) {
