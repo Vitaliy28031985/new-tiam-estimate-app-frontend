@@ -6,5 +6,7 @@ export interface Price {
     updateAllow: boolean; 
     owner: string;       
     createdAt: string;    
-    updatedAt: string;   
+    updatedAt: string;
+    isShow?: boolean;
+    isDelete?: boolean;
 }

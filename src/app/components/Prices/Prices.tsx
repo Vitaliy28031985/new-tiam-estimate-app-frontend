@@ -1,23 +1,72 @@
 'use client'
-import { PlusIcon, MagnifyingGlassIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { getAllPrices } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
+import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import { useEffect, useState } from 'react';
 export default function PricesComponent() {
     const [data, setData] = useState<Price[] | null>(null);
+    const [isRender, setIsRender] = useState(false);
    
     async function getPrices() {
         const prices = await getAllPrices();
         if (prices) {
-            await setData(prices)
+        const enhancedData = prices.map(item => ({
+        ...item,
+        isShow: false,
+        isDelete: false,
+        }));
+            await setData(enhancedData)
         }
     }
+    
+    const toggleRender = () => {
+    setIsRender(prev => !prev);
+    }; 
 
     useEffect( () => {
-             getPrices();
-             }, [])
+        getPrices();
+             }, [isRender])
 
+     const addIsToggle = (id: string, currentIsShow: boolean, name: 'update' | 'delete'): void => {
+         setData(prevData => {
+            if (prevData === null) return []; 
+            const newData = prevData.map(item => {
+                if (item.id === id) {
+                    if (name === 'update') {
+                        return { ...item, isShow: currentIsShow };
+                    }
+                    if (name === 'delete') {
+                        return { ...item, isDelete: currentIsShow };
+                    }
+                }
+                return item;
+            });
+            return newData;
+        });
+    };
+
+        const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, id } = e.currentTarget;
+            setData(prevData => {
+             if (prevData === null) return []; 
+            const newData = prevData.map(price => {
+                if (price.id === id) {
+                    switch (name) {
+                        case name:
+                            return  {...price, [name]: value};
+                        default:
+                          return price;
+                      }
+                }
+                return price; 
+            });
+        
+            return newData; 
+        });
+    }
+    
 
     return (
         <section>
@@ -50,30 +99,67 @@ export default function PricesComponent() {
                         <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
 
-                    {data && data.map(({ id, title, price }) => (
+                    {data && data.map(({ id, title, price, isShow, isDelete  }) => (
                      <div className='flex items-center gap-4 mb-3' key={id}>
                        
                         <div className='w-96 relative'>
-                            <button className='absolute top-3 left-4' type='button'>
-                              <PencilIcon className='size-6 text-gray-30'/>   
+                            <button
+                                    onClick={() => {
+                                        addIsToggle(id, !isShow, 'update')
+                                        if (isShow) {
+                                            toggleRender();  
+                                        }
+                                    }
+                                    }
+                                className='absolute top-3 left-4' type='button'>
+                                {isShow ? (<CheckIcon className='size-6 text-gray-30'/>) : (<PencilIcon className='size-6 text-gray-30'/>)}
+                                 
                             </button>
-                           
-                            <div className='border border-blue-20 pl-12 pr-4 py-3 rounded-full'>
+                                {isShow ? (
+                                    <input className='w-96 bg-blue-5 pl-12 pr-4 py-3 rounded-full font-normal
+                                 text-base text-gray-35 shadow-pricesTablet' id={id} name='title' onChange={onChange} type='text' value={title} />
+                                ): (
+                              <div className='border border-blue-20 pl-12 pr-4 py-3 rounded-full'>
                                     <p className='font-normal text-base text-gray-35 text-start'>{title}</p>
-                            </div>
+                            </div>       
+                           )}
+                           
 
                         </div>
 
-                        <div className='w-52'>
-
-                            <div className='border border-blue-20 px-5 py-3 rounded-full'>
+                            <div className='w-52'>
+                                
+                                {isShow ? (
+                                <input className='w-48 bg-blue-5 pl-20 pr-4 py-3 rounded-full font-normal
+                                 text-base text-gray-35 shadow-pricesTablet' id={id} name='price' onChange={onChange} type='number' value={price} />
+                                ): (
+                                 <div className='border border-blue-20 px-5 py-3 rounded-full'>
                                     <p className='font-normal text-base text-gray-35 text-center'>{price}</p>
-                            </div>
+                                 </div>   
+                                )}
+
+                            
                             
                         </div>
-                        <ButtonDelete />
+                            <ButtonDelete click={() => {
+                                addIsToggle(id, !isDelete, 'delete')
+                                if(isDelete) {
+                                    toggleRender();
+                                }
+                            
+                            }}
+                                
+                                isActive={isShow} />
                     </div>   
                     ))}
+
+                    <div className='flex justify-end gap-4 items-center'>
+                        <ButtonPrint />
+                          <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
+                            text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10`} >
+                             Відправити
+                            </button>
+                    </div>
                     
                 </div>
             </div>
