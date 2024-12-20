@@ -1,6 +1,24 @@
 'use client'
-import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { getAllPrices } from '@/app/utils/prices';
+import { Price } from '@/app/interfaces/PriceInterface';
+import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
+import { useEffect, useState } from 'react';
 export default function PricesComponent() {
+    const [data, setData] = useState<Price[] | null>(null);
+   
+    async function getPrices() {
+        const prices = await getAllPrices();
+        if (prices) {
+            await setData(prices)
+        }
+    }
+
+    useEffect( () => {
+             getPrices();
+             }, [])
+
+
     return (
         <section>
           
@@ -26,22 +44,37 @@ export default function PricesComponent() {
 
             <div className=''>
                 <div className='w-[661px] '>
+
                     <div className='flex items-center gap-4 mb-2'>
                         <div className='w-96'><p className='font-normal text-base text-black text-start'>Найменування роботи</p></div>
                         <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
-                    <div className='flex items-center gap-4 mb-3'>
-                        <div className='w-96'>
+
+                    {data && data.map(({ id, title, price }) => (
+                     <div className='flex items-center gap-4 mb-3' key={id}>
+                       
+                        <div className='w-96 relative'>
+                            <button className='absolute top-3 left-4' type='button'>
+                              <PencilIcon className='size-6 text-gray-30'/>   
+                            </button>
+                           
                             <div className='border border-blue-20 pl-12 pr-4 py-3 rounded-full'>
-                                <p className='font-normal text-base text-gray-35 text-start'>Штукатурка стін</p>
+                                    <p className='font-normal text-base text-gray-35 text-start'>{title}</p>
                             </div>
+
                         </div>
+
                         <div className='w-52'>
-                            <div>
-                                <p className='font-normal text-base text-gray-35 text-center'>300</p>
+
+                            <div className='border border-blue-20 px-5 py-3 rounded-full'>
+                                    <p className='font-normal text-base text-gray-35 text-center'>{price}</p>
                             </div>
+                            
                         </div>
-                    </div>
+                        <ButtonDelete />
+                    </div>   
+                    ))}
+                    
                 </div>
             </div>
 
