@@ -1,6 +1,6 @@
 'use client'
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
-import { getAllPrices } from '@/app/utils/prices';
+import { getAllPrices, updatePrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
@@ -20,13 +20,14 @@ export default function PricesComponent() {
             await setData(enhancedData)
         }
     }
-    
+
     const toggleRender = () => {
     setIsRender(prev => !prev);
     }; 
 
     useEffect( () => {
         getPrices();
+        console.log("update")
              }, [isRender])
 
      const addIsToggle = (id: string, currentIsShow: boolean, name: 'update' | 'delete'): void => {
@@ -104,10 +105,11 @@ export default function PricesComponent() {
                        
                         <div className='w-96 relative'>
                             <button
-                                    onClick={() => {
+                                    onClick={async () => {
                                         addIsToggle(id, !isShow, 'update')
                                         if (isShow) {
-                                            toggleRender();  
+                                            await updatePrice({id, title, price})
+                                            await toggleRender();  
                                         }
                                     }
                                     }

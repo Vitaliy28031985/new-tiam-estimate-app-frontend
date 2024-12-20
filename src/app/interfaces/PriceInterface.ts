@@ -10,3 +10,9 @@ export interface Price {
     isShow?: boolean;
     isDelete?: boolean;
 }
+
+export interface UpdatePrice {
+    id: string;  
+    title: string;       
+    price: number;  
+}
