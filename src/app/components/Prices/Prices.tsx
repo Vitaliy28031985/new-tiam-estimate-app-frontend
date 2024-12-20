@@ -1,13 +1,16 @@
 'use client'
+import { useEffect, useState } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { getAllPrices, updatePrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
-import { useEffect, useState } from 'react';
+import AddPriceModal from '../AddPriceModal/AddPriceModal';
+
 export default function PricesComponent() {
     const [data, setData] = useState<Price[] | null>(null);
     const [isRender, setIsRender] = useState(false);
+    const [isShowModal, setIsShowModal] = useState(false);
    
     async function getPrices() {
         const prices = await getAllPrices();
@@ -23,6 +26,10 @@ export default function PricesComponent() {
 
     const toggleRender = () => {
     setIsRender(prev => !prev);
+    }; 
+
+     const isToggle = () => {
+    setIsShowModal(prev => !prev);
     }; 
 
     useEffect( () => {
@@ -74,7 +81,7 @@ export default function PricesComponent() {
           
              <div className='flex items-center justify-center gap-1 mb-2'>
                 <h3 className="font-bold font-alternates text-5xl">Прайс робіт</h3>
-                <button className=''>
+                <button className='' onClick={isToggle}>
                  <PlusIcon className='size-10 text-black'/>   
                 </button>
             </div>
@@ -165,7 +172,8 @@ export default function PricesComponent() {
                     
                 </div>
             </div>
-
+            {isShowModal && (<AddPriceModal toggle={isToggle}/>)}
+         
         </section>
     )
 }
