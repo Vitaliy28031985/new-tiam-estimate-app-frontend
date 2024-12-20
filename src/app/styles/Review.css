@@ -3,7 +3,8 @@
 }
 
 .swiper-slide {
-    height: 193px;
+    width: 395px;
+    height: 220px;
     padding: 25px 30px;
     background-color: #DFDFDF;
     margin-bottom: 40px;
@@ -28,6 +29,15 @@
     display: flex;
     justify-content: center;
     gap: 4px;
+    margin: 0;
+}
+
+.swiper-pagination-custom {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin: 0;
 }
 
 .pagination button {
