@@ -1,14 +1,15 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import "../../styles/Review.css";
 import RatingStars from "@/app/UI/RatingStars/RaitingStars";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import formatDate from '../../utils/formatDate';
-import Image from "next/image";
-import WorkerFoto from '../../assets/worker.png';
+import AddReviewModal from "../Modal/AddReviewModal";
+
 
 
 interface Reviews {
@@ -21,33 +22,24 @@ interface Reviews {
 }
 
 export default function Reviews() {
-    const [currentPage, setCurrentPage] = useState<number>(0);
-    const [reviewPerPage, setReviewPerPage] = useState<number>(3);
     const [reviews, setReviews] = useState<Reviews[]>([]);
-    const totalPages = Math.ceil(reviews.length / reviewPerPage);
+    const [slidesPerView, setSlidesPerView] = useState<number>(3);
+    const [isOpenAddReviewModal, setIsOpenAddReviewModal] = useState(false);
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+    const handleOpenAddReviewModal = () => {
+        setIsOpenAddReviewModal(true);
     };
 
-    const handleNextPage = () => {
-        setCurrentPage((prevPage) => prevPage + 1);
+    const handleCloseAddReviewModal = () => {
+        setIsOpenAddReviewModal(false);
     };
 
-    const handlePrevPage = () => {
-        setCurrentPage((prevPage) => prevPage - 1);
-    }
-
-    const updateRevewsPerPage = () => {
+    const updateSlidesPerView = () => {
         const width = window.innerWidth;
-        if (width < 768) {
-            setReviewPerPage(1);
-        } else if (width < 1024) {
-            setReviewPerPage(2);
-        } else {
-            setReviewPerPage(3);
-        }
-    }
+        if (width < 768) setSlidesPerView(1);
+        else if (width < 1024) setSlidesPerView(2);
+        else setSlidesPerView(3);
+    };
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -61,81 +53,82 @@ export default function Reviews() {
             } catch (error) {
                 console.error("Error fetching reviews:", error);
             }
-        }
+        };
 
         fetchReviews();
-        updateRevewsPerPage();
-        window.addEventListener('resize', updateRevewsPerPage);
-        return () => {
-            window.removeEventListener('resize', updateRevewsPerPage);
-        };
+        updateSlidesPerView();
+        window.addEventListener('resize', updateSlidesPerView);
+        return () => window.removeEventListener('resize', updateSlidesPerView);
     }, []);
 
-    const currentReviews = reviews.slice(currentPage * reviewPerPage, (currentPage + 1) * reviewPerPage);
-
     return (
-        <section id="reviews">
-            <h2 className='text-5xl font-alternates font-bold text-black mb-[60px] w-[427px]'>Що говорять про нас люди</h2>
+        <section>
+            <h2 className="text-5xl font-alternates font-bold text-black mb-[60px] w-[427px]">
+                Що говорять про нас люди
+            </h2>
 
-            <Swiper
-                allowTouchMove={true}
-                spaceBetween={24}
-                slidesPerView={reviewPerPage}
-                onSlideChange={(swiper) => handlePageChange(swiper.activeIndex)}
-            >
-                {currentReviews.map((review) => (
-                    <SwiperSlide key={review._id} className="bg-blue-5 rounded-3xl">
-                        <div className='flex  flex-col'>
-                            <div className='flex justify-between mb-3'>
-                                <div className="flex gap-2 items-center justify-center">
-                                    <Image
-                                        src={review.avatar ? review.avatar : WorkerFoto}
-                                        alt={review.name}
-                                        width={32}
-                                        height={32}
-                                        className='rounded-full'
-                                    />
-                                    <p className='text-2xl text-black font-semibold'>{review.name}</p>
+            <div className="relative">
+                <Swiper
+                    spaceBetween={24}
+                    slidesPerView={slidesPerView}
+                    navigation={{ nextEl: '.button-next', prevEl: '.button-prev' }}
+                    pagination={{
+                        el: '.pagination',
+                        type: 'custom',
+                        renderCustom: (swiper, current, total) => {
+                            let paginationNumbers = "";
+                            for (let i = 1; i <= total; i++) {
+                                paginationNumbers += `
+                                <button class="${i === current ? 'active' : ''}" style="display: flex; justify-content: center;align-items: center; margin: 0px; font-size: 14px; width: 32px; height: 32px; font-weight:700; color: ${i === current ? '#0C4A6E' : '#A3A3A3'};">
+                                    ${i}
+                                </button>
+                            `;
+                            }
+                            return paginationNumbers;
+                        },
+                        clickable: true,
+                    }}
+                    modules={[Pagination, Navigation]}
+                >
+                    {reviews.map((review) => (
+                        <SwiperSlide key={review._id} className="swiper-slide  rounded-3xl">
+                            <div className="flex flex-col">
+                                <div className="flex justify-between mb-1">
+                                    <p className="text-2xl text-black font-semibold">{review.name}</p>
+                                    <RatingStars rating={review.rating} />
                                 </div>
-                                <RatingStars rating={review.rating} />
+                                <p className="text-xs text-gray-600 mb-3">
+                                    {formatDate(review.createdAt)}
+                                </p>
+                                <p className="review-comment text-xl text-black">{review.comment}</p>
+
                             </div>
-                            <p className="text-xs text-[#A3A3A3]  mb-3" >{formatDate(review.createdAt)}</p>
-                            <p className='review-comment text-xl text-black '>{review.comment}</p>
-                        </div>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-            <div className="flex justify-center items-center w-full">
-                <button
-                    className={`flex justify-center items-center w-8 h-8 ${currentPage === 0 ? 'opacity-50' : ''}`}
-                    disabled={currentPage === 0}
-                    onClick={handlePrevPage}
-                >
-                    <FaChevronLeft />
-                </button>
-                <div className='pagination'>
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                        <button
-                            key={index}
-                            className={index === currentPage ? 'active' : ''}
-                            onClick={() => handlePageChange(index)}
-                        >
-                            {index + 1}
-                        </button>
+                        </SwiperSlide>
                     ))}
+                </Swiper>
+
+                <div className="relative flex justify-center items-center mt-5 gap-0">
+                    <button className="button-prev w-8 h-8 flex items-center justify-center">
+                        <FaChevronLeft />
+                    </button>
+                    <div className="pagination"></div>
+                    <button className="button-next w-8 h-8 flex items-center justify-center">
+                        <FaChevronRight />
+                    </button>
                 </div>
+            </div>
+            <div className="flex justify-center mt-8 mb-[38px]">
                 <button
-                    className={`flex justify-center items-center w-8 h-8 ${currentPage === totalPages - 1 ? 'opacity-50' : ''}`}
-                    disabled={currentPage === totalPages - 1}
-                    onClick={handleNextPage}
+                    className="px-[148px] py-4 border border-[#0C4A6E] rounded-3xl text-[#0C4A6E] text-xl font-semibold"
+                    onClick={handleOpenAddReviewModal}
                 >
-                    <FaChevronRight />
+                    Залишити відгук
                 </button>
             </div>
-
-
-
-
+            <AddReviewModal
+                isOpen={isOpenAddReviewModal}
+                onClose={handleCloseAddReviewModal}
+            />
         </section>
-    )
+    );
 }
