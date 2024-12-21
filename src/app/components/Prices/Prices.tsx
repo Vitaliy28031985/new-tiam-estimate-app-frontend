@@ -9,8 +9,8 @@ import AddPriceModal from '../AddPriceModal/AddPriceModal';
 
 export default function PricesComponent() {
     const [data, setData] = useState<Price[] | null>(null);
-    const [isRender, setIsRender] = useState(false);
-    const [isShowModal, setIsShowModal] = useState(false);
+    const [isRender, setIsRender] = useState<boolean>(false);
+    const [isShowModal, setIsShowModal] = useState<boolean>(false);
    
     async function getPrices() {
         const prices = await getAllPrices();
@@ -28,7 +28,7 @@ export default function PricesComponent() {
     setIsRender(prev => !prev);
     }; 
 
-     const isToggle = () => {
+     const isToggle = (): void | undefined => {
     setIsShowModal(prev => !prev);
     }; 
 
@@ -75,6 +75,12 @@ export default function PricesComponent() {
         });
     }
     
+    async function handleSubmit(price: number, title: string): Promise<void> {
+        
+        console.log(title, price);
+
+        
+    }
 
     return (
         <section>
@@ -172,7 +178,7 @@ export default function PricesComponent() {
                     
                 </div>
             </div>
-            {isShowModal && (<AddPriceModal toggle={isToggle}/>)}
+            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} submit={handleSubmit}/>)}
          
         </section>
     )
