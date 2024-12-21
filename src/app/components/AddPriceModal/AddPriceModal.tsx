@@ -192,7 +192,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow }) => {
 // відправлення форми
 
    async function sendData(e: FormEvent<HTMLFormElement>): Promise<void> {
-
+        e.preventDefault()
        if (title && price) {
            const newData = { title, price };
            await addPrice(newData);
