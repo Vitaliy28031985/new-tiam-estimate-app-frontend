@@ -2,7 +2,7 @@
 import { useActionState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 // import { getMiddlePrices, addPrice } from '@/app/utils/prices';
-import { Price } from '@/app/interfaces/PriceInterface';
+// import { Price } from '@/app/interfaces/PriceInterface';
 
 
 interface AddPriceModalProps {
@@ -13,7 +13,7 @@ interface AddPriceModalProps {
 
 type State = {
   data: { title: string; price: string } | null;
-  error: any | null;
+  error: string | null;
 };
 
 const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
