@@ -2,7 +2,7 @@
 import { useActionState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 // import { getMiddlePrices, addPrice } from '@/app/utils/prices';
-// import { Price } from '@/app/interfaces/PriceInterface';
+import { Price } from '@/app/interfaces/PriceInterface';
 
 
 interface AddPriceModalProps {
@@ -12,13 +12,13 @@ interface AddPriceModalProps {
 }
 
 type State = {
-  data: any | null;
+  data: { title: string; price: string } | null;
   error: any | null;
 };
 
-const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle, isShow }) => {
+const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
     //   const [data, setData] = useState<Price[] | null>(null);
-    // @ts-ignore
+
   const [state, submitAction] = useActionState<State>(handlerSubmit, {
   data: null,
   error: null,
@@ -40,7 +40,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle, isShow })
        const title = state?.data?.title;
        const price = state?.data?.price
        if (title && price) {
-           // @ts-ignore
+           
            await submit(title, price);  
            
   }     
@@ -77,7 +77,10 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle, isShow })
       
         try {
        const newState: State = {
-        data: { title, price },
+          data: {
+            title: title ? title : '', 
+            price: price ? price : '',  
+        },
            error: null,
            
             };
@@ -85,7 +88,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle, isShow })
    
             
        return newState;
-        } catch (e) {
+        } catch {
             
            return {...prevState}
         }
