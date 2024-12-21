@@ -28,8 +28,8 @@ export default {
         questionsSection: '0px 4px 28px 0px rgba(0, 0, 0, 0.25)',
         questionSectionTwo: '0px 4px 9.8px 0px rgba(0, 0, 0, 0.25)',
         pricesPage: '0px 4px 16px 0px rgba(0, 0, 0, 0.25',
-        pricesTablet: '0px 4px 4px 0px rgb(229, 231, 235)'
-        
+        pricesTablet: '0px 4px 4px 0px rgb(229, 231, 235)',
+        middlePrices: '0px 2px 4px 0px 0 rgba(0, 0, 0, 0.25)'
     },
       colors: {
         black: 'rgb(9, 9, 11)',

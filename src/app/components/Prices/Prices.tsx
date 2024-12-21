@@ -76,7 +76,7 @@ export default function PricesComponent() {
     }
     
     async function handleSubmit(title: string, price: string ): Promise<void> {
-        const newPrice = { title, price }      
+        const newPrice = { title, price } 
         await addPrice(newPrice);
         toggleRender();    
     }
