@@ -124,7 +124,7 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
                         </div>
                         <p className="text-xl font-semibold mb-8">Залишати відгуки можуть лише авторизовані користувачі.</p>
                         <div className="flex justify-center">
-                            <ButtonBlue title="Авторизуватися" click={() => router.push('login')} />
+                            <ButtonBlue title="Авторизуватися" click={() => router.push('/authorization?param=true')} />
 
                         </div>
                     </div>
