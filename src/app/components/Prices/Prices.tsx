@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
-import { getAllPrices, updatePrice, addPrice } from '@/app/utils/prices';
+import { getAllPrices, updatePrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
@@ -75,12 +75,7 @@ export default function PricesComponent() {
         });
     }
     
-    async function handleSubmit(title: string, price: string ): Promise<void> {
-        const newPrice = { title, price } 
-        await addPrice(newPrice);
-        toggleRender();    
-    }
-
+  
     return (
         <section>
           
@@ -177,7 +172,7 @@ export default function PricesComponent() {
                     
                 </div>
             </div>
-            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} submit={handleSubmit}/>)}
+            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender}/>)}
          
         </section>
     )

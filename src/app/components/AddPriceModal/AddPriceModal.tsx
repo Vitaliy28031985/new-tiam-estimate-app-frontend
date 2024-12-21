@@ -127,28 +127,23 @@
 
 
 'use client'
-import { useActionState, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {  MicrophoneIcon } from '@heroicons/react/24/solid';
 import { Price } from '@/app/interfaces/PriceInterface';
-import { getMiddlePrices } from '@/app/utils/prices';
+import { getMiddlePrices, addPrice } from '@/app/utils/prices';
 
 
 interface AddPriceModalProps {
-    submit?: (title: string, price: string) => void;
     toggle?: () => void;
     isShow?: () => void;
 }
 
-type State = {
-  data: { title: string; price: string } | null;
-  error: string | null;
-};
 
-const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
+const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow }) => {
     const [data, setData] = useState<Price[] | null>(null);
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
+   const [title, setTitle] = useState<string>('');
+  const [price, setPrice] = useState<string>('');
     const [middle, setMiddle] = useState(false);
 
     
@@ -195,18 +190,17 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
 
 
 // відправлення форми
-// @ts-expect-error
-  const [state, submitAction] = useActionState<State>(handlerSubmit, {
-  data: null,
-  error: null,
-  });
-   async function sendData() {
-       const title = state?.data?.title;
-       const price = state?.data?.price
+
+   async function sendData(e: FormEvent<HTMLFormElement>): Promise<void> {
+
        if (title && price) {
-           // @ts-expect-error
-           await submit(title, price);  
-           
+           const newData = { title, price };
+           await addPrice(newData);
+          if (isShow) {
+          isShow();
+        }
+           console.log(newData);
+                  
   }     
        
   if (toggle) {
@@ -217,36 +211,10 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
 }
     
     useEffect(() => {
-        sendData();
         getPrices();
-    }, [state])
+    }, [])
  
-    async function handlerSubmit(prevState: State, formData: FormData): Promise<State> { 
-        const title = formData.get('title') as string | null;
-        const price = formData.get('price') as string | null;
-      
-        try {
-       const newState: State = {
-          data: {
-            title: title ? title : '', 
-            price: price ? price : '',  
-        },
-           error: null,
-           
-            };
-
-   
-            
-       return newState;
-        } catch {
-            
-           return {...prevState}
-        }
-
-    }
     
-
-   
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -254,7 +222,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
                 <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black'/></button>
                 <h3 className="font-semibold text-2xl text-black text-center mb-6">Форма для створення роботи</h3>
 
-                <form className='' action={submitAction} >
+                <form className='' onSubmit={sendData} >
                     <div className='relative '>
                         <button className='absolute right-2 top-11 text-gray-20' type='button'><MicrophoneIcon className='size-6 '/></button>
                     <label htmlFor='title' className='inline-block text-sm text-black font-normal mb-3'> Найменування роботи</label>
