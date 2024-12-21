@@ -129,6 +129,7 @@
 'use client'
 import { useActionState, useEffect, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import {  MicrophoneIcon } from '@heroicons/react/24/solid';
 import { Price } from '@/app/interfaces/PriceInterface';
 import { getMiddlePrices } from '@/app/utils/prices';
 
@@ -244,7 +245,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
 
     }
     
-    
+
    
 
     return (
@@ -255,7 +256,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ submit, toggle }) => {
 
                 <form className='' action={submitAction} >
                     <div className='relative '>
-                        
+                        <button className='absolute right-2 top-11 text-gray-20' type='button'><MicrophoneIcon className='size-6 '/></button>
                     <label htmlFor='title' className='inline-block text-sm text-black font-normal mb-3'> Найменування роботи</label>
                     <input className='w-[480px] h-[48px] block px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center  mb-6 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none' type="text" name='title' id='title' value={title} onChange={handleChange} />
                         {showMiddleList && (
