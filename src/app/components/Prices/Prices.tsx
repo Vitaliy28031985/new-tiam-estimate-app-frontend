@@ -6,11 +6,14 @@ import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import AddPriceModal from '../AddPriceModal/AddPriceModal';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 export default function PricesComponent() {
     const [data, setData] = useState<Price[] | null>(null);
+    const [currentData, setCurrentData] = useState<{id: string, title: string} | null>(null);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
+    const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
    
     async function getPrices() {
         const prices = await getAllPrices();
@@ -23,6 +26,10 @@ export default function PricesComponent() {
             await setData(enhancedData)
         }
     }
+
+    const toggleDelete = () => {
+    setIsShowDeleteModal(prev => !prev);
+    };
 
     const toggleRender = () => {
     setIsRender(prev => !prev);
@@ -152,13 +159,17 @@ export default function PricesComponent() {
                         </div>
                             <ButtonDelete click={() => {
                                 addIsToggle(id, !isDelete, 'delete')
-                                if(isDelete) {
-                                    toggleRender();
+                                toggleDelete();
+                                    
+                                if (isDelete) {
+                                 console.log(id, title)
+                                  setCurrentData({id, title})
+                                   toggleRender(); 
                                 }
                             
                             }}
                                 
-                                isActive={isShow} />
+                            />
                     </div>   
                     ))}
 
@@ -172,7 +183,10 @@ export default function PricesComponent() {
                     
                 </div>
             </div>
-            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender}/>)}
+            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
+            
+            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} />)}
+            
          
         </section>
     )
