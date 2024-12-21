@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
-import { getAllPrices, updatePrice } from '@/app/utils/prices';
+import { getAllPrices, updatePrice, addPrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
@@ -75,11 +75,10 @@ export default function PricesComponent() {
         });
     }
     
-    async function handleSubmit(price: number, title: string): Promise<void> {
-        
-        console.log(title, price);
-
-        
+    async function handleSubmit(title: string, price: string ): Promise<void> {
+        const newPrice = { title, price }      
+        await addPrice(newPrice);
+        toggleRender();    
     }
 
     return (
