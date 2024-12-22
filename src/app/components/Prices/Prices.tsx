@@ -6,12 +6,26 @@ import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import AddPriceModal from '../AddPriceModal/AddPriceModal';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 export default function PricesComponent() {
     const [data, setData] = useState<Price[] | null>(null);
+    const [currentData, setCurrentData] = useState<{id: string, title: string} | null>(null);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
+    const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+    const [filter, setFilter] = useState('')
    
+
+    const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
+    
+     const normalizeFilter = filter.toLowerCase();
+
+    const filteredPrices =  data?.filter(item =>
+        item.title.toLowerCase().includes(normalizeFilter)) ?? [];
+    
+
+
     async function getPrices() {
         const prices = await getAllPrices();
         if (prices) {
@@ -24,7 +38,11 @@ export default function PricesComponent() {
         }
     }
 
-    const toggleRender = () => {
+    const toggleDelete = () => {
+    setIsShowDeleteModal(prev => !prev);
+    };
+
+    const toggleRender = (): void | undefined => {
     setIsRender(prev => !prev);
     }; 
 
@@ -91,7 +109,7 @@ export default function PricesComponent() {
             <div className=' mb-12'>
             <div className='relative w-max'>
                 <MagnifyingGlassIcon className='size-6 absolute left-2 top-3 text-gray-20'/>
-                <input
+                <input onChange={filterChange} value={filter} 
                     className='w-[589px] h-[49px] px-10  rounded-3xl border border-gray-20 
                      text-gray-20 text-base font-normal focus:border-blue-20 focus:outline-none'
                     placeholder='Пошук'
@@ -107,7 +125,7 @@ export default function PricesComponent() {
                         <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
 
-                    {data && data.map(({ id, title, price, isShow, isDelete  }) => (
+                    {data && filteredPrices?.map(({ id, title, price, isShow, isDelete  }) => (
                      <div className='flex items-center gap-4 mb-3' key={id}>
                        
                         <div className='w-96 relative'>
@@ -145,20 +163,16 @@ export default function PricesComponent() {
                                  <div className='border border-blue-20 px-5 py-3 rounded-full'>
                                     <p className='font-normal text-base text-gray-35 text-center'>{price}</p>
                                  </div>   
-                                )}
-
-                            
+                                )}  
                             
                         </div>
-                            <ButtonDelete click={() => {
-                                addIsToggle(id, !isDelete, 'delete')
-                                if(isDelete) {
-                                    toggleRender();
-                                }
-                            
-                            }}
-                                
-                                isActive={isShow} />
+                          <ButtonDelete
+                            click={ () => {
+                            addIsToggle(id, !isDelete, 'delete');
+                            setCurrentData({ id, title });
+                            toggleDelete();        
+                        }} isActive={isShow}/>
+
                     </div>   
                     ))}
 
@@ -172,7 +186,10 @@ export default function PricesComponent() {
                     
                 </div>
             </div>
-            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender}/>)}
+            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
+            
+            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
+            
          
         </section>
     )

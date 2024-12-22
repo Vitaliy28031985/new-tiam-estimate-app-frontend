@@ -141,10 +141,10 @@ interface AddPriceModalProps {
 
 
 const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow }) => {
-    const [data, setData] = useState<Price[] | null>(null);
-   const [title, setTitle] = useState<string>('');
-  const [price, setPrice] = useState<string>('');
-    const [middle, setMiddle] = useState(false);
+const [data, setData] = useState<Price[] | null>(null);
+const [title, setTitle] = useState<string>('');
+const [price, setPrice] = useState<string>('');
+const [middle, setMiddle] = useState(false);
 
     
      async function getPrices() {
@@ -196,7 +196,7 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow }) => {
        if (title && price) {
            const newData = { title, price };
            await addPrice(newData);
-          if (isShow) {
+        if (isShow) {
           isShow();
         }
            console.log(newData);
@@ -244,8 +244,6 @@ const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow }) => {
                     <input className='w-[480px] h-[48px] block px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center mb-6 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none' type="number" name='price' id='price' value={price} onChange={handleChange} />  
                     </div>
                    
-                    
-
                     <button className='w-[480px] h-[48px] px-20 py-4 font-bold text-sm
                      text-white rounded-full bg-blue-30 hover:bg-blue-20 focus:bg-blue-20
                       disabled:text-gray-10' type='submit'>Зберегти зміни</button>

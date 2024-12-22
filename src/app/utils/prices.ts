@@ -105,3 +105,24 @@ export async function updatePrice(data: UpdatePrice) {
   } 
 }
 
+export async function deletePrice(id: string | null) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'delete',
+      url: `${BASE_URL}api/prices/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+   return response;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
+
