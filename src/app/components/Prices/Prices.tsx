@@ -14,7 +14,18 @@ export default function PricesComponent() {
     const [isRender, setIsRender] = useState<boolean>(false);
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+    const [filter, setFilter] = useState('')
    
+
+    const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
+    
+     const normalizeFilter = filter.toLowerCase();
+
+    const filteredPrices =  data?.filter(item =>
+        item.title.toLowerCase().includes(normalizeFilter)) ?? [];
+    
+
+
     async function getPrices() {
         const prices = await getAllPrices();
         if (prices) {
@@ -98,7 +109,7 @@ export default function PricesComponent() {
             <div className=' mb-12'>
             <div className='relative w-max'>
                 <MagnifyingGlassIcon className='size-6 absolute left-2 top-3 text-gray-20'/>
-                <input
+                <input onChange={filterChange} value={filter} 
                     className='w-[589px] h-[49px] px-10  rounded-3xl border border-gray-20 
                      text-gray-20 text-base font-normal focus:border-blue-20 focus:outline-none'
                     placeholder='Пошук'
@@ -114,7 +125,7 @@ export default function PricesComponent() {
                         <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
 
-                    {data && data?.map(({ id, title, price, isShow, isDelete  }) => (
+                    {data && filteredPrices?.map(({ id, title, price, isShow, isDelete  }) => (
                      <div className='flex items-center gap-4 mb-3' key={id}>
                        
                         <div className='w-96 relative'>
