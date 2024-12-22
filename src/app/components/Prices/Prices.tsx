@@ -114,7 +114,7 @@ export default function PricesComponent() {
                         <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
 
-                    {data && data.map(({ id, title, price, isShow, isDelete  }) => (
+                    {data && data?.map(({ id, title, price, isShow, isDelete  }) => (
                      <div className='flex items-center gap-4 mb-3' key={id}>
                        
                         <div className='w-96 relative'>
@@ -152,24 +152,16 @@ export default function PricesComponent() {
                                  <div className='border border-blue-20 px-5 py-3 rounded-full'>
                                     <p className='font-normal text-base text-gray-35 text-center'>{price}</p>
                                  </div>   
-                                )}
-
-                            
+                                )}  
                             
                         </div>
-                            <ButtonDelete click={() => {
-                                addIsToggle(id, !isDelete, 'delete')
-                                toggleDelete();
-                                    
-                                if (isDelete) {
-                                 console.log(id, title)
-                                  setCurrentData({id, title})
-                                   toggleRender(); 
-                                }
-                            
-                            }}
-                                
-                            />
+                          <ButtonDelete
+                            click={ () => {
+                            addIsToggle(id, !isDelete, 'delete');
+                            setCurrentData({ id, title });
+                            toggleDelete();        
+                        }}/>
+
                     </div>   
                     ))}
 
@@ -185,7 +177,7 @@ export default function PricesComponent() {
             </div>
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
             
-            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} />)}
+            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' />)}
             
          
         </section>
