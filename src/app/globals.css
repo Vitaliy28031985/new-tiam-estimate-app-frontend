@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 /*Montserrat 400 */
+
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/Montserrat-Regular.ttf") format("truetype");

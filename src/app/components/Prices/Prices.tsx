@@ -7,8 +7,11 @@ import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import AddPriceModal from '../AddPriceModal/AddPriceModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import ViberPdfShare from './ViberPdfShare';
+
 
 export default function PricesComponent() {
+    
     const [data, setData] = useState<Price[] | null>(null);
     const [currentData, setCurrentData] = useState<{id: string, title: string} | null>(null);
     const [isRender, setIsRender] = useState<boolean>(false);
@@ -24,6 +27,78 @@ export default function PricesComponent() {
     const filteredPrices =  data?.filter(item =>
         item.title.toLowerCase().includes(normalizeFilter)) ?? [];
     
+
+const handlePrint = () => {
+  const printContent = `
+    <div class="print-content">
+       <h3 class="title">Прайс робіт</h3>
+
+      <div class='flex items-center gap-4 mb-2'>
+        <div class='w-96'><p class='font-normal text-base text-black text-center'>Найменування роботи</p></div>
+        <div class='w-52'><p class='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
+     </div>
+                
+      ${data && data?.map(({ title, price }) => `
+        <div class='flex items-center gap-4 mb-3' key={id}>
+          <div class='w-96 relative'>
+            <div class='border border-blue-20 pl-12 pr-4 py-3 rounded-full'>
+              <p class='font-normal text-base text-gray-35 text-start'>${title}</p>
+            </div>       
+          </div>
+          <div class='w-52'>
+            <div class='border border-blue-20 px-5 py-3 rounded-full'>
+              <p class='font-normal text-base text-gray-35 text-center'>${price}</p>
+            </div>      
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  const printWindow = window.open('', '', 'width=800,height=600');
+  if (printWindow) {
+    const styles = `
+      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        .print-content {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        button {
+          display: none;
+        }
+
+        .title {
+          font-weight: 700; 
+          font-size: 3rem;
+          line-height: 1;
+          text-align: center;
+          margin-bottom: 20px;
+          margin-top: 10px;
+        }
+      </style>
+    `;
+      
+    printWindow.document.write('<html><head><title>Print</title>' + styles + '</head><body>');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    setTimeout(() => {
+      printWindow.print();
+    }, 500);
+  }
+};
+
+
+    
+
+
 
 
     async function getPrices() {
@@ -103,7 +178,7 @@ export default function PricesComponent() {
                  <PlusIcon className='size-10 text-black'/>   
                 </button>
             </div>
-
+            
             <p className='font-normal text-lg text-center text-black mb-12'>Порахуйте вартість капітального ремонту</p>
             
             <div className=' mb-12'>
@@ -175,17 +250,20 @@ export default function PricesComponent() {
 
                     </div>   
                     ))}
-
+</div>
                     <div className='flex justify-end gap-4 items-center'>
-                        <ButtonPrint />
-                          <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
+                        <ButtonPrint click={handlePrint} />
+                          {/* <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
                             text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10`} >
                              Відправити
-                            </button>
+                    </button> */}
+                    <ViberPdfShare data={data}/>
                     </div>
                     
-                </div>
             </div>
+            
+            
+            
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
             
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
