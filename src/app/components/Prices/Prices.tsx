@@ -171,7 +171,7 @@ export default function PricesComponent() {
                             addIsToggle(id, !isDelete, 'delete');
                             setCurrentData({ id, title });
                             toggleDelete();        
-                        }}/>
+                        }} isActive={isShow}/>
 
                     </div>   
                     ))}
