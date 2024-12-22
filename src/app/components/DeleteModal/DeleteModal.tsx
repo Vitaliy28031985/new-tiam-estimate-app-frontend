@@ -1,21 +1,23 @@
+import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Message from '../Prices/Message';
-import { useState } from 'react';
+import { deletePrice } from '@/app/utils/prices';
 
 interface DeleteModalProps {
     data?: { id: string, title: string } | null;
     nameComponent?: string;
     toggle?: () => void;
-    
+    toggleData?: () => void;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, toggleData }) => {
     const [showMessage, setMessage] = useState(false);
 
     async function OnDelete() {
         try {
             if (nameComponent === 'price') {
-            console.log('price')
+                if (data?.id) await deletePrice(data?.id);
+                if (toggleData) toggleData();
         }
 
             setMessage(true);

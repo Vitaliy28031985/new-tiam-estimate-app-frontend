@@ -31,7 +31,7 @@ export default function PricesComponent() {
     setIsShowDeleteModal(prev => !prev);
     };
 
-    const toggleRender = () => {
+    const toggleRender = (): void | undefined => {
     setIsRender(prev => !prev);
     }; 
 
@@ -177,7 +177,7 @@ export default function PricesComponent() {
             </div>
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
             
-            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' />)}
+            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
             
          
         </section>
