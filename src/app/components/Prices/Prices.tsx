@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { getAllPrices, updatePrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
@@ -7,6 +7,8 @@ import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import AddPriceModal from '../AddPriceModal/AddPriceModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import ViberPdfShare from './ViberPdfShare';
+
 
 export default function PricesComponent() {
     
@@ -93,6 +95,8 @@ const handlePrint = () => {
   }
 };
 
+
+    
 
 
 
@@ -249,13 +253,16 @@ const handlePrint = () => {
 </div>
                     <div className='flex justify-end gap-4 items-center'>
                         <ButtonPrint click={handlePrint} />
-                          <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
+                          {/* <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
                             text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10`} >
                              Відправити
-                            </button>
+                    </button> */}
+                    <ViberPdfShare data={data}/>
                     </div>
                     
-                </div>
+            </div>
+            
+            
             
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
             
