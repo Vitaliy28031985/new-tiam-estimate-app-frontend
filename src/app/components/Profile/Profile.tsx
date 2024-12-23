@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from 'next/image';
-import {  PencilSquareIcon, CheckIcon } from '@heroicons/react/24/outline';
+import {  PencilSquareIcon, ArrowLeftStartOnRectangleIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { getCurrentUser } from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
+import { formatPhoneNumber } from "@/app/utils/formatFunctions";
 
 
 export default function ProfileComponent() {
@@ -24,7 +25,10 @@ export default function ProfileComponent() {
     return (
         <section className="">
             <div className="">
-                
+                <div>
+                    <button className="text-sm "><PencilSquareIcon className="size-6 text-blue-30" />Змінити</button>
+                    <button className="text-sm "><ArrowLeftStartOnRectangleIcon className="size-5 text-blue-30"/>Вийти</button>
+                </div>
                 <div>
                 <div className="w-[150px] h-[150px] mb-6 mx-auto">
                   <Image className='w-full h-full rounded-full overflow-hidden object-cover '
@@ -55,7 +59,7 @@ export default function ProfileComponent() {
                          <li className="mb-6">
                              <div className="px-4 mb-2"><p className="text-base font-normal">Hомер телефону</p></div>
                             <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
-                                <p className="text-base font-normal"> {data && data?.phone }</p>
+                                <p className="text-base font-normal"> {data && formatPhoneNumber(data?.phone) }</p>
                                 <button type="button"><PencilSquareIcon className="size-5 text-blue-30" /></button>
                             </div>
                        
