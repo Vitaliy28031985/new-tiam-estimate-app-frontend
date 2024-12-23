@@ -6,9 +6,9 @@ import { RegisterDataInterface, LoginDataInterface } from '../interfaces/registe
 export async function registerApi(data: RegisterDataInterface) {
   try {
     const response = await axios.post(`${BASE_URL}api/auth/register`, data);
-    return response; 
+    return response;
   } catch (error) {
-    console.error('Error during registration:', error); 
+    console.error('Error during registration:', error);
     throw error;
   }
 }
@@ -16,11 +16,11 @@ export async function registerApi(data: RegisterDataInterface) {
 
 
 export async function loginApi(data: LoginDataInterface) {
-    try {
-    const response = await axios.post(`${BASE_URL}api/auth/login`, data); 
-    return response; 
+  try {
+    const response = await axios.post(`${BASE_URL}api/auth/login`, data);
+    return response;
   } catch (error) {
-    console.error('Error during login:', error); 
+    console.error('Error during login:', error);
     throw error;
   }
 }
@@ -33,7 +33,7 @@ export async function logout() {
   }
 
   try {
-   await axios({
+    await axios({
       method: 'post',
       url: `${BASE_URL}api/auth/logout`,
       headers: {
@@ -42,7 +42,7 @@ export async function logout() {
     });
   } catch (error) {
     console.error('Error during logout request:', error);
-    
+
   }
 }
 //
