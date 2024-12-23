@@ -130,3 +130,36 @@ export async function changePhone(phone: string | undefined) {
     
   }
 }
+
+
+export async function changeAvatar(avatar: File | undefined) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found in localStorage');
+    return null;
+  }
+
+  if (!avatar) {
+    console.error('No avatar file selected');
+    return null;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+
+
+    await axios({
+      method: 'put',
+      url: `${BASE_URL}api/user/avatar`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      data: formData,
+    });
+
+    console.log('Avatar updated successfully');
+  } catch (error) {
+    console.error('Error during avatar update request:', error);
+  }
+}

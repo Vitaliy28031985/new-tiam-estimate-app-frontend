@@ -5,7 +5,7 @@ import React, { ChangeEvent } from 'react';
 import Image from 'next/image';
 import { PencilSquareIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
-import { getCurrentUser, changeName, changeEmail, changePhone } from "@/app/utils/user";
+import { getCurrentUser, changeAvatar, changeName, changeEmail, changePhone } from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
 import { formatPhoneNumber } from "@/app/utils/formatFunctions";
 import LogoutModal from "../Modal/LogoutModal";
@@ -41,7 +41,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
     }
   }
 };
-    console.log('avatar file:', avatar); 
+    // console.log('avatar file:', avatar); 
     
      const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
@@ -73,7 +73,8 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
     
     const changeToggle = () => setToggle(toggle => !toggle);
 
-    
+    const renderAvatar = avatar !== null;
+
     async function getUser() {
         const user = await getCurrentUser();
         if (user) {
@@ -84,10 +85,10 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
         }
         
     }
-
+    
     useEffect(() => {
         getUser();
-    }, [changeNameState, changeEmailState, changePhoneState, show])
+    }, [changeNameState, changeEmailState, changePhoneState, renderAvatar])
 
    
 
@@ -96,11 +97,13 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
         <section className="relative">
             <div className="">
                 <div className="absolute right-0">
-                    <button onClick={() => {
+                    <button onClick={async () => {
                         if (avatar === null) {
                          setShow(true)   
                         } if(avatar !== null) {
                             setShow(false);
+                            await changeAvatar(avatar);
+                            setAvatar(null)
                         }
                         
                     }} type="button" className="block text-sm text-blue-30 text-center mb-6"><PencilSquareIcon className="size-6 text-blue-30 mx-auto" /> Змінити</button>
