@@ -26,7 +26,10 @@ export default {
       boxShadow: {
         base: '0px 4px 4px -4px rgba(12, 12, 13, 0.05)',
         questionsSection: '0px 4px 28px 0px rgba(0, 0, 0, 0.25)',
-        questionSectionTwo: '0px 4px 9.8px 0px rgba(0, 0, 0, 0.25)'
+        questionSectionTwo: '0px 4px 9.8px 0px rgba(0, 0, 0, 0.25)',
+        pricesPage: '0px 4px 16px 0px rgba(0, 0, 0, 0.25',
+        pricesTablet: '0px 4px 4px 0px rgb(229, 231, 235)',
+        middlePrices: '0px 2px 4px 0px 0 rgba(0, 0, 0, 0.25)'
     },
       colors: {
         black: 'rgb(9, 9, 11)',
@@ -48,7 +51,8 @@ export default {
           15: 'rgb(229, 231, 235)',
           20: 'rgb(163, 163, 163)',
           25: 'rgb(115, 115, 115)',
-          30: 'rgb(55, 65, 81)'
+          30: 'rgb(55, 65, 81)',
+          35: 'rgb(105, 112, 119)'
         },
         red: {
           10: 'rgba(239, 68, 68, 0.1)',

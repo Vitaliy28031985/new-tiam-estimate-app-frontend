@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import PricesComponent from "@/app/components/Prices/Prices";
 
 export const metadata: Metadata = {
   title: "Прайс",
@@ -6,6 +7,10 @@ export const metadata: Metadata = {
 };
 export default function Prices() {
     return (
-        <div>Prices</div>
+      <main className="bg-gray-0 pt-20 pb-20">
+       <div className='w-[822px] ml-auto mr-auto container bg-white p-12 rounded-3xl shadow-pricesPage'>
+         <PricesComponent/>
+       </div>
+      </main>
     )
 }
