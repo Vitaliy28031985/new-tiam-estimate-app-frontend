@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { PencilSquareIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
-import { getCurrentUser } from "@/app/utils/user";
+import { getCurrentUser, changeName, changeEmail, changePhone } from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
 import { formatPhoneNumber } from "@/app/utils/formatFunctions";
 import LogoutModal from "../Modal/LogoutModal";
@@ -13,7 +13,46 @@ import LogoutModal from "../Modal/LogoutModal";
 export default function ProfileComponent() {
     const [data, setData] = useState<User | null>(null)
     const [toggle, setToggle] = useState<boolean | null>(false);
+
+    const [changeNameState, setChangeName] = useState(true);
+    const [changeEmailState, setChangeEmail] = useState(true);
+    const [changePhoneState, setChangePhoneState] = useState(true);
+    
   
+    const [name, setName] = useState(data?.name);
+    const [email, setEmail] = useState(data?.email);
+    const [phone, setPhone] = useState(data?.phone);
+    
+    
+     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+        const {name, value,} = e.currentTarget;
+        switch (name) {
+        //      case 'avatar':
+        //    SetAvatar(files[0]);
+        //    break;
+            case 'name':
+                setName(value);
+                break;
+            case 'email':
+               setEmail(value);
+                break;
+            case 'phone':
+                setPhone(value);
+                break;
+            // case 'role':
+            //     setRole(value);
+            //     break;
+            // case 'password':
+            //     setPassword(value);
+            //     break;
+            // case 'passwordTwo':
+            //     setPasswordTwo(value);
+            //     break;
+}
+    }
+    
+    
+    
     const changeToggle = () => setToggle(toggle => !toggle);
 
     
@@ -21,13 +60,16 @@ export default function ProfileComponent() {
         const user = await getCurrentUser();
         if (user) {
             setData(user);
+            setName(user.name);
+            setEmail(user.email);
+            setPhone(user.phone)
         }
         
     }
 
     useEffect(() => {
         getUser();
-    }, [])
+    }, [changeNameState, changeEmailState, changePhoneState])
 
    
 
@@ -50,29 +92,68 @@ export default function ProfileComponent() {
                
                 <ul>
                         <li className="mb-6">
-                             <div className="px-4 mb-2"><p className="text-base font-normal">Ім’я</p></div>
-                            <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
+                            <div className="px-4 mb-2"><p className="text-base font-normal">Ім’я</p></div>
+                            {changeNameState ? (
+                               <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
                                 <p className="text-base font-normal"> {data && data?.name }</p>
-                                <button type="button"><PencilSquareIcon className="size-5 text-blue-30" /></button>
-                            </div>
+                                <button type="button" onClick={() => setChangeName(false)}><PencilSquareIcon className="size-5 text-blue-30" /></button>
+                            </div>   
+                            ) : 
+                                (
+                                    <div className="relative">
+                                        <input className="w-[559px] flex items-center justify-between p-4 bg-white
+                                         border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
+                                         text-base font-normal text-gray-20"
+                                            value={name} name="name" onChange={onChange} />
+                                        <button className="absolute top-4 right-4 " type="button" onClick={async () => { setChangeName(true); await changeName(name) } }><PiFloppyDisk className="size-5 text-blue-30" /></button>
+                                    </div>
+                            )
+                            }
+                          
                        
                         </li>
                         
                          <li className="mb-6">
-                             <div className="px-4 mb-2"><p className="text-base font-normal">E-mail</p></div>
-                            <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
+                            <div className="px-4 mb-2"><p className="text-base font-normal">E-mail</p></div>
+                            {changeEmailState ? (
+                              <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
                                 <p className="text-base font-normal"> {data && data?.email }</p>
-                                <button type="button"><PencilSquareIcon className="size-5 text-blue-30" /></button>
-                            </div>
+                                <button type="button" onClick={() => setChangeEmail(false)}><PencilSquareIcon className="size-5 text-blue-30" /></button>
+                            </div>   
+                            ) : 
+                              (
+                                    <div className="relative">
+                                        <input className="w-[559px] flex items-center justify-between p-4 bg-white
+                                         border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
+                                         text-base font-normal text-gray-20"
+                                            value={email} name="email" onChange={onChange} />
+                                        <button className="absolute top-4 right-4 " type="button" onClick={async () => { setChangeEmail(true); await changeEmail(email) } }><PiFloppyDisk className="size-5 text-blue-30" /></button>
+                                    </div>
+                            )
+                            }
+                           
                        
                         </li>
                         
                          <li className="mb-6">
-                             <div className="px-4 mb-2"><p className="text-base font-normal">Hомер телефону</p></div>
-                            <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
+                            <div className="px-4 mb-2"><p className="text-base font-normal">Hомер телефону</p></div>
+                            {changePhoneState ? (
+                             <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
                                 <p className="text-base font-normal"> {data && formatPhoneNumber(data?.phone) }</p>
-                                <button type="button"><PencilSquareIcon className="size-5 text-blue-30" /></button>
-                            </div>
+                                <button onClick={() => setChangePhoneState(false)} type="button"><PencilSquareIcon className="size-5 text-blue-30" /></button>
+                            </div>    
+                            ) :
+                             (
+                                    <div className="relative">
+                                        <input className="w-[559px] flex items-center justify-between p-4 bg-white
+                                         border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
+                                         text-base font-normal text-gray-20"
+                                            value={phone} name="phone" onChange={onChange} />
+                                        <button className="absolute top-4 right-4 " type="button" onClick={async () => { setChangePhoneState(true); await changePhone(phone) } }><PiFloppyDisk className="size-5 text-blue-30" /></button>
+                                    </div>
+                            )
+                            }
+                           
                        
                     </li>
                </ul>

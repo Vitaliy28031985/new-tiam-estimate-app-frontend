@@ -63,4 +63,70 @@ export async function isLoginUser(): Promise<boolean | null> {
   
   return false;
 }
-//
+
+
+export async function changeName(name: string | undefined) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found in localStorage');
+    return null;
+  }
+
+  try {
+   await axios({
+      method: 'put',
+      url: `${BASE_URL}api/user/name`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+     },
+      data: {name}
+    });
+  } catch (error) {
+    console.error('Error during logout request:', error);
+    
+  }
+}
+
+export async function changeEmail(email: string | undefined) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found in localStorage');
+    return null;
+  }
+
+  try {
+   await axios({
+      method: 'put',
+      url: `${BASE_URL}api/user/email`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+     },
+      data: {email}
+    });
+  } catch (error) {
+    console.error('Error during logout request:', error);
+    
+  }
+}
+
+export async function changePhone(phone: string | undefined) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found in localStorage');
+    return null;
+  }
+
+  try {
+   await axios({
+      method: 'put',
+      url: `${BASE_URL}api/user/phone`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+     },
+      data: {phone}
+    });
+  } catch (error) {
+    console.error('Error during logout request:', error);
+    
+  }
+}
