@@ -2,14 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Image from 'next/image';
-import {  PencilSquareIcon, ArrowLeftStartOnRectangleIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
+import { PiFloppyDisk } from "react-icons/pi";
 import { getCurrentUser } from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
 import { formatPhoneNumber } from "@/app/utils/formatFunctions";
+import LogoutModal from "../Modal/LogoutModal";
 
 
 export default function ProfileComponent() {
     const [data, setData] = useState<User | null>(null)
+    const [toggle, setToggle] = useState<boolean | null>(false);
+  
+    const changeToggle = () => setToggle(toggle => !toggle);
+
+    
     async function getUser() {
         const user = await getCurrentUser();
         if (user) {
@@ -17,18 +24,22 @@ export default function ProfileComponent() {
         }
         
     }
+
     useEffect(() => {
         getUser();
     }, [])
 
-    console.log(data);
+   
+
+    // console.log(data);
     return (
-        <section className="">
+        <section className="relative">
             <div className="">
-                <div>
-                    <button className="text-sm "><PencilSquareIcon className="size-6 text-blue-30" />Змінити</button>
-                    <button className="text-sm "><ArrowLeftStartOnRectangleIcon className="size-5 text-blue-30"/>Вийти</button>
+                <div className="absolute right-0">
+                    <button type="button" className="block text-sm text-blue-30 text-center mb-6"><PencilSquareIcon className="size-6 text-blue-30 mx-auto" /> Змінити</button>
+                    <button type="button" onClick={changeToggle} className="block text-sm text-blue-30 text-center"><ArrowLeftStartOnRectangleIcon className="size-5 text-blue-30 mx-auto"/>Вийти</button>
                 </div>
+
                 <div>
                 <div className="w-[150px] h-[150px] mb-6 mx-auto">
                   <Image className='w-full h-full rounded-full overflow-hidden object-cover '
@@ -67,6 +78,8 @@ export default function ProfileComponent() {
                </ul>
                </div>
             </div>
+
+            {toggle && (<LogoutModal toggle={changeToggle}  />)}
            
        </section>
    ) 

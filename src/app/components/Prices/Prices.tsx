@@ -1,12 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { PlusIcon, MagnifyingGlassIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { PiFloppyDisk } from "react-icons/pi";
 import { getAllPrices, updatePrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
 import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
-import AddPriceModal from '../AddPriceModal/AddPriceModal';
-import DeleteModal from '../DeleteModal/DeleteModal';
+import AddPriceModal from '../Modal/AddPriceModal';
+import DeleteModal from '../Modal/DeleteModal/DeleteModal';
 import ViberPdfShare from './ViberPdfShare';
 
 
@@ -203,25 +204,13 @@ const handlePrint = () => {
                     {data && filteredPrices?.map(({ id, title, price, isShow, isDelete  }) => (
                      <div className='flex items-center gap-4 mb-3' key={id}>
                        
-                        <div className='w-96 relative'>
-                            <button
-                                    onClick={async () => {
-                                        addIsToggle(id, !isShow, 'update')
-                                        if (isShow) {
-                                            await updatePrice({id, title, price})
-                                            await toggleRender();  
-                                        }
-                                    }
-                                    }
-                                className='absolute top-3 left-4' type='button'>
-                                {isShow ? (<CheckIcon className='size-6 text-gray-30'/>) : (<PencilIcon className='size-6 text-gray-30'/>)}
-                                 
-                            </button>
+                        <div className='w-80 relative'>
+                            
                                 {isShow ? (
-                                    <input className='w-96 bg-blue-5 pl-12 pr-4 py-3 rounded-full font-normal
+                                    <input className='w-80 bg-blue-5 pl-4 pr-4 py-3 rounded-full font-normal
                                  text-base text-gray-35 shadow-pricesTablet' id={id} name='title' onChange={onChange} type='text' value={title} />
                                 ): (
-                              <div className='border border-blue-20 pl-12 pr-4 py-3 rounded-full'>
+                              <div className='border border-blue-20 pl-4 pr-4 py-3 rounded-full'>
                                     <p className='font-normal text-base text-gray-35 text-start'>{title}</p>
                             </div>       
                            )}
@@ -241,6 +230,27 @@ const handlePrint = () => {
                                 )}  
                             
                         </div>
+
+                              <button
+                                    onClick={async () => {
+                                        addIsToggle(id, !isShow, 'update')
+                                        if (isShow) {
+                                            await updatePrice({id, title, price})
+                                            await toggleRender();  
+                                        }
+                                    }
+                                    }
+                                
+                          
+                                  className={isShow ? `w-12 h-12 bg-blue-5 rounded-full hover:bg-blue-15 focus:bg-blue-15` :
+                                  `w-12 h-12 border border-blue-20 rounded-full hover:bg-blue-5 focus:bg-blue-5
+                                  hover:border-0 focus:border-0`
+                                   }
+                                type='button'>
+                                {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)}
+                                 
+                            </button>
+
                           <ButtonDelete
                             click={ () => {
                             addIsToggle(id, !isDelete, 'delete');
