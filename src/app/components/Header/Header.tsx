@@ -56,7 +56,7 @@ export default function Header() {
                   </li>
               </ul> 
               <div onClick={logoutFunction} className="object-center w-[74px] h-[74px]">
-                  <Image className='rounded-full overflow-hidden object-cover' src={avatar ? avatar : 'https://res.cloudinary.com/ddzcjknmj/image/upload/v1731220706/Group_427321632_xsewqc.png'} alt="avatar" width={74} height={74} quality={100} />
+                  <Image className='w-full h-full rounded-full overflow-hidden object-cover' src={avatar ? avatar : 'https://res.cloudinary.com/ddzcjknmj/image/upload/v1731220706/Group_427321632_xsewqc.png'} alt="avatar" width={74} height={74} quality={100} />
               </div>
     </header>
       )    
