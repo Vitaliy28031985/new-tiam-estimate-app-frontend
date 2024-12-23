@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import React, { ChangeEvent } from 'react';
 import Image from 'next/image';
 import { PencilSquareIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
@@ -17,19 +18,36 @@ export default function ProfileComponent() {
     const [changeNameState, setChangeName] = useState(true);
     const [changeEmailState, setChangeEmail] = useState(true);
     const [changePhoneState, setChangePhoneState] = useState(true);
+    const [show, setShow] = useState(false);
     
   
     const [name, setName] = useState(data?.name);
     const [email, setEmail] = useState(data?.email);
     const [phone, setPhone] = useState(data?.phone);
+    const [avatar, setAvatar] = useState<File | null>(null);
+
+const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
+  const { files, name } = e.target; 
+
+ 
+  if (files && files[0]) {
+    switch (name) { 
+      case 'avatar':  
+      setAvatar(files[0]);    
+        break;
+      
+      default:
+        console.log('Unknown input name');
+    }
+  }
+};
+    console.log('avatar file:', avatar); 
     
-    
-     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
-        const {name, value,} = e.currentTarget;
-        switch (name) {
-        //      case 'avatar':
-        //    SetAvatar(files[0]);
-        //    break;
+     const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.currentTarget;
+
+    switch (name) {
+      
             case 'name':
                 setName(value);
                 break;
@@ -69,27 +87,45 @@ export default function ProfileComponent() {
 
     useEffect(() => {
         getUser();
-    }, [changeNameState, changeEmailState, changePhoneState])
+    }, [changeNameState, changeEmailState, changePhoneState, show])
 
    
 
-    // console.log(data);
+   
     return (
         <section className="relative">
             <div className="">
                 <div className="absolute right-0">
-                    <button type="button" className="block text-sm text-blue-30 text-center mb-6"><PencilSquareIcon className="size-6 text-blue-30 mx-auto" /> Змінити</button>
+                    <button onClick={() => {
+                        if (avatar === null) {
+                         setShow(true)   
+                        } if(avatar !== null) {
+                            setShow(false);
+                        }
+                        
+                    }} type="button" className="block text-sm text-blue-30 text-center mb-6"><PencilSquareIcon className="size-6 text-blue-30 mx-auto" /> Змінити</button>
                     <button type="button" onClick={changeToggle} className="block text-sm text-blue-30 text-center"><ArrowLeftStartOnRectangleIcon className="size-5 text-blue-30 mx-auto"/>Вийти</button>
                 </div>
 
                 <div>
-                <div className="w-[150px] h-[150px] mb-6 mx-auto">
+                    {!show ? (
+                   <div className="w-[150px] h-[150px] mb-6 mx-auto">
                   <Image className='w-full h-full rounded-full overflow-hidden object-cover '
                     src={data?.avatar ? data?.avatar :
                         'https://res.cloudinary.com/ddzcjknmj/image/upload/v1731220706/Group_427321632_xsewqc.png'}
-                        alt="avatar" width={150} height={150} quality={100} />   
-                </div>
-               
+                            alt="avatar" width={150} height={150} quality={100} /> 
+                    </div> 
+                    ) : (
+                            <div className="w-[150px] h-[150px] mb-6 mx-auto relative">
+                                <Image className='w-full h-full rounded-full overflow-hidden object-cover '
+                                    src={avatar && URL.createObjectURL(avatar) ? URL.createObjectURL(avatar) :'https://res.cloudinary.com/ddzcjknmj/image/upload/v1731220706/Group_427321632_xsewqc.png'}
+                            alt="avatar" width={150} height={150} quality={100} /> 
+                        <input className='w-full  h-full  absolute top-0 opacity-0' type="file" accept="image/*" name="avatar" onChange={onChangeAvatar} />
+                    </div>      
+                    )}
+                
+
+                    
                 <ul>
                         <li className="mb-6">
                             <div className="px-4 mb-2"><p className="text-base font-normal">Ім’я</p></div>
