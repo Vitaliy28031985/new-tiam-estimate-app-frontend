@@ -1,9 +1,8 @@
 'use client'
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { isLoginUser } from "../../utils/user";
 import Header from "@/app/components/Header/Header";
-import "../../globals.css";
+import { isLoginUser } from "@/app/utils/user";
 
 
 
@@ -14,22 +13,22 @@ export default function RootLayout({
 }>) {
   const router = useRouter()
 
-      useEffect(() => {
+  useEffect(() => {
     const fetchUser = async () => {
-     const isLogin = await isLoginUser();
-        if (!isLogin) {
-         router.push('/');
-        } 
+      const isLogin = await isLoginUser();
+      if (!isLogin) {
+        router.push('/');
+      }
     };
-        fetchUser();
-    
-      }, []);  
+    fetchUser();
+
+  }, []);
 
   return (
     <div>
       <Header />
-        {children}
+      {children}
     </div>
-  )      
-     
+  )
+
 }
