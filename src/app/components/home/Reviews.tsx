@@ -26,12 +26,26 @@ export default function Reviews() {
     const [slidesPerView, setSlidesPerView] = useState<number>(3);
     const [isOpenAddReviewModal, setIsOpenAddReviewModal] = useState(false);
 
+    const fetchReviews = async () => {
+        try {
+            const response = await fetch("https://new-team-estimate-app-backend.onrender.com/api/reviews");
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data: Reviews[] = await response.json();
+            setReviews(data);
+        } catch (error) {
+            console.error("Error fetching reviews:", error);
+        }
+    };
+
     const handleOpenAddReviewModal = () => {
         setIsOpenAddReviewModal(true);
     };
 
     const handleCloseAddReviewModal = () => {
         setIsOpenAddReviewModal(false);
+        fetchReviews();
     };
 
     const updateSlidesPerView = () => {
@@ -42,19 +56,6 @@ export default function Reviews() {
     };
 
     useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const response = await fetch("https://new-team-estimate-app-backend.onrender.com/api/reviews");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data: Reviews[] = await response.json();
-                setReviews(data);
-            } catch (error) {
-                console.error("Error fetching reviews:", error);
-            }
-        };
-
         fetchReviews();
         updateSlidesPerView();
         window.addEventListener('resize', updateSlidesPerView);

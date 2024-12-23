@@ -11,6 +11,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
   const { toPDF, targetRef } = usePDF({ filename: 'price-list.pdf' });
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  console.log('targetRef', targetRef)
 
   // Використовуємо useEffect, щоб дізнатися, чи код виконується на клієнті
   useEffect(() => {
@@ -57,7 +58,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
     setError(null);
     try {
       console.log('Generating PDF...');
-      
+
       // Викликаємо toPDF() для створення PDF, не зберігаючи результат у змінну
       await toPDF();
 
@@ -85,6 +86,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
         console.log('Web Share API is not supported, opening PDF in new tab...');
         // Відкриваємо PDF в новій вкладці
         const pdfUrl = URL.createObjectURL(targetRef.current);
+        console.log('PDF URL:', pdfUrl);
         window.open(pdfUrl, '_blank');
       }
     } catch (error) {
@@ -104,7 +106,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
         {/* Вставка HTML-контенту */}
         {generatePrintContent()}
       </div>
-      <button 
+      <button
         className="mr-16 bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10"
         onClick={handleShare}
       >

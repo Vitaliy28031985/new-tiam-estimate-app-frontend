@@ -1,12 +1,14 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlue";
 import BASE_URL from "@/app/utils/base";
 import { useRouter } from 'next/navigation';
+import { isLoginUser } from "@/app/utils/user";
+
 
 
 interface AddReviewModalProps {
@@ -19,15 +21,26 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
     const [hover, setHover] = useState<number>(0);
     const [comment, setComment] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
-    const auth = false;
+    const [auth, setAuth] = useState<boolean>(false);
     const router = useRouter();
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const auth = await isLoginUser();
+            if (auth) {
+                setAuth(true);
+            }
+
+        };
+        fetchUser();
+
+    }, []);
+
     if (!isOpen) return null;
-
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        console.log("auth", auth);
         if (!rating) {
             setError("Rating are required.");
             return;
@@ -35,7 +48,17 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
 
         try {
             const payload = { comment, rating };
-            await axios.post(`${BASE_URL}api/reviews/create`, payload);
+            const token = localStorage.getItem('token');
+            console.log("payload", payload);
+            await axios({
+                method: 'post',
+                url: `${BASE_URL}api/reviews/create`,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                data: payload
+            })
+            console.log("Review submitted successfully");
             onClose();
         } catch (error) {
             console.error("Failed to submit review:", error);
@@ -105,8 +128,9 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
                             }
                         </div>
                         <div className="flex justify-center">
-                            <ButtonBlue title="Залишити відгук" click={() => handleSubmit} />
+                            <ButtonBlue title="Залишити відгук" type='submit' />
 
+                            {/* <button onClick={handleSubmit} className="w-[120px] text-base font-normal text-white  bg-blue-30 py-4 rounded-full hover:bg-blue-20 focus:bg-blue-20">Залишити відгук</button>*/}
                         </div>
                     </form>
 
