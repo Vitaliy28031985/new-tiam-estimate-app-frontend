@@ -68,12 +68,6 @@ export default function UnitComponent() {
         }
        }
 
-//     //    console.log(deleteUnit)
-
-           const empty = unit === '' && deleteUnitToggle === '';
-    
-    
-
     return(
         
         <form onSubmit={handleSubmit} >
