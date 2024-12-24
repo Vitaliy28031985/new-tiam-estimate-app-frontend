@@ -8,9 +8,10 @@ export const metadata: Metadata = {
 export default function Prices() {
     return (
       <main className="bg-gray-0 pt-20 pb-20">
-       <div className='w-[822px] ml-auto mr-auto container bg-white p-12 rounded-3xl shadow-pricesPage'>
+       <div className='w-[822px] mx-auto container bg-white p-12 rounded-3xl shadow-pricesPage'>
          <PricesComponent/>
-       </div>
+        </div>
+        
       </main>
     )
 }
