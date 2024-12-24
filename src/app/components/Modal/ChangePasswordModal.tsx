@@ -96,10 +96,10 @@ const ChangePasswordModal: React.FC<AddPriceModalProps> = ({ toggle }) => {
           try {
               await changePassword(data);
               if (toggle) toggle();
-            console.log(data);
-    
           reset();
-        } catch (error) {
+          } catch (error) {
+          if (toggle) toggle();
+          reset();
           console.error('Login failed:', error);
         }
       });
@@ -125,7 +125,7 @@ const ChangePasswordModal: React.FC<AddPriceModalProps> = ({ toggle }) => {
                          <button
                         type="button"
                         onClick={toggleOldPasswordVisibility}
-                        className="absolute top-12 right-5"
+                        className="absolute top-12 right-6"
                       >
                         {oldPasswordVisible ? (
                           <EyeSlashIcon className={errors?.oldPassword ? `size-6 text-red-0` : `size-6 text-blue-20`} />
@@ -146,7 +146,7 @@ const ChangePasswordModal: React.FC<AddPriceModalProps> = ({ toggle }) => {
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}
-                        className="absolute top-12 right-5"
+                        className="absolute top-12 right-6"
                       >
                         {passwordVisible ? (
                           <EyeSlashIcon className={errors?.newPassword ? `size-6 text-red-0` : `size-6 text-blue-20`} />

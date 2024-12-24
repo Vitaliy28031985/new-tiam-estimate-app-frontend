@@ -46,7 +46,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
     }
   }
 };
-    // console.log('avatar file:', role); 
+     
     
     const onChange = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
@@ -66,13 +66,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                setRole(value);
                await changeRole(value);
                 break;
-            // case 'password':
-            //     setPassword(value);
-            //     break;
-            // case 'passwordTwo':
-            //     setPasswordTwo(value);
-            //     break;
-}
+           }
     }
     
     
