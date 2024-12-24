@@ -5,10 +5,12 @@ import React, { ChangeEvent } from 'react';
 import Image from 'next/image';
 import { PencilSquareIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
-import { getCurrentUser, changeAvatar, changeName, changeEmail, changePhone } from "@/app/utils/user";
+import {getCurrentUser, changeAvatar, changeName,
+changeEmail, changePhone, changeRole} from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
 import { formatPhoneNumber } from "@/app/utils/formatFunctions";
 import LogoutModal from "../Modal/LogoutModal";
+import Checkbox from "@/app/UI/Inputs/Checkbox";
 
 
 export default function ProfileComponent() {
@@ -20,11 +22,12 @@ export default function ProfileComponent() {
     const [changePhoneState, setChangePhoneState] = useState(true);
     const [show, setShow] = useState(false);
     
-  
+    const [avatar, setAvatar] = useState<File | null>(null);
     const [name, setName] = useState(data?.name);
     const [email, setEmail] = useState(data?.email);
     const [phone, setPhone] = useState(data?.phone);
-    const [avatar, setAvatar] = useState<File | null>(null);
+    const [role, setRole] = useState(data?.role);
+    
 
 const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
   const { files, name } = e.target; 
@@ -41,9 +44,9 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
     }
   }
 };
-    // console.log('avatar file:', avatar); 
+    // console.log('avatar file:', role); 
     
-     const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const onChange = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
 
     switch (name) {
@@ -57,9 +60,10 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
             case 'phone':
                 setPhone(value);
                 break;
-            // case 'role':
-            //     setRole(value);
-            //     break;
+            case 'role':
+               setRole(value);
+               await changeRole(value);
+                break;
             // case 'password':
             //     setPassword(value);
             //     break;
@@ -81,14 +85,15 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
             setData(user);
             setName(user.name);
             setEmail(user.email);
-            setPhone(user.phone)
+            setPhone(user.phone);
+            setRole(user.role);
         }
         
     }
     
     useEffect(() => {
         getUser();
-    }, [changeNameState, changeEmailState, changePhoneState, renderAvatar])
+    }, [changeNameState, changeEmailState, changePhoneState, renderAvatar, role])
 
    
 
@@ -194,7 +199,14 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                             }
                            
                        
-                    </li>
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <h5 className="font-normal text-base">Роль:</h5>
+                            <div className="flex items-center gap-2">
+                                <Checkbox title="Замовник" type="radio" name="role" value="customer" data={role} changeCheckbox={onChange} />
+                                <Checkbox title="Виконавець" type="radio" name="role" value="executor" data={role} changeCheckbox={onChange} />
+                            </div>
+                        </li>
                </ul>
                </div>
             </div>

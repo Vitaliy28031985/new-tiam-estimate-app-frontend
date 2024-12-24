@@ -163,3 +163,26 @@ export async function changeAvatar(avatar: File | undefined) {
     console.error('Error during avatar update request:', error);
   }
 }
+
+
+export async function changeRole(role: string | undefined) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found in localStorage');
+    return null;
+  }
+
+  try {
+   await axios({
+      method: 'put',
+      url: `${BASE_URL}api/user/role`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+     },
+      data: {role}
+    });
+  } catch (error) {
+    console.error('Error during logout request:', error);
+    
+  }
+}
