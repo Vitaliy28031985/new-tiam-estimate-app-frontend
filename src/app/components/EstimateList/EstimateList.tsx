@@ -3,6 +3,27 @@ import { PlusIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import Link from "next/link";
 
+const data = {
+    "projects": [
+        {
+            "_id": "674098b321830139dfc99b95",
+            "title": "Василь",
+            "description": "Жовква, вул. Л. Українки, 5"
+        },
+        {
+            "_id": "6735fd1872e30c084c07e680",
+            "title": "Тарас Шевченка",
+            "description": "вул. Шевченка 40/29"
+        },
+        {
+            "_id": "673ca767a62cf357daaf1020",
+            "title": "Андрій",
+            "description": "Шевченка, 30"
+        }
+    ],
+    "total": 3
+}
+
 export default function EstimateList() {
 
 
@@ -18,8 +39,9 @@ export default function EstimateList() {
             </div>
 
 
-            <ul>
-                <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base">
+            <ul className={data && data?.projects.length <= 1 ? "flex flex-wrap gap-8 justify-center" : "flex flex-wrap gap-8"}>
+                {data && data?.projects.map(({ _id, title, description }) => (
+                  <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
                     <div className="mb-6 flex items-center gap-6">
 
                            <button
@@ -49,15 +71,19 @@ export default function EstimateList() {
                     
                         <span className="flex items-center gap-4 mb-7">
                         <p className="font-semibold text-2xl">Назва кошторису:</p>
-                            <p className="font-normal text-base">Lviv</p>
+                            <p className="font-normal text-base">{title}</p>
                         </span>
                         <span className="flex items-center gap-10 mb-7">
                             <p className="font-semibold text-2xl">Адреса об’єкту:</p>
-                            <p className="font-normal text-base">Шевченка, 32</p>
+                            <p className="font-normal text-base">{description}</p>
                         </span>
                     
                        <Link className="flex items-center gap-2 font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" href='/'>Детальніше <ArrowRightIcon className="size-6 text-blue-30"/></Link>
-                </li>
+                </li>  
+                ))}
+                
+
+              
             </ul>
         </section>
     )
