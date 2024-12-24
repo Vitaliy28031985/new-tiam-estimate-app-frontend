@@ -196,8 +196,8 @@ const handlePrint = () => {
             <div className=''>
                 <div className='w-[661px] '>
 
-                    <div className='flex items-center gap-4 mb-2'>
-                        <div className='w-96'><p className='font-normal text-base text-black text-start'>Найменування роботи</p></div>
+                    <div className='flex items-center gap-3 mb-2'>
+                        <div className='w-80'><p className='font-normal text-base text-black text-start'>Найменування роботи</p></div>
                         <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
 
