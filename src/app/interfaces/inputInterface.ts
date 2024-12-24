@@ -5,7 +5,7 @@ export interface InputProps {
     placeholder?: string;
     message?: string;
     value?: string;
-    data?: string;
+    data?: string | undefined;
     isError?: boolean;
     showButton?: boolean;
     change?: (e: React.ChangeEvent<HTMLInputElement>) => void;

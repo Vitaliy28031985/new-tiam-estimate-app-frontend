@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import Message from '../Prices/Message';
+import Message from './Message';
 import { deletePrice } from '@/app/utils/prices';
 
 interface DeleteModalProps {

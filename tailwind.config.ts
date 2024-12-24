@@ -29,7 +29,8 @@ export default {
         questionSectionTwo: '0px 4px 9.8px 0px rgba(0, 0, 0, 0.25)',
         pricesPage: '0px 4px 16px 0px rgba(0, 0, 0, 0.25',
         pricesTablet: '0px 4px 4px 0px rgb(229, 231, 235)',
-        middlePrices: '0px 2px 4px 0px 0 rgba(0, 0, 0, 0.25)'
+        middlePrices: '0px 2px 4px 0px 0 rgba(0, 0, 0, 0.25)',
+        profile: '0px 4px 4px 0.5px rgba(0, 0, 0, 0.25)'
     },
       colors: {
         black: 'rgb(9, 9, 11)',
