@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@/app/context/UserContext';
 import { logout } from '@/app/utils/auth';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { redirect } from 'next/navigation'
@@ -9,13 +10,14 @@ interface LogoutModalProps {
 }
 
 const LogoutModal: React.FC<LogoutModalProps> = ({ toggle }) => {
-
+const { user, setUser } = useUser();
 
   const handleLogout = async () => {
     await logout();
     localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
-       if (toggle) toggle();
+    if (toggle) toggle();
+     setUser(null);
       redirect('/');
    
   };
