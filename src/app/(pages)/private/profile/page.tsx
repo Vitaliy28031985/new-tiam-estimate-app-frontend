@@ -1,5 +1,5 @@
 import ProfileComponent from "@/app/components/Profile/Profile";
-import Unit from "@/app/components/Unit/Unit";
+import UnitComponent from "@/app/components/Unit/Unit";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default function Profile() {
       </div>
       <div className='w-[608px] mx-auto container bg-white p-12 rounded-3xl shadow-pricesPage'>
         <h3 className="font-semibold text-2xl mb-6">Одиниці виміру</h3>
-        <Unit/>
+        <UnitComponent/>
         </div>
     </main>
     )
