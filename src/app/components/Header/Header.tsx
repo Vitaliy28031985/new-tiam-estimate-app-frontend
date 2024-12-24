@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../../assets/Logo-1.svg';
@@ -9,7 +9,6 @@ import { useUser } from '@/app/context/UserContext';
 
 export default function Header() {
     const { user } = useUser();
-    const router = useRouter();
     const pathname = usePathname();
 
     const avatar = user?.avatar;
