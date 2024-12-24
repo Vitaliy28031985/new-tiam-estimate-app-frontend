@@ -11,11 +11,13 @@ import { User } from "@/app/interfaces/user";
 import { formatPhoneNumber } from "@/app/utils/formatFunctions";
 import LogoutModal from "../Modal/LogoutModal";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
+import ChangePasswordModal from "../Modal/ChangePasswordModal";
 
 
 export default function ProfileComponent() {
     const [data, setData] = useState<User | null>(null)
     const [toggle, setToggle] = useState<boolean | null>(false);
+    const [toggleModal, setToggleModal] = useState<boolean | null>(false);
 
     const [changeNameState, setChangeName] = useState(true);
     const [changeEmailState, setChangeEmail] = useState(true);
@@ -44,7 +46,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
     }
   }
 };
-    // console.log('avatar file:', role); 
+     
     
     const onChange = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
@@ -64,18 +66,14 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                setRole(value);
                await changeRole(value);
                 break;
-            // case 'password':
-            //     setPassword(value);
-            //     break;
-            // case 'passwordTwo':
-            //     setPasswordTwo(value);
-            //     break;
-}
+           }
     }
     
     
     
     const changeToggle = () => setToggle(toggle => !toggle);
+
+    const changeToggleModal = () => setToggleModal(toggle => !toggle);
 
     const renderAvatar = avatar !== null;
 
@@ -112,7 +110,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                         }
                         
                     }} type="button" className="block text-sm text-blue-30 text-center mb-6"><PencilSquareIcon className="size-6 text-blue-30 mx-auto" /> Змінити</button>
-                    <button type="button" onClick={changeToggle} className="block text-sm text-blue-30 text-center"><ArrowLeftStartOnRectangleIcon className="size-5 text-blue-30 mx-auto"/>Вийти</button>
+                    <button type="button" onClick={changeToggle} className="block text-sm text-blue-30 text-center ml-1"><ArrowLeftStartOnRectangleIcon className="size-6 text-blue-30 mx-auto"/>Вийти</button>
                 </div>
 
                 <div>
@@ -207,11 +205,13 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                                 <Checkbox title="Виконавець" type="radio" name="role" value="executor" data={role} changeCheckbox={onChange} />
                             </div>
                         </li>
-               </ul>
+                    </ul>
+                    <button className="mt-6 text-blue-20 text-sx font-semibold hover:text-blue-15" onClick={changeToggleModal} type="button">Змінити пароль?</button>
                </div>
             </div>
 
-            {toggle && (<LogoutModal toggle={changeToggle}  />)}
+            {toggle && (<LogoutModal toggle={changeToggle} />)}
+            {toggleModal && (<ChangePasswordModal toggle={changeToggleModal}/>)}
            
        </section>
    ) 

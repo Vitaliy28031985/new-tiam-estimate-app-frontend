@@ -24,3 +24,8 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Passwords {
+  oldPassword: string;
+  newPassword: string;
+}

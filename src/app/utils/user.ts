@@ -1,6 +1,6 @@
 import axios from 'axios';
 import BASE_URL from './base';
-import { User } from '@/app/interfaces/user';
+import { User, Passwords } from '@/app/interfaces/user';
 
 export async function getCurrentUser(): Promise<User | null> {
   
@@ -180,6 +180,28 @@ export async function changeRole(role: string | undefined) {
         'Authorization': `Bearer ${token}`
      },
       data: {role}
+    });
+  } catch (error) {
+    console.error('Error during logout request:', error);
+    
+  }
+}
+
+export async function changePassword(data: Passwords | undefined) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found in localStorage');
+    return null;
+  }
+
+  try {
+   await axios({
+      method: 'put',
+      url: `${BASE_URL}api/user/password`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+     },
+      data
     });
   } catch (error) {
     console.error('Error during logout request:', error);
