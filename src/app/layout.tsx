@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { isLoginUser } from "./utils/user";
 import "./globals.css";
+import { UserProvider } from "./context/UserContext";
+import Header from "./components/Header/Header";
 
 
 export default function RootLayout({
@@ -16,28 +18,32 @@ export default function RootLayout({
 
 
   const router = useRouter()
-  
-     const fetchUser = async () => {
-       const isLogin = await isLoginUser();
 
-        if (isLogin) {
-          if (isAuthorization) {
-            await router.push('/private');
-          }
-        }
-    };
-      
-    useEffect(() => {
-     
-        fetchUser();
-    
-    }, []);
-  
- 
+  const fetchUser = async () => {
+    const isLogin = await isLoginUser();
+
+    if (isLogin) {
+      if (isAuthorization) {
+        await router.push('/private');
+      }
+    }
+  };
+
+  useEffect(() => {
+
+    fetchUser();
+
+  }, []);
+
+
   return (
     <html lang="uk">
-      <body>  
-        {children}
+      <body>
+        <UserProvider>
+          {!isAuthorization && <Header />}
+
+          {children}
+        </UserProvider>
       </body>
     </html>
   );

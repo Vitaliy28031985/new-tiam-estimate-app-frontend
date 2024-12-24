@@ -3,8 +3,9 @@ import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/2
 import React, { useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { loginApi } from '@/app/utils/auth';
-
 import { useRouter } from 'next/navigation'
+import { useUser } from '@/app/context/UserContext';
+
 
 type FormValues = {
   email: string;
@@ -14,6 +15,8 @@ type FormValues = {
 const resolver: Resolver<FormValues> = async (values) => {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[*!#&])[A-Za-z0-9*!#&]{6,}$/;
+
+
 
 
   if (!values.email) {
@@ -74,7 +77,7 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 export default function Login() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-
+  const { setUser } = useUser();
   const router = useRouter()
 
   const togglePasswordVisibility = () => {
@@ -94,6 +97,7 @@ export default function Login() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await loginApi(data);
+      setUser(response.data);
       if (response?.data?.token) {
         localStorage.setItem('token', response.data.token);
         router.push('/prices');
@@ -102,6 +106,7 @@ export default function Login() {
         localStorage.setItem('refreshToken', response.data.refreshToken);
 
       }
+
       reset();
     } catch (error) {
       console.error('Login failed:', error);

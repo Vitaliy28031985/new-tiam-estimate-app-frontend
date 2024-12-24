@@ -1,7 +1,6 @@
 'use client'
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import Header from "@/app/components/Header/Header";
 import { isLoginUser } from "@/app/utils/user";
 
 
@@ -26,7 +25,6 @@ export default function RootLayout({
 
   return (
     <div>
-      <Header />
       {children}
     </div>
   )
