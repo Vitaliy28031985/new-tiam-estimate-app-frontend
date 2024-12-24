@@ -10,7 +10,7 @@ interface LogoutModalProps {
 }
 
 const LogoutModal: React.FC<LogoutModalProps> = ({ toggle }) => {
-const { user, setUser } = useUser();
+const {  setUser } = useUser();
 
   const handleLogout = async () => {
     await logout();
