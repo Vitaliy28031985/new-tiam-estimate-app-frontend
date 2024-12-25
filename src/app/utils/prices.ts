@@ -76,10 +76,6 @@ export async function addPrice(data: UpdatePrice) {
 }
 
 
-
-
-
-
 export async function updatePrice(data: UpdatePrice) {
   const token = localStorage.getItem('token');
   if (!token) {

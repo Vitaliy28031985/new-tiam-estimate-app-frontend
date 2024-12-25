@@ -1,26 +1,31 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ProjectsData, Project } from "@/app/interfaces/projects";
+import { ProjectsData } from "@/app/interfaces/projects";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDeletePrices";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
-import { getAllProjects } from "@/app/utils/projects";
+import { getAllProjects, updatePrice } from "@/app/utils/projects";
 import AddProjectModal from "../Modal/AddProjectModal";
+import { PiFloppyDisk } from "react-icons/pi";
+import DeleteModal from "../Modal/DeleteModal/DeleteModal";
 
 
 
 
 export default function EstimateList() {
     const [data, setData] = useState<ProjectsData[] | null | []>(null);
+    const [currentData, setCurrentData] = useState<{_id: string, title: string} | null>(null);
     const [page, setPage] = useState(1);
     const [toggleModal, setToggleModal] = useState<boolean | null | undefined>(false);
     const [toggleRender, setToggleRender] = useState<boolean | null | undefined>(false);
+    const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 
     
     const changePage = () => setPage(prevState => prevState + 1);
     const isToggle = () => setToggleModal(toggle => !toggle);
     const isRender = () => setToggleRender(toggle => !toggle);
+    const toggleDelete = () => setIsShowDeleteModal(prev => !prev);
 
 
     
@@ -34,7 +39,7 @@ export default function EstimateList() {
             setData(newData);
 
         } else {
-            const newData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false }))
+            const newData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false,  }))
             setData(newData || []);
         }
     }
@@ -93,8 +98,8 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 
 
             <ul className={data && data?.length <= 1 ? "mb-6 flex flex-wrap gap-8 justify-center" : "mb-6 flex flex-wrap gap-8"}>
-                {Array.isArray(data) && data?.map(({ _id, title, description, isShow }) => (
-                  <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
+                {Array.isArray(data) && data?.map(({ _id, title, description, isShow, isDelete }, index) => (
+                  <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={`${_id || index}-${index}`}>
                     <div className="mb-6 flex items-center gap-6">
 
                            <button
@@ -103,8 +108,8 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                         addIsToggle(_id, !isShow, 'update')
                                     if (isShow) {
                                         console.log(isShow);
-                                            // await updatePrice({id, title, price})
-                                            // await toggleRender();  
+                                            await updatePrice({_id, title, description})
+                                            await isRender();  
                                         }
                                     }
                                     }
@@ -113,22 +118,34 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                   hover:border-0 focus:border-0`
                                    }
                             type='button'>
-                            <PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>
-                                {/* {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)} */}
+                                {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)}
                                  
                         </button>
                         
-                        <ButtonDelete/>
+                            <ButtonDelete
+                                click={() => {
+                            if (_id) {
+                             addIsToggle(_id, !isDelete, 'delete');
+                            setCurrentData({ _id, title });
+                            toggleDelete();    
+                            }
+                                   
+                        }} isActive={isShow}
+                            />
 
                     </div>
                     
                         <span className="flex items-center gap-4 mb-7">
-                        <p className="font-semibold text-2xl">Назва кошторису:</p>
-                            <p className="font-normal text-base">{title}</p>
+                            <p className="font-semibold text-2xl">Назва кошторису:</p>
+                            {!isShow ? (<p className="font-normal text-base">{title}</p>) : 
+                           (<input id={_id} maxLength={10} name='title' className="font-normal text-base focus:outline-none"  value={title} disabled={!isShow} onChange={onChange} />)}
+                            
                         </span>
                         <span className="flex items-center gap-10 mb-7">
                             <p className="font-semibold text-2xl">Адреса об’єкту:</p>
-                            <p className="font-normal text-base">{description}</p>
+                            {!isShow ? ( <p className="font-normal text-base">{description}</p>) : 
+                            (<input id={_id} maxLength={30} name='description' className="font-normal text-base focus:outline-none" value={description} disabled={!isShow} onChange={onChange} />)}
+                           
                         </span>
                     
                        <Link className="flex items-center gap-2 font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" href='/'>Детальніше <ArrowRightIcon className="size-6 text-blue-30"/></Link>
@@ -139,7 +156,8 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             {data && data?.length > 7 &&
             ( <button onClick={changePage} className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
             }
-           {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender}/>)}
+            {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}
+             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project' toggleData={isRender}/>)}
         </section>
     )
 }

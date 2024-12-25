@@ -49,3 +49,50 @@ export async function addProject(data: ProjectsData) {
   }
   } 
 }
+
+export async function updatePrice(data: ProjectsData) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'put',
+      url: `${BASE_URL}api/projects/${data._id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }, 
+      data: { 
+         title: data.title,
+         description: data.description,
+          
+        }
+    });
+   return response.data;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
+
+export async function deleteProject(id: string | null) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'delete',
+      url: `${BASE_URL}api/projects/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+   return response;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
