@@ -1,8 +1,8 @@
-import axios from 'axios';
-import BASE_URL from './base';
-import { Price, UpdatePrice } from '../interfaces/PriceInterface';
+import axios from "axios";
+import { Projects, ProjectsData } from "../interfaces/projects";
+import BASE_URL from "./base";
 
-export async function getAllPrices(): Promise<Price[] | null> {
+export async function getAllProjects(page: number, limit: number): Promise<Projects | null> {
 
     const token = localStorage.getItem('token');
   if (!token) {
@@ -11,12 +11,12 @@ export async function getAllPrices(): Promise<Price[] | null> {
     try {
     const response = await axios({
       method: 'get',
-      url: `${BASE_URL}api/prices`,
+      url: `${BASE_URL}api/projects?page=${page}&limit=${limit}`,
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
-    const priceData: Price[] = response.data;
+    const priceData: Projects = response.data;
     return priceData;
   } catch (error) {
     console.error('Error during request:', error);
@@ -25,32 +25,7 @@ export async function getAllPrices(): Promise<Price[] | null> {
   } 
 }
 
-export async function getMiddlePrices(): Promise<Price[] | null> {
-  
-    const token = localStorage.getItem('token');
-  if (!token) {
-    return null;
-  } else {
-    try {
-    const response = await axios({
-      method: 'get',
-      url: `${BASE_URL}api/prices/middle`,
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    const priceData: Price[] = response.data;
-    return priceData;
-  } catch (error) {
-    console.error('Error during request:', error);
-    return null;
-  }
-  } 
-}
-
-
-
-export async function addPrice(data: UpdatePrice) {
+export async function addProject(data: ProjectsData) {
    const token = localStorage.getItem('token');
   if (!token) {
     return null;
@@ -58,13 +33,13 @@ export async function addPrice(data: UpdatePrice) {
     try {
     const response = await axios({
       method: 'post',
-      url: `${BASE_URL}api/prices`,
+      url: `${BASE_URL}api/projects`,
       headers: {
         'Authorization': `Bearer ${token}`
       }, 
         data: { 
-          price: Number(data.price),
           title: data.title,
+          description: data.description,
         }
     });
    return response.data;
@@ -75,8 +50,7 @@ export async function addPrice(data: UpdatePrice) {
   } 
 }
 
-
-export async function updatePrice(data: UpdatePrice) {
+export async function updatePrice(data: ProjectsData) {
   const token = localStorage.getItem('token');
   if (!token) {
     return null;
@@ -84,13 +58,14 @@ export async function updatePrice(data: UpdatePrice) {
     try {
     const response = await axios({
       method: 'put',
-      url: `${BASE_URL}api/prices/${data.id}`,
+      url: `${BASE_URL}api/projects/${data._id}`,
       headers: {
         'Authorization': `Bearer ${token}`
       }, 
-        data: { 
-          price: Number(data.price),
-          title: data.title,
+      data: { 
+         title: data.title,
+         description: data.description,
+          
         }
     });
    return response.data;
@@ -101,7 +76,7 @@ export async function updatePrice(data: UpdatePrice) {
   } 
 }
 
-export async function deletePrice(id: string | null) {
+export async function deleteProject(id: string | null) {
    const token = localStorage.getItem('token');
   if (!token) {
     return null;
@@ -109,7 +84,7 @@ export async function deletePrice(id: string | null) {
     try {
     const response = await axios({
       method: 'delete',
-      url: `${BASE_URL}api/prices/${id}`,
+      url: `${BASE_URL}api/projects/${id}`,
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -121,4 +96,3 @@ export async function deletePrice(id: string | null) {
   }
   } 
 }
-

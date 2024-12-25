@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Message from './Message';
 import { deletePrice } from '@/app/utils/prices';
+import { deleteProject } from '@/app/utils/projects';
 
 interface DeleteModalProps {
-    data?: { id: string, title: string } | null;
+    data?: { _id?: string, id?: string, title: string } | null;
     nameComponent?: string;
     toggle?: () => void;
     toggleData?: () => void;
@@ -18,7 +19,14 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
             if (nameComponent === 'price') {
                 if (data?.id) await deletePrice(data?.id);
                 if (toggleData) toggleData();
-        }
+                
+            }
+            
+            if (nameComponent === 'project') {
+                if (data?._id) await deleteProject(data._id);
+                if (toggleData) toggleData();
+                //  window.location.reload();
+            }
 
             setMessage(true);
             setTimeout(function () {
@@ -27,7 +35,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
         } catch {}
     } 
     
-    console.log(data)
+    // console.log(data)
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

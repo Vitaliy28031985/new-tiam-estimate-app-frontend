@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Profile() {
   return (
     <main className="bg-gray-0 pt-20 pb-20">
-      <div className='w-[608px] mx-auto mb-24 container bg-white p-6 rounded-3xl shadow-profile'>
+      <div className='w-[608px] mx-auto mb-6 container bg-white p-6 rounded-3xl shadow-profile'>
         <ProfileComponent/>
       </div>
       <div className='w-[608px] mx-auto container bg-white p-12 rounded-3xl shadow-pricesPage'>
