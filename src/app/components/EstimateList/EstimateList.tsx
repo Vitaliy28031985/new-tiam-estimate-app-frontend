@@ -6,6 +6,7 @@ import ButtonDelete from "@/app/UI/Buttons/ButtonDeletePrices";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { getAllProjects } from "@/app/utils/projects";
+import AddProjectModal from "../Modal/AddProjectModal";
 
 
 
@@ -13,8 +14,10 @@ import { getAllProjects } from "@/app/utils/projects";
 export default function EstimateList() {
     const [data, setData] = useState<ProjectsData[] | null>(null);
     const [page, setPage] = useState(1);
+    const [toggleModal, setToggleModal] = useState<boolean | null | undefined>(false);
     
-const changePage = () =>  setPage(prevState => prevState +1);
+    const changePage = () => setPage(prevState => prevState + 1);
+    const isToggle = () => setToggleModal(toggle => !toggle);
 
 
     console.log(data);
@@ -35,7 +38,7 @@ const changePage = () =>  setPage(prevState => prevState +1);
             <div className='flex items-center justify-center gap-1 mb-16'>
                 <h3 className="font-bold font-alternates text-5xl">Список кошторисів</h3>
                 <button className=''
-                    // onClick={isToggle}
+                    onClick={isToggle}
                 >
                  <PlusIcon className='size-10 text-black'/>   
                 </button>
@@ -89,7 +92,7 @@ const changePage = () =>  setPage(prevState => prevState +1);
             {data && data?.length > 7 &&
             ( <button onClick={changePage} className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
             }
-           
+           {toggleModal && (<AddProjectModal toggle={isToggle}/>)}
         </section>
     )
 }

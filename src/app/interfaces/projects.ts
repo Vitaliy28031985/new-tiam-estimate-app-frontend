@@ -9,7 +9,7 @@ export interface Projects {
 
 export interface ProjectsData {
 
-    _id: string;
+    _id?: string;
     title: string;
     description: string;
 
