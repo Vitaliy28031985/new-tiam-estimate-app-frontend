@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ProjectsData } from "@/app/interfaces/projects";
+import { ProjectsData, Project } from "@/app/interfaces/projects";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDeletePrices";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
@@ -12,7 +12,7 @@ import AddProjectModal from "../Modal/AddProjectModal";
 
 
 export default function EstimateList() {
-    const [data, setData] = useState<ProjectsData[] | null>(null);
+    const [data, setData] = useState<ProjectsData[] | null | []>(null);
     const [page, setPage] = useState(1);
     const [toggleModal, setToggleModal] = useState<boolean | null | undefined>(false);
     const [toggleRender, setToggleRender] = useState<boolean | null | undefined>(false);
@@ -23,19 +23,63 @@ export default function EstimateList() {
     const isRender = () => setToggleRender(toggle => !toggle);
 
 
-    // console.log(data);
-
+    
+  // рендер даних
     async function getProjects() {
         const projectsItems = await getAllProjects(page, 8);
 
-      if (projectsItems && data !== null) {
-      setData(state => [...(state || []), ...(projectsItems?.projects || [])]);
-     } else {
-      setData(projectsItems?.projects || []);
-     }
+        if (projectsItems && data !== null) {
+            const combinedDate = [...(data || []), ...(projectsItems?.projects || []),]  
+            const newData = combinedDate.map(item => ({ ...item, isShow: false, isDelete: false }))
+            setData(newData);
+
+        } else {
+            const newData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false }))
+            setData(newData || []);
+        }
     }
 
     useEffect(() => { getProjects() }, [page, toggleRender])
+
+
+
+    const addIsToggle = (id: string, currentIsShow: boolean, name: 'update' | 'delete'): void => {
+        setData(prevData => {
+        if (prevData === null) return [];
+        const newData = prevData.map((project: ProjectsData) => {
+            if (project._id === id) {
+                if (name === 'update') {
+                    return { ...project, isShow: currentIsShow };
+                }
+                if (name === 'delete') {
+                    return { ...project, isDelete: currentIsShow };
+                }
+            }
+            return project;
+        });
+
+        return newData;
+    });
+};
+
+
+const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value, id } = e.currentTarget;
+
+    setData(prevData => {
+        if (prevData === null) return [];
+        const newData = prevData.map((project: ProjectsData) => {
+            if (project._id === id) {
+                return { ...project, [name]: value };
+            }
+            return project;
+        });
+
+        return newData;
+    });
+};
+
+    
     return (
         <section>
             <div className='flex items-center justify-center gap-1 mb-16'>
@@ -49,25 +93,25 @@ export default function EstimateList() {
 
 
             <ul className={data && data?.length <= 1 ? "mb-6 flex flex-wrap gap-8 justify-center" : "mb-6 flex flex-wrap gap-8"}>
-                {Array.isArray(data) && data?.map(({ _id, title, description }) => (
+                {Array.isArray(data) && data?.map(({ _id, title, description, isShow }) => (
                   <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
                     <div className="mb-6 flex items-center gap-6">
 
                            <button
-                                    // onClick={async () => {
-                                    //     addIsToggle(id, !isShow, 'update')
-                                    //     if (isShow) {
-                                    //         await updatePrice({id, title, price})
-                                    //         await toggleRender();  
-                                    //     }
-                                    // }
-                                    // }
-                                className={ `w-12 h-12 border  border-blue-20 rounded-full hover:bg-blue-5 focus:bg-blue-5 hover:border-0 focus:border-0` }
-                          
-                                //   className={isShow ? `w-12 h-12 bg-blue-5 rounded-full hover:bg-blue-15 focus:bg-blue-15` :
-                                //   `w-12 h-12 border border-blue-20 rounded-full hover:bg-blue-5 focus:bg-blue-5
-                                //   hover:border-0 focus:border-0`
-                                //    }
+                                onClick={async () => {
+                                      if(_id)
+                                        addIsToggle(_id, !isShow, 'update')
+                                    if (isShow) {
+                                        console.log(isShow);
+                                            // await updatePrice({id, title, price})
+                                            // await toggleRender();  
+                                        }
+                                    }
+                                    }
+                                  className={isShow ? `w-12 h-12 bg-blue-5 rounded-full hover:bg-blue-15 focus:bg-blue-15` :
+                                  `w-12 h-12 border border-blue-20 rounded-full hover:bg-blue-5 focus:bg-blue-5
+                                  hover:border-0 focus:border-0`
+                                   }
                             type='button'>
                             <PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>
                                 {/* {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)} */}
