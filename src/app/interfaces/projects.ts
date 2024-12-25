@@ -6,3 +6,11 @@ export interface Projects {
   }[];  
   total: number;
 }
+
+export interface ProjectsData {
+
+    _id: string;
+    title: string;
+    description: string;
+
+}

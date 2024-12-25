@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Projects } from "@/app/interfaces/projects";
+import { ProjectsData } from "@/app/interfaces/projects";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDeletePrices";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
@@ -11,14 +11,25 @@ import { getAllProjects } from "@/app/utils/projects";
 
 
 export default function EstimateList() {
-    const [data, setData] = useState<Projects | null>(null);
+    const [data, setData] = useState<ProjectsData[] | null>(null);
+    const [page, setPage] = useState(1);
+    
+const changePage = () =>  setPage(prevState => prevState +1);
+
+
+    console.log(data);
 
     async function getProjects() {
-        const projects = await getAllProjects(1, 8);
-        if (projects) setData(projects);
+        const projectsItems = await getAllProjects(page, 8);
+
+      if (projectsItems && data !== null) {
+      setData(state => [...(state || []), ...(projectsItems?.projects || [])]);
+     } else {
+      setData(projectsItems?.projects || []);
+     }
     }
 
-    useEffect(() => { getProjects() }, [])
+    useEffect(() => { getProjects() }, [page])
     return (
         <section>
             <div className='flex items-center justify-center gap-1 mb-16'>
@@ -31,8 +42,8 @@ export default function EstimateList() {
             </div>
 
 
-            <ul className={data && data?.projects?.length <= 1 ? "mb-6 flex flex-wrap gap-8 justify-center" : "mb-6 flex flex-wrap gap-8"}>
-                {data && data?.projects?.map(({ _id, title, description }) => (
+            <ul className={data && data?.length <= 1 ? "mb-6 flex flex-wrap gap-8 justify-center" : "mb-6 flex flex-wrap gap-8"}>
+                {Array.isArray(data) && data?.map(({ _id, title, description }) => (
                   <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
                     <div className="mb-6 flex items-center gap-6">
 
@@ -75,8 +86,8 @@ export default function EstimateList() {
                 ))}
                 
             </ul>
-            {data && data?.projects?.length > 8 &&
-            ( <button className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
+            {data && data?.length > 7 &&
+            ( <button onClick={changePage} className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
             }
            
         </section>
