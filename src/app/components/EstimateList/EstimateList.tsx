@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ProjectsData } from "@/app/interfaces/projects";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDeletePrices";
-import { PlusIcon } from "@heroicons/react/16/solid";
+import { PlusIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { getAllProjects, updatePrice } from "@/app/utils/projects";
 import AddProjectModal from "../Modal/AddProjectModal";
@@ -22,26 +22,33 @@ export default function EstimateList() {
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 
     
-    const changePage = () => setPage(prevState => prevState + 1);
+   
     const isToggle = () => setToggleModal(toggle => !toggle);
     const isRender = () => setToggleRender(toggle => !toggle);
     const toggleDelete = () => setIsShowDeleteModal(prev => !prev);
 
 
     
+    const changePage = (name?: string) => {
+        if (name === "+") {
+          setPage(prevState => prevState + 1);  
+        }
+        if (name === "-") {
+          setPage(prevState => prevState - 1);   
+        }
+        
+    }; 
+
   // рендер даних
     async function getProjects() {
         const projectsItems = await getAllProjects(page, 8);
         if (projectsItems) {
            const addElementsData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false }))
-          
-            if (data !== null && page > 1) {
-                
-                setData(prevState  => ([ ...prevState || [], ...addElementsData ]));
-            } else {
+            if (projectsItems.total === 0) setPage(page - 1);
+            if (page === 0) setPage(1);
+            
                 setData(addElementsData);
-            }
-          
+            
         }
       
     }
@@ -112,7 +119,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                     if (isShow) {
                                         console.log(isShow);
                                             await updatePrice({_id, title, description})
-                                            window.location.reload();  
+                                            // window.location.reload();  
                                         }
                                     }
                                     }
@@ -156,9 +163,12 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 ))}
                 
             </ul>
-            {data && data?.length >= 8 &&
-            ( <button onClick={changePage} className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
-            }
+            
+            <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button>
+                    <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button>
+            </div>
+           
             {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project' toggleData={isRender}/>)}
         </section>

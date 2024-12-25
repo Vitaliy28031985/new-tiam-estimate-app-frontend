@@ -25,7 +25,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
             if (nameComponent === 'project') {
                 if (data?._id) await deleteProject(data._id);
                 if (toggleData) toggleData();
-                 window.location.reload();
+                //  window.location.reload();
             }
 
             setMessage(true);
