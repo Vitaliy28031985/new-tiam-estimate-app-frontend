@@ -15,12 +15,15 @@ export default function EstimateList() {
     const [data, setData] = useState<ProjectsData[] | null>(null);
     const [page, setPage] = useState(1);
     const [toggleModal, setToggleModal] = useState<boolean | null | undefined>(false);
+    const [toggleRender, setToggleRender] = useState<boolean | null | undefined>(false);
+
     
     const changePage = () => setPage(prevState => prevState + 1);
     const isToggle = () => setToggleModal(toggle => !toggle);
+    const isRender = () => setToggleRender(toggle => !toggle);
 
 
-    console.log(data);
+    // console.log(data);
 
     async function getProjects() {
         const projectsItems = await getAllProjects(page, 8);
@@ -32,7 +35,7 @@ export default function EstimateList() {
      }
     }
 
-    useEffect(() => { getProjects() }, [page])
+    useEffect(() => { getProjects() }, [page, toggleRender])
     return (
         <section>
             <div className='flex items-center justify-center gap-1 mb-16'>
@@ -92,7 +95,7 @@ export default function EstimateList() {
             {data && data?.length > 7 &&
             ( <button onClick={changePage} className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
             }
-           {toggleModal && (<AddProjectModal toggle={isToggle}/>)}
+           {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender}/>)}
         </section>
     )
 }
