@@ -11,7 +11,7 @@ interface AddProjectModalProps {
 const AddProjectModal: React.FC<AddProjectModalProps> = ({ toggle, isShow }) => {
 
     const onSubmit = async (formData: FormData) => {
-        let result = await saveProject(formData);
+        const result = await saveProject(formData);
         const newData: ProjectsData = {title: result.title.toString(), description: result.description.toString()}
          await addProject(newData)
        
@@ -36,7 +36,7 @@ const AddProjectModal: React.FC<AddProjectModalProps> = ({ toggle, isShow }) => 
                     </div>
                      <div className="mb-6">
                         <label className="inline-block font-normal text-base mb-2" htmlFor="description">Адреса об’єкта</label>
-                        <input name="description" autoComplete="off" defaultValue="" className="w-[324px] h-[49px] p-4 border border-gray-15 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none" type="text" id="description" placeholder="Введіть судову адресу об’єкта" />
+                        <input name="description" autoComplete="off" defaultValue="" className="w-[324px] h-[49px] p-4 border border-gray-15 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none" type="text" id="description" placeholder="Введіть адресу об’єкта" />
                     </div>
                     <button className="w-[324px] h-[49px] bg-blue-30 py-4 rounded-full text-white text-center text-sm font-bold  focus:bg-blue-25 hover:bg-blue-25">Додати</button>
                 </form>
