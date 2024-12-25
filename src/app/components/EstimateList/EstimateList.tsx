@@ -32,18 +32,21 @@ export default function EstimateList() {
   // рендер даних
     async function getProjects() {
         const projectsItems = await getAllProjects(page, 8);
-
-        if (projectsItems && data !== null) {
-            const combinedDate = [...(data || []), ...(projectsItems?.projects || []),]  
-            const newData = combinedDate.map(item => ({ ...item, isShow: false, isDelete: false }))
-            setData(newData);
-
-        } else {
-            const newData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false,  }))
-            setData(newData || []);
+        if (projectsItems) {
+           const addElementsData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false }))
+          
+            if (data !== null && page > 1) {
+                
+                setData(prevState  => ([ ...prevState || [], ...addElementsData ]));
+            } else {
+                setData(addElementsData);
+            }
+          
         }
+      
     }
 
+    // console.log(data); 
     useEffect(() => { getProjects() }, [page, toggleRender])
 
 
@@ -98,8 +101,8 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 
 
             <ul className={data && data?.length <= 1 ? "mb-6 flex flex-wrap gap-8 justify-center" : "mb-6 flex flex-wrap gap-8"}>
-                {Array.isArray(data) && data?.map(({ _id, title, description, isShow, isDelete }, index) => (
-                  <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={`${_id || index}-${index}`}>
+                {Array.isArray(data) && data?.map(({ _id, title, description, isShow, isDelete }) => (
+                  <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
                     <div className="mb-6 flex items-center gap-6">
 
                            <button
@@ -109,7 +112,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                     if (isShow) {
                                         console.log(isShow);
                                             await updatePrice({_id, title, description})
-                                            await isRender();  
+                                            window.location.reload();  
                                         }
                                     }
                                     }
@@ -153,7 +156,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 ))}
                 
             </ul>
-            {data && data?.length > 7 &&
+            {data && data?.length >= 8 &&
             ( <button onClick={changePage} className="font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" type="button">Дивитись ще...</button>)
             }
             {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}

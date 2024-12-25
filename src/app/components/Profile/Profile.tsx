@@ -107,6 +107,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                             setShow(false);
                             await changeAvatar(avatar);
                             setAvatar(null)
+                            window.location.reload();
                         }
                         
                     }} type="button" className="block text-sm text-blue-30 text-center mb-6"><PencilSquareIcon className="size-6 text-blue-30 mx-auto" /> Змінити</button>
