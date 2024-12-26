@@ -100,7 +100,7 @@ export default function Login() {
       setUser(response.data);
       if (response?.data?.token) {
         localStorage.setItem('token', response.data.token);
-        router.push('/prices');
+        router.push('/prices');   
       }
       if (response?.data?.refreshToken) {
         localStorage.setItem('refreshToken', response.data.refreshToken);

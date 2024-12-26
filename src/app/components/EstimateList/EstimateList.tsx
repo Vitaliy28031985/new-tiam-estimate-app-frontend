@@ -158,15 +158,15 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                            
                         </span>
                     
-                       <Link className="flex items-center gap-2 font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" href='/'>Детальніше <ArrowRightIcon className="size-6 text-blue-30"/></Link>
+                       <Link className="flex items-center gap-2 font-medium text-xl text-blue-30 hover:text-blue-25 focus:text-blue-25" href={`/estimates/${_id}`} >Детальніше <ArrowRightIcon className="size-6 text-blue-30"/></Link>
                 </li>  
                 ))}
                 
             </ul>
             
             <div className="flex items-center gap-3">
-                    <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button>
-                    <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button>
+                <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button> 
+                <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button>
             </div>
            
             {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}

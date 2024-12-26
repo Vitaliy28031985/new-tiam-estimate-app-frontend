@@ -16,3 +16,102 @@ export interface ProjectsData {
     isDelete?: boolean;
 
 }
+
+interface Price {
+  id: string;
+  title: string;
+  price: number;
+  updateAllow: boolean;
+  owner: string;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface EstimatePosition {
+  id: string;
+  title: string;
+  unit: string;
+  number: number;
+  price: number;
+  result: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Estimate {
+  id: string;
+  title: string;
+  positions: EstimatePosition[];
+  total: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface LowEstimatePosition {
+  id: string;
+  title: string;
+  unit: string;
+  number: number;
+  price: number;
+  result: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface LowEstimate {
+  id: string;
+  title: string;
+  positions: LowEstimatePosition[];
+  total: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Material {
+  id: string;
+  title: string;
+  order: string;
+  date: string;
+  sum: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Advance {
+  id: string;
+  comment: string;
+  date: string;
+  sum: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PriceItem {
+  _id?: string;
+  title?: string;
+  description?: string;
+  prices?: Price[];
+  discount?: number;
+  lowDiscount?: number;
+  discountPercentage?: number;
+  materialsTotal?: number;
+  advancesTotal?: number;
+  lowTotal?: number;
+  total?: number;
+  lowGeneral?: number;
+  general?: number;
+  owner?: string;
+  estimates?: Estimate[];
+  lowEstimates?: LowEstimate[];
+  materials?: Material[];
+  advances?: Advance[];
+  lowPrices?: Price[];
+}
+
