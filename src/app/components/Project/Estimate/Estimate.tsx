@@ -29,7 +29,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                    <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                      <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                 </div>
-                {project && project?.estimates?.map((item, index) => (
+                {project && project?.estimates?.map((item) => (
                     <div className="mb-6" key={item?._id}>
                   <div className="flex items-center gap-6 justify-center mb-8"> 
                         <p className="font-semibold text-xl">{ item?.title}</p>
@@ -48,8 +48,8 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                    <td className="w-36 border border-gray-20 p-3"><p className="font-bold text-sm">Редагувати</p></td>
                </tr>    
                        
-                {item?.positions && item?.positions?.map(({ _id, id, title, unit, price, number, result }, index) => (         
-                <tr key={_id} className="">
+                {item?.positions && item?.positions?.map(({ id, title, unit, price, number, result }, index) => (         
+                <tr key={id} className="">
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{index + 1}</p></td>
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal">{title}</p></td>                 
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{unit}</p></td>
