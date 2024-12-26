@@ -12,7 +12,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
     return <div>No project available</div>;
     }
 
-    console.log(project?.estimates);
+    // console.log(project?.estimates);
     
     return (
         <div>
@@ -68,7 +68,30 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                 ))}
                
                 <div>
+                    <div className="flex items-center justify-between mb-8">
+                        <p className="text-lg font-normal">Загальна сума:</p>
+                        <p className="text-lg font-normal">{project?.total}</p>
+                    </div>  
+
+                    <div className="flex items-center justify-between mb-8">
+                        <p className="text-lg font-normal text-green">Знижка:</p>
+                        <p className="text-lg font-normal text-green">{project?.discount}</p>
+                    </div> 
+
+                     <div className="flex items-center justify-between mb-8">
+                        <p className="text-lg font-normal">Аванс:</p>
+                        <p className="text-lg font-normal">{project?.advancesTotal}</p>
+                    </div>
                     
+                      <div className="flex items-center justify-between mb-8">
+                        <p className="text-lg font-normal">Витрачено на матеріали:</p>
+                        <p className="text-lg font-normal">{project?.materialsTotal}</p>
+                    </div>
+
+                     <div className="flex items-center justify-between p-6 bg-gray-5 rounded-full">
+                        <p className="text-xl font-semibold">До сплати:</p>
+                        <p className="text-xl font-semibold">{project?.general}</p>
+                    </div>
                 </div>
             </section>
         </div>
