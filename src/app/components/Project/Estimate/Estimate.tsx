@@ -3,6 +3,7 @@ import { PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline';
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDelete";
 import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
+import ButtonPrint from "@/app/UI/Buttons/ButtonPrint";
 
 interface EstimateProps {
   project: PriceItem | null;
@@ -24,6 +25,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
             </ul>
             
             <section>
+                <div className="flex items-center gap-6 mt-6">
+                   <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
+                     <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
+                </div>
                 {project && project?.estimates?.map((item, index) => (
                     <div className="mb-6" key={item?._id}>
                   <div className="flex items-center gap-6 justify-center mb-8"> 
@@ -32,15 +37,15 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                             <ButtonDelete />
                         </div>
 
-                     <tbody className="table-auto w-full">
-                  <tr className="">
-                   <td className="border border-gray-20 p-3"><p>№ з/п.</p></td>
-                   <td className="border border-gray-20 p-3"><p>Назва</p> </td>
+                     <tbody className="table-auto ]">
+                  <tr className="w-full">
+                   <td className="w-14 border border-gray-20 p-3"><p className="font-bold text-sm">№ з/п.</p></td>
+                   <td className="w-64 border border-gray-20 p-3"><p className="font-bold text-sm">Назва</p> </td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Одиниця</p></td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Кількість</p></td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Ціна в грн.</p></td>
-                   <td className="border border-gray-20 p-3"><p>Сума в грн.</p></td>
-                   <td className="border border-gray-20 p-3"><p>Редагувати</p></td>
+                   <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Сума в грн.</p></td>
+                   <td className="w-36 border border-gray-20 p-3"><p className="font-bold text-sm">Редагувати</p></td>
                </tr>    
                        
                 {item?.positions && item?.positions?.map(({ _id, id, title, unit, price, number, result }, index) => (         
@@ -103,6 +108,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                     </div>
                 </div>
             </section>
+            <div className="flex items-center justify-end gap-8 mt-8">
+                <ButtonBlue title="Відправити кошторис" /> 
+                <ButtonPrint/>
+            </div>
         </div>
     )
 }
