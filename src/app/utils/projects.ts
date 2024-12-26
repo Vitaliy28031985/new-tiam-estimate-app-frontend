@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Projects, ProjectsData } from "../interfaces/projects";
+import { PriceItem, Projects, ProjectsData } from "../interfaces/projects";
 import BASE_URL from "./base";
 
 export async function getAllProjects(page: number, limit: number): Promise<Projects | null> {
@@ -18,6 +18,29 @@ export async function getAllProjects(page: number, limit: number): Promise<Proje
     });
     const priceData: Projects = response.data;
     return priceData;
+  } catch (error) {
+    console.error('Error during request:', error);
+    return null;
+  }
+  } 
+}
+
+export async function getProject(id: string): Promise<PriceItem | null> {
+
+    const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'get',
+      url: `${BASE_URL}api/projects/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const projectData: PriceItem = response.data;
+    return projectData;
   } catch (error) {
     console.error('Error during request:', error);
     return null;
