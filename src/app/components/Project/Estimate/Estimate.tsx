@@ -1,4 +1,5 @@
 import { PriceItem } from "@/app/interfaces/projects";
+import { PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline';
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDelete";
 import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
@@ -50,7 +51,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{number}</p></td>
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{price}</p></td>   
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{result}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal"></p></td>
+                        <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
+                            <button type="button"><PencilSquareIcon className="size-5 text-gray-25"/></button>
+                            <button type="button"><TrashIcon className="size-5 text-red-0"/></button>
+                        </td>
                         </tr>
 
                 ))}
@@ -63,7 +67,12 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                                 <td className="p-3 border border-b-gray-20" ></td>
                       <td className="p-3 border border-b-gray-20 border-r-gray-20 text-center"><p className="font-bold text-sm">{item.total &&  item.total}</p></td>
                     </tr>
-                </tbody>
+                        </tbody>
+                        
+                        <div className="flex items-center justify-between mt-8">
+                            <button type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold">Додати</button>
+                            <button type="button" className="p-4 bg-blue-30 rounded-full text-sm text-white font-bold">Зберегти зміни</button>
+                        </div>
                     </div>  
                 ))}
                
