@@ -1,4 +1,4 @@
-import Estimate from "@/app/components/Estimate/Estimate";
+import Project from "@/app/components/Project/Project";
 
 export default async function EstimatePage({
   params,
@@ -10,7 +10,7 @@ export default async function EstimatePage({
   return (
       <main className="bg-gray-0 pt-20 pb-20">
           <div className="w-[960px] mx-auto shadow-base p-8 bg-white rounded-3xl">
-            <Estimate projectId={projectId} />   
+            <Project projectId={projectId} />   
           </div>
     </main>
   );
