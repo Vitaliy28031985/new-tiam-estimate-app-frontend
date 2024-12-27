@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
 import { updateEstimate } from "@/app/utils/Estimates";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
+import { Position } from "@/app/interfaces/positions";
+import AddPosition from "../../Modal/AddPosition";
 
 interface EstimateProps {
     project: PriceItem | null;
@@ -25,6 +27,14 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; title: string | undefined} | null>(null);
     const [toggleModal, setToggleModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+    const [isAddPosition, setIsAddPosition] = useState<boolean>(false);
+
+const toggleAddPosition = () => {
+    setIsAddPosition(toggle => !toggle);
+  
+    };
+    
+  
 
     
    
@@ -117,7 +127,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
 
    
 
-    // console.log(data);
+    console.log(project?.prices);
     
     return (
         <div>
@@ -133,7 +143,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                      <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                 </div>
                 {data && data?.map((item) => (
-                    <div className="mb-6" key={item?.id}>
+                    <div className="mb-6 relative" key={item?.id}>
                         <div className={`${!item?.isShow ? 'mt-2 flex items-center gap-6 justify-center mb-8' : 'mt-2 flex items-center gap-6 justify-center mb-8 bg-blue-5 rounded-md'} `}>
                             {item?.isShow ?
                                 (<input onChange={onChange} className="w-28  font-semibold text-xl bg-transparent focus:outline-none"
@@ -179,9 +189,13 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                             <button type="button"><PencilSquareIcon className="size-5 text-gray-25"/></button>
                             <button type="button"><TrashIcon className="size-5 text-red-0"/></button>
                         </td>
+                        
                         </tr>
+                    
+                         
 
-                ))}
+                ))}        {isAddPosition && (<AddPosition isShow={isRender} toggle={toggleAddPosition} prices={project?.prices} />)}
+                            
                              <tr className="bg-gray-0 border border-gray-20 p-3">
                                 <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm">Всього:</p></td>
                                 <td className="p-3 border border-b-gray-20" ></td>
@@ -193,9 +207,8 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                     </tr>
                         </tbody>
                         
-                        <div className="flex items-center justify-between mt-8">
-                            <button type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold">Додати</button>
-                            <button type="button" className="p-4 bg-blue-30 rounded-full text-sm text-white font-bold">Зберегти зміни</button>
+                        <div className=" mt-8">
+                            <button onClick={() =>toggleAddPosition()} type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">Додати</button>
                         </div>
                     </div>  
                 ))}
