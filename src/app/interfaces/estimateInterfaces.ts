@@ -1,5 +1,6 @@
 export interface EstimateCreate {
-  projectId: string;
-  title: string;
+  projectId: string | undefined;
+  estimateId?: string | undefined; 
+  title?: string | undefined;
 
 }

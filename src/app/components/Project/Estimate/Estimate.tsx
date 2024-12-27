@@ -7,6 +7,8 @@ import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
 import ButtonPrint from "@/app/UI/Buttons/ButtonPrint";
 import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
+import { updateEstimate } from "@/app/utils/Estimates";
+import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 
 interface EstimateProps {
     project: PriceItem | null;
@@ -20,11 +22,15 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
     } 
 
     const [data, setData] = useState<Estimate[] | null>(null);
+    const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; title: string | undefined} | null>(null);
     const [toggleModal, setToggleModal] = useState<boolean>(false);
+    const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 
     
    
     const isShowModal = () => setToggleModal(toggle => !toggle);
+    const toggleDelete = () => setIsShowDeleteModal(prev => !prev);
+    
 
     useEffect(() => {
     
@@ -135,13 +141,19 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                                 (<p className="font-semibold text-xl">{ item?.title}</p>)
                             }        
                         
-                            <ButtonUpdate click={async () => {
+                            <ButtonUpdate type="button" click={async () => {
                                 addIsToggle(item.id, !item.isShow, "update", "estimate");
                                 if (item.isShow) {
-                                    
+                                   await updateEstimate({projectId: project?._id, estimateId: item?.id, title: item?.title}) 
+                                    if (isRender) isRender();
                                 }
                             } }/>
-                            <ButtonDelete />
+                            <ButtonDelete type="button" isActive={item.isShow} click={async () => {
+                                addIsToggle(item.id, !item.isDelete, "delete", "estimate");
+                                setCurrentData({ id: project?._id, estimateId: item?.id, title: item?.title })
+                                toggleDelete();
+                                
+                            }} />
                         </div>
 
                      <tbody className="table-auto ]">
@@ -220,6 +232,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                 <ButtonPrint/>
             </div>
             {toggleModal && (<AddEstimateModal id={project?._id} toggle={isShowModal} isShow={isRender} />)}
+             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
         </div>
     )
 }

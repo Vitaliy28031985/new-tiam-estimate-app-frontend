@@ -97,11 +97,7 @@ const handlePrint = () => {
 };
 
 
-    
-
-
-
-
+  
     async function getPrices() {
         const prices = await getAllPrices();
         if (prices) {
