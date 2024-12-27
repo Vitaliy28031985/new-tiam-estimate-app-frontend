@@ -1,11 +1,11 @@
 'use client'
-import { PriceItem } from "@/app/interfaces/projects";
+import { Estimate, EstimatePosition, PriceItem } from "@/app/interfaces/projects";
 import { PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline';
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDelete";
 import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
 import ButtonPrint from "@/app/UI/Buttons/ButtonPrint";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
 
 interface EstimateProps {
@@ -14,16 +14,48 @@ interface EstimateProps {
 }
 
 const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
-    const [toggleModal, setToggleModal] = useState<boolean>(false);
-    
-
-    const isShowModal = () => setToggleModal(toggle => !toggle);
-
     if (!project) {
     return <div>No project available</div>;
-    }
+    } 
 
-    // console.log(project?.estimates);
+    const [data, setData] = useState<Estimate | null>(null);
+    const [toggleModal, setToggleModal] = useState<boolean>(false);
+
+    
+   
+    const isShowModal = () => setToggleModal(toggle => !toggle);
+
+    useEffect(() => {
+    
+    if (project?.estimates) {
+        const newEstimates: Estimate[] | any = project?.estimates.map(item => ({
+            ...item,
+            isShow: false,
+            isDelete: false,
+        }));
+
+        if (newEstimates?.length > 0) {
+    
+            for (let i = 0; i < newEstimates.length; i++) {
+                if (Array.isArray(newEstimates[i].positions)) {
+
+                    newEstimates[i].positions = newEstimates[i].positions.map((position: EstimatePosition) => ({
+                        ...position,
+                        isShow: false,
+                        isDelete: false,
+                    }));
+                } 
+            }
+        }
+        setData(newEstimates)   
+    }
+        
+}, [project]);
+
+
+   
+
+    // console.log(data);
     
     return (
         <div>
@@ -38,7 +70,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                    <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                      <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                 </div>
-                {project && project?.estimates?.map((item) => (
+                {data && data?.map((item) => (
                     <div className="mb-6" key={item?._id}>
                   <div className="flex items-center gap-6 justify-center mb-8"> 
                         <p className="font-semibold text-xl">{ item?.title}</p>
@@ -57,14 +89,14 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                    <td className="w-36 border border-gray-20 p-3"><p className="font-bold text-sm">Редагувати</p></td>
                </tr>    
                        
-                {item?.positions && item?.positions?.map(({ id, title, unit, price, number, result }, index) => (         
-                <tr key={id} className="">
+                {item?.positions && item?.positions?.map((item: EstimatePosition, index: number) => (         
+                <tr key={item.id || index} className="">
                 <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{index + 1}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal">{title}</p></td>                 
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{unit}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{number}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{price}</p></td>   
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{result}</p></td>
+                <td className="border border-gray-20 p-3"><p className="text-xs font-normal">{item.title}</p></td>                 
+                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.unit}</p></td>
+                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.number}</p></td>
+                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.price}</p></td>   
+                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.result}</p></td>
                         <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
                             <button type="button"><PencilSquareIcon className="size-5 text-gray-25"/></button>
                             <button type="button"><TrashIcon className="size-5 text-red-0"/></button>

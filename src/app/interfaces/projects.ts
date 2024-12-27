@@ -28,8 +28,10 @@ interface Price {
   updatedAt: string;
 }
 
-interface EstimatePosition {
+export interface EstimatePosition {
   id: string;
+ isShow?: false;
+  isDelete?: false;
   title: string;
   unit: string;
   number: number;
@@ -41,8 +43,11 @@ interface EstimatePosition {
 }
 
 export interface Estimate {
+  map(arg0: (item: any) => import("react").JSX.Element): import("react").ReactNode;
   id?: string;
   title: string;
+  isShow?: false;
+  isDelete?: false;
   positions?: EstimatePosition[];
   total?: number;
   _id?: string;
