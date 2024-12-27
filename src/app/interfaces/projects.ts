@@ -30,8 +30,8 @@ interface Price {
 
 export interface EstimatePosition {
   id: string;
- isShow?: false;
-  isDelete?: false;
+ isShow?: boolean;
+  isDelete?: boolean;
   title: string;
   unit: string;
   number: number;
@@ -46,8 +46,8 @@ export interface Estimate {
   map(arg0: (item: any) => import("react").JSX.Element): import("react").ReactNode;
   id?: string;
   title: string;
-  isShow?: false;
-  isDelete?: false;
+  isShow?: boolean;
+  isDelete?: boolean;
   positions?: EstimatePosition[];
   total?: number;
   _id?: string;

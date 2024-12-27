@@ -13,12 +13,13 @@ interface EstimateProps {
     isRender: () => void;
 }
 
+
 const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
     if (!project) {
     return <div>No project available</div>;
     } 
 
-    const [data, setData] = useState<Estimate | null>(null);
+    const [data, setData] = useState<Estimate[] | null>(null);
     const [toggleModal, setToggleModal] = useState<boolean>(false);
 
     
@@ -53,6 +54,61 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
 }, [project]);
 
 
+    
+    const addIsToggle = (id: string | undefined, currentIsShow: boolean, name: 'update' | 'delete', type: "estimate" | "position"): void => {
+        if (type === 'estimate') {
+           
+         setData(prevData => {
+            if (prevData === null) return []; 
+            const newData = prevData.map(item => {
+                if (item.id === id) {
+                    if (name === 'update') {
+                        return { ...item, isShow: currentIsShow };
+                    }
+                    if (name === 'delete') {
+                        return { ...item, isDelete: currentIsShow };
+                    }
+                }
+                return item;
+            });
+            return newData;
+        });    
+         }
+        
+    };
+
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, id } = e.currentTarget;
+
+    setData(prevData => {
+        if (prevData === null) return []; 
+
+        const newData = prevData.map(estimate => {
+            if (estimate.id === id) {
+                switch (name) {
+                    case 'title': 
+                        return { ...estimate, title: value };
+                    default:
+                        return estimate;
+                }
+            }
+  
+            const newPositions: EstimatePosition[] = estimate.positions?.map(position => {
+                if (position._id === id) {
+                    return { ...position, [name]: value };
+                }
+                return position;
+            }) || [];
+
+            return { ...estimate, positions: newPositions };
+        });
+
+        return newData;
+    });
+};
+
+
    
 
     // console.log(data);
@@ -71,10 +127,20 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                      <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                 </div>
                 {data && data?.map((item) => (
-                    <div className="mb-6" key={item?._id}>
-                  <div className="flex items-center gap-6 justify-center mb-8"> 
-                        <p className="font-semibold text-xl">{ item?.title}</p>
-                            <ButtonUpdate/>
+                    <div className="mb-6" key={item?.id}>
+                        <div className={`${!item?.isShow ? 'mt-2 flex items-center gap-6 justify-center mb-8' : 'mt-2 flex items-center gap-6 justify-center mb-8 bg-blue-5 rounded-md'} `}>
+                            {item?.isShow ?
+                                (<input onChange={onChange} className="w-28  font-semibold text-xl bg-transparent focus:outline-none"
+                                   id={item?.id} name="title" value={item?.title} />) :
+                                (<p className="font-semibold text-xl">{ item?.title}</p>)
+                            }        
+                        
+                            <ButtonUpdate click={async () => {
+                                addIsToggle(item.id, !item.isShow, "update", "estimate");
+                                if (item.isShow) {
+                                    
+                                }
+                            } }/>
                             <ButtonDelete />
                         </div>
 
