@@ -1,4 +1,7 @@
 export interface Position {
+  projectId?: string | undefined;
+  estimateId?: string | undefined;
+  positionId?: string | undefined;
   title: string |undefined;
   unit: string  | undefined;
   number: number;
@@ -16,3 +19,4 @@ export interface Price {
   createdAt: string;
   updatedAt: string;
 }
+

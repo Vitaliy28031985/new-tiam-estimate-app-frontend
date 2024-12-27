@@ -1,7 +1,9 @@
 'use client'
 
 import { Position, Price } from "@/app/interfaces/positions";
-import { useState } from "react";
+import Unit from "@/app/interfaces/unitInterface";
+import { getUnits } from "@/app/utils/unit";
+import { useEffect, useState } from "react";
 
 interface AddPositionProps {
     prices?: Price[];
@@ -10,12 +12,33 @@ interface AddPositionProps {
     toggle?: () => void;
 }
 
-const AddPosition: React.FC<AddPositionProps> = ({isShow, toggle, prices}) => {
+const AddPosition: React.FC<AddPositionProps> = ({ isShow, toggle, prices }) => {
+    const [data, setData] = useState<Unit[] | null | undefined>(null);
     const [title, setTitle] = useState('');
     const [unit, setUnit] = useState('');
     const [number, setNumber] = useState('');
     const [price, setPrice] = useState('');
     const [priceShow, setPriceShow] = useState(false);
+
+     const defaultData = {
+          _id: "6735cf9bd38738b09dbrwerwer",
+        title: "Вибери для видалення",
+        owner: "6735c438d38738b09db4950b",
+        createdAt: "2024-11-14T10:23:23.208Z",
+        updatedAt: "2024-11-14T10:23:23.208Z"
+    }
+
+     const getAllUnits = async () => {
+        const units = await getUnits();
+        if (units) {
+            const newData: Unit[] = [defaultData];
+            units.map(item => newData.push(item))
+            
+         setData(newData);   
+        } 
+    }
+
+    useEffect(() => { getAllUnits() }, []);
 
   const normalizeFilter = title.toLowerCase();
 
@@ -58,8 +81,11 @@ const AddPosition: React.FC<AddPositionProps> = ({isShow, toggle, prices}) => {
          
     };
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         console.log({ title, unit, number, price })
+        if (title !== '' && unit !== '' && number !== '' && price !== '') {
+            
+        }
         try {
 
             if (isShow) isShow();
@@ -75,9 +101,22 @@ const AddPosition: React.FC<AddPositionProps> = ({isShow, toggle, prices}) => {
         <tr>
              <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center"></p></td>
                 <td className="border border-gray-20 p-3"><input onChange={onChange} value={title} name="title" className="w-full text-xs font-normal focus:outline-none"/></td>                 
-                <td className="border border-gray-20 p-3"><input onChange={onChange} value={unit} name="unit" className="w-full text-xs font-normal focus:outline-none"/></td>
-                <td className="border border-gray-20 p-3"><input type="number" onChange={onChange} value={number} name="number"  className="w-full text-xs font-normal focus:outline-none"/></td>
-                <td className="border border-gray-20 p-3"><input type="number" onChange={onChange} value={price} name="price" className="w-full text-xs font-normal focus:outline-none"/></td>   
+            <td className="border border-gray-20 p-3">
+                  <select
+                     className="w-full text-xs text-center font-normal focus:outline-none"
+                     name="unit"
+                     id="delete"
+                     onChange={onChange}>
+                     {data?.map(({title, _id}) => (
+                       <option key={_id} value={title}>
+                         {title}
+                         </option>
+                          ))}
+                     
+                </select>
+                </td>
+                <td className="border border-gray-20 p-3"><input type="number" onChange={onChange} value={number} name="number"  className="w-full text-center text-xs font-normal focus:outline-none"/></td>
+                <td className="border border-gray-20 p-3"><input type="number" onChange={onChange} value={price} name="price" className="w-full text-center text-xs font-normal focus:outline-none"/></td>   
                 <td className="border border-gray-20 p-3"></td>
             <td className="border border-gray-20 p-3"></td>
             {showMiddleList && (

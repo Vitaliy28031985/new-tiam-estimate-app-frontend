@@ -127,7 +127,7 @@ const toggleAddPosition = () => {
 
    
 
-    console.log(project?.prices);
+    // console.log(project?.prices);
     
     return (
         <div>
