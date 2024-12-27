@@ -13,13 +13,16 @@ interface ProjectProps {
 
 const Project: React.FC<ProjectProps> = ({ projectId }) => {
     const [data, setData] = useState<PriceItem | null>(null);
+    const [isRender, setIsRender] = useState<boolean | null | undefined>(false);
+    
+    const toggleRender = () => setIsRender(render => !render);
 
     async function getEstimate() {
        const estimate = await getProject(projectId);
         if (estimate) setData(estimate);
     }
 
-    useEffect(() => { getEstimate() }, [])
+    useEffect(() => { getEstimate() }, [isRender])
     
     console.log(data?.title)
 
@@ -41,7 +44,7 @@ const Project: React.FC<ProjectProps> = ({ projectId }) => {
                   <li><Link className="font-medium text-xl px-3 py-1 text-blue-25" href={`/`}>Аванс</Link><div className="w-full h-[1px] bg-blue-25"></div></li>
           </ul>
           
-          <EstimateItem project={data}/>
+          <EstimateItem project={data} isRender={toggleRender} />
       </section>
   );
 }

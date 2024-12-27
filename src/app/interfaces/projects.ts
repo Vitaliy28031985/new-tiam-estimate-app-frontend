@@ -40,14 +40,14 @@ interface EstimatePosition {
   updatedAt: string;
 }
 
-interface Estimate {
-  id: string;
+export interface Estimate {
+  id?: string;
   title: string;
-  positions: EstimatePosition[];
-  total: number;
-  _id: string;
-  createdAt: string;
-  updatedAt: string;
+  positions?: EstimatePosition[];
+  total?: number;
+  _id?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface LowEstimatePosition {

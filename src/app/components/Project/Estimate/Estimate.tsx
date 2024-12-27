@@ -1,15 +1,24 @@
+'use client'
 import { PriceItem } from "@/app/interfaces/projects";
 import { PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline';
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDelete";
 import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
 import ButtonPrint from "@/app/UI/Buttons/ButtonPrint";
+import { useState } from "react";
+import AddEstimateModal from "../../Modal/AddEstimateModal";
 
 interface EstimateProps {
-  project: PriceItem | null;
+    project: PriceItem | null;
+    isRender: () => void;
 }
 
-const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
+const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
+    const [toggleModal, setToggleModal] = useState<boolean>(false);
+    
+
+    const isShowModal = () => setToggleModal(toggle => !toggle);
+
     if (!project) {
     return <div>No project available</div>;
     }
@@ -19,7 +28,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
     return (
         <div>
             <ul className="mb-8 flex items-center gap-4 justify-center">
-                <li><ButtonBlue type="button" title="Додати таблицю" /></li>
+                <li><ButtonBlue click={isShowModal} type="button" title="Додати таблицю" /></li>
                 <li><ButtonBlue type="button" title="Створити таблицю Excel" /></li>
                 <li><ButtonBlue type="button" title="Створити PDF файл" /></li>
             </ul>
@@ -112,6 +121,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project }) => {
                 <ButtonBlue title="Відправити кошторис" /> 
                 <ButtonPrint/>
             </div>
+            {toggleModal && (<AddEstimateModal id={project?._id} toggle={isShowModal} isShow={isRender} />)}
         </div>
     )
 }
