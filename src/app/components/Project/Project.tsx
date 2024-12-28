@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { EstimatePosition, ProjectItem } from "@/app/interfaces/projects";
+import { ProjectItem } from "@/app/interfaces/projects";
 import { getProject } from "@/app/utils/projects";
 import EstimateItem from "./Estimate/Estimate";
 
