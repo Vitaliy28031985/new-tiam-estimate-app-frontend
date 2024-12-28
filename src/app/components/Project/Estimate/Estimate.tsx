@@ -1,6 +1,7 @@
 'use client'
 import { Estimate, EstimatePosition, PriceItem } from "@/app/interfaces/projects";
-import { PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PiFloppyDisk } from "react-icons/pi";
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDelete";
 import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
@@ -11,7 +12,7 @@ import { updateEstimate } from "@/app/utils/Estimates";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 import { Position } from "@/app/interfaces/positions";
 import AddPosition from "../../Modal/AddPosition";
-import { addPosition } from "@/app/utils/positions";
+import { addPosition, updatePosition } from "@/app/utils/positions";
 
 interface EstimateProps {
     project: PriceItem | null;
@@ -26,7 +27,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
 
     const [data, setData] = useState<Estimate[] | null>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; title: string | undefined} | null>(null);
-   const [estId, setEstId] = useState<string | undefined>('');
+    const [estId, setEstId] = useState<string | undefined>('');
     const [toggleModal, setToggleModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
    
@@ -75,32 +76,55 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
 }, [project]);
 
 
-    
-    const addIsToggle = (id: string | undefined, currentIsShow: boolean, name: 'update' | 'delete' | "add", type: "estimate" | "position"): void => {
-        if (type === 'estimate') {
-           
-         setData(prevData => {
-            if (prevData === null) return []; 
-            const newData = prevData.map(item => {
-                if (item.id === id) {
-                    if (name === 'update') {
-                        return { ...item, isShow: currentIsShow };
-                    }
-                    if (name === 'delete') {
-                        return { ...item, isDelete: currentIsShow };
-                    }
-
-                     if (name === 'add') {
-                        return { ...item, isAdd: currentIsShow };
-                    }
-                }
-                return item;
-            });
-            return newData;
-        });    
-         }
         
-    };
+    const addIsToggle = (
+  id: string | undefined,
+  currentIsShow: boolean,
+  name: 'update' | 'delete' | 'add',
+  type: 'estimate' | 'position'
+): void => {
+  setData(prevData => {
+    if (prevData === null) return [];
+
+    const newData = prevData.map(item => {
+      // Обробка 'estimate' типу
+      if (type === 'estimate' && item.id === id) {
+        if (name === 'update') {
+          return { ...item, isShow: currentIsShow };
+        }
+        if (name === 'delete') {
+          return { ...item, isDelete: currentIsShow };
+        }
+        if (name === 'add') {
+          return { ...item, isAdd: currentIsShow };
+        }
+      }
+
+      // Обробка позицій у 'estimate'
+      if (type === 'position' && item.positions) {
+        const newPositions = item.positions.map(position => {
+          if (position.id === id) {
+            if (name === 'update') {
+              return { ...position, isShow: currentIsShow };
+            }
+            if (name === 'delete') {
+              return { ...position, isDelete: currentIsShow };
+            }
+          }
+          return position;
+        });
+
+        return { ...item, positions: newPositions };
+      }
+
+      return item;
+    });
+
+    // Повертаємо оновлений масив
+    return newData;
+  });
+};
+
 
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +144,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
             }
   
             const newPositions: EstimatePosition[] = estimate.positions?.map(position => {
-                if (position._id === id) {
+                if (position.id === id) {
                     return { ...position, [name]: value };
                 }
                 return position;
@@ -186,16 +210,80 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                    <td className="w-36 border border-gray-20 p-3"><p className="font-bold text-sm">Редагувати</p></td>
                </tr>    
                        
-                {item?.positions && item?.positions?.map((item: EstimatePosition, index: number) => (         
-                <tr key={item.id || index} className="">
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{index + 1}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal">{item.title}</p></td>                 
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.unit}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.number}</p></td>
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.price}</p></td>   
-                <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{item.result}</p></td>
+                {item?.positions && item?.positions?.map((position: EstimatePosition, index: number) => (         
+                    <tr key={position.id || index} className="">
+                        
+                        <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{index + 1}</p></td>
+
+                        <td className="border border-gray-20 p-3">
+                            {position.isShow ? (
+                                <input type="text"
+                                className="w-full h-full text-xs font-normal focus:outline-none"
+                                id={position.id} name='title' value={position.title}  
+                                onChange={onChange}
+                                />
+                            ) : (<p className="text-xs font-normal">{position.title}</p>)}
+                            
+                        </td>
+                        
+                        <td className="border border-gray-20 p-3">
+                            {position.isShow ? (
+                             <input type="text"
+                                className="w-full h-full text-xs font-normal text-center focus:outline-none"
+                                id={position.id} name='unit' value={position.unit}  
+                                onChange={onChange}
+                                />
+                            ) : (
+                             <p className="text-xs font-normal text-center">{position.unit}</p>       
+                            )}
+                            
+                        </td>
+
+                        <td className="border border-gray-20 p-3">
+                            {position.isShow ? (
+                            <input type="number"
+                                className="w-full h-full text-xs font-normal text-center focus:outline-none"
+                                id={position.id} name='number' value={position.number}  
+                                onChange={onChange}
+                                />
+                            ) : (
+                             <p className="text-xs font-normal text-center">{position.number}</p>       
+                            )} 
+                        </td>
+
+                        <td className="border border-gray-20 p-3">
+                            {position.isShow ? (
+                             <input type="number"
+                                className="w-full h-full text-xs font-normal text-center focus:outline-none"
+                                id={position.id} name='price' value={position.price}  
+                                onChange={onChange}
+                                />
+                            ) : (
+                             <p className="text-xs font-normal text-center">{position.price}</p>       
+                            )}
+                        </td>   
+
+                        <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{position.result}</p></td>
                         <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
-                            <button type="button"><PencilSquareIcon className="size-5 text-gray-25"/></button>
+                            <button
+                                onClick={async () => {
+                                addIsToggle(position.id, !position.isShow, "update", "position");
+                                    if (position.isShow) {
+                                        await updatePosition({
+                                            projectId: project._id,
+                                            estimateId: item.id,
+                                            positionId: position.id,
+                                            title: position.title,
+                                            unit: position.unit,
+                                            number: position.number,
+                                            price: position.price,
+                                        });
+                                    if (isRender) isRender();
+                                 }   
+                            }}
+                                type="button">
+                                {position.isShow ? (<PiFloppyDisk className="size-5 text-gray-25" />) : (<PencilSquareIcon className="size-5 text-gray-25" />)}
+                                </button>
                             <button type="button"><TrashIcon className="size-5 text-red-0"/></button>
                         </td>
                         
