@@ -318,7 +318,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             }
                                 
                                 
-                            } type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">Додати</button>
+                            } type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">{item.isAdd ? "Закрити" : "Додати" }</button>
                         </div>
                     </li>  
                 ))}
