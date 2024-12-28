@@ -2,20 +2,18 @@
 
 import { Position, Price } from "@/app/interfaces/positions";
 import Unit from "@/app/interfaces/unitInterface";
+import { getProject } from "@/app/utils/projects";
 import { getUnits } from "@/app/utils/unit";
 import { useEffect, useState } from "react";
 
 interface AddPositionProps {
-    prices?: Price[];
+    projectId: string;
     isGetData: (data: Position) => Promise<void>;
 }
 
-const AddPosition: React.FC<AddPositionProps> = ({ prices, isGetData }) => {
-
-    if (!prices) {
-    return <div>No project available</div>;
-    } 
-
+const AddPosition: React.FC<AddPositionProps> = ({  isGetData, projectId }) => {
+    
+    const [prices, setPrices] = useState<Price[] | null | undefined>(null);
     const [data, setData] = useState<Unit[] | null | undefined>(null);
     const [title, setTitle] = useState('');
     const [unit, setUnit] = useState('');
@@ -31,16 +29,20 @@ const AddPosition: React.FC<AddPositionProps> = ({ prices, isGetData }) => {
         updatedAt: "2024-11-14T10:23:23.208Z"
     }
 
-     const getAllUnits = async () => {
-        const units = await getUnits();
+     const getAllData = async () => {
+         const units = await getUnits();
+          const estimate = await getProject(projectId);
         if (units) {
             const newData: Unit[] = [defaultData];
             units.map(item => newData.push(item))
             setData(newData);   
-        } 
+         } 
+         if (estimate) {
+             setPrices(estimate.prices);
+         }
     }
 
-    useEffect(() => { getAllUnits() }, []);
+    useEffect(() => { getAllData() }, []);
 
   const normalizeFilter = title.toLowerCase();
      

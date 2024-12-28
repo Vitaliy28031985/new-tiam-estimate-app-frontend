@@ -1,5 +1,5 @@
 'use client'
-import { Estimate, EstimatePosition, ProjectItem } from "@/app/interfaces/projects";
+import { Estimate, EstimatePosition } from "@/app/interfaces/projects";
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
@@ -24,7 +24,6 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
    
  
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
-    const [project, setProject] = useState<ProjectItem| null>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; positionId?: string | undefined; title: string | undefined} | null>(null);
     const [estId, setEstId] = useState<string | undefined>('');
     const [toggleModal, setToggleModal] = useState<boolean>(false);
@@ -59,7 +58,6 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
 
             estimate.estimates = newEstimates;
             
-            setProject(estimate);
             setData(estimate.estimates); 
         }
     }
@@ -304,7 +302,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                     </tr>
    
                 ))}
-                    {item.isAdd && (<AddPosition isGetData={getDataPosition} prices={project?.prices} />)}
+                    {item.isAdd && (<AddPosition projectId={projectId} isGetData={getDataPosition} />)}
                             
                     <tr className="bg-gray-0 border border-gray-20 p-3">
                             <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm">Всього:</p></td>
