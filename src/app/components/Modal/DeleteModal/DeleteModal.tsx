@@ -3,9 +3,11 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import Message from './Message';
 import { deletePrice } from '@/app/utils/prices';
 import { deleteProject } from '@/app/utils/projects';
+import { deleteEstimate } from '@/app/utils/Estimates';
+import { deletePosition } from '@/app/utils/positions';
 
 interface DeleteModalProps {
-    data?: { _id?: string, id?: string, title: string } | null;
+    data?: { _id?: string, id?: string | undefined, estimateId?: string | undefined; positionId?: string | undefined; title: string | undefined } | null;
     nameComponent?: string;
     toggle?: () => void;
     toggleData?: () => void;
@@ -26,6 +28,16 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
                 if (data?._id) await deleteProject(data._id);
                 if (toggleData) toggleData();
                 //  window.location.reload();
+            }
+
+            if (nameComponent === 'estimate') {
+                if (data) await deleteEstimate({ projectId: data.id, estimateId: data.estimateId });
+                 if (toggleData) toggleData();
+            }
+
+            if (nameComponent === 'position') {
+                if (data) await deletePosition({ projectId: data.id, estimateId: data.estimateId, positionId: data.positionId });
+                if (toggleData) toggleData();
             }
 
             setMessage(true);
