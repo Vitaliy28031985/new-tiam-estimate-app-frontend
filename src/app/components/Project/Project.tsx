@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { PriceItem } from "@/app/interfaces/projects";
+import { EstimatePosition, ProjectItem } from "@/app/interfaces/projects";
 import { getProject } from "@/app/utils/projects";
 import EstimateItem from "./Estimate/Estimate";
 
@@ -12,19 +12,36 @@ interface ProjectProps {
 }
 
 const Project: React.FC<ProjectProps> = ({ projectId }) => {
-    const [data, setData] = useState<PriceItem | null>(null);
-    const [isRender, setIsRender] = useState<boolean | null | undefined>(false);
+    const [data, setData] = useState<ProjectItem| null>(null);
     
-    const toggleRender = () => setIsRender(render => !render);
+useEffect(() => { getEstimate() }, [])
 
     async function getEstimate() {
        const estimate = await getProject(projectId);
-        if (estimate) setData(estimate);
+        if (estimate) {
+            const newEstimates = estimate?.estimates?.map(item => ({
+                        ...item,
+                        isShow: false,
+                        isDelete: false,
+                        isAdd: false,
+                        positions: item.positions?.map((position: EstimatePosition) => ({
+                            ...position,
+                            isShow: false,
+                            isDelete: false,
+                        })) || [],
+            }));
+
+            estimate.estimates = newEstimates;            
+            setData(estimate); 
+        }
+           
     }
 
-    useEffect(() => { getEstimate() }, [isRender])
     
-    console.log(data?.title)
+
+   
+    
+
 
   return (
       <section>
@@ -44,7 +61,7 @@ const Project: React.FC<ProjectProps> = ({ projectId }) => {
                   <li><Link className="font-medium text-xl px-3 py-1 text-blue-25" href={`/`}>Аванс</Link><div className="w-full h-[1px] bg-blue-25"></div></li>
           </ul>
           
-          <EstimateItem project={data} isRender={toggleRender} />
+          <EstimateItem projectId={projectId} />
       </section>
   );
 }

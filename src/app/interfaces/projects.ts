@@ -99,7 +99,7 @@ interface Advance {
   updatedAt: string;
 }
 
-export interface PriceItem {
+export interface ProjectItem {
   _id?: string;
   title?: string;
   description?: string;

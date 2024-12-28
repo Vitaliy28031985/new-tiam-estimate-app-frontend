@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PriceItem, Projects, ProjectsData } from "../interfaces/projects";
+import { ProjectItem, Projects, ProjectsData } from "../interfaces/projects";
 import BASE_URL from "./base";
 
 export async function getAllProjects(page: number, limit: number): Promise<Projects | null> {
@@ -25,7 +25,7 @@ export async function getAllProjects(page: number, limit: number): Promise<Proje
   } 
 }
 
-export async function getProject(id: string): Promise<PriceItem | null> {
+export async function getProject(id: string | undefined): Promise<ProjectItem | null> {
 
     const token = localStorage.getItem('token');
   if (!token) {
@@ -39,7 +39,7 @@ export async function getProject(id: string): Promise<PriceItem | null> {
         'Authorization': `Bearer ${token}`
       }
     });
-    const projectData: PriceItem = response.data;
+    const projectData: ProjectItem = response.data;
     return projectData;
   } catch (error) {
     console.error('Error during request:', error);
