@@ -125,7 +125,7 @@ const AddPosition: React.FC<AddPositionProps> = ({  isGetData, projectId }) => {
                 </ul>     
                        )}
             <button
-                className="absolute bottom-0 right-0 z-10 p-4 bg-blue-30 rounded-full text-sm text-white font-bold hover:bg-blue-20 focus:bg-blue-20"
+                className="absolute bottom-3 right-3 z-10 p-4 bg-blue-30 rounded-full text-sm text-white font-bold hover:bg-blue-20 focus:bg-blue-20"
                 type="button" onClick={onSubmit}>Зберегти зміни
             </button>
         </tr>

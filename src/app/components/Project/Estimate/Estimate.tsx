@@ -1,5 +1,5 @@
 'use client'
-import { Estimate, EstimatePosition } from "@/app/interfaces/projects";
+import { Estimate, EstimatePosition, ProjectItem } from "@/app/interfaces/projects";
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
 import ButtonBlue from "@/app/UI/Buttons/ButtonBlueProject";
@@ -22,7 +22,7 @@ interface EstimateProps {
 
 const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
    
- 
+    const [project, setProject] = useState<ProjectItem| null>(null);
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; positionId?: string | undefined; title: string | undefined} | null>(null);
     const [estId, setEstId] = useState<string | undefined>('');
@@ -57,7 +57,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
             }));
 
             estimate.estimates = newEstimates;
-            
+            setProject(estimate);
             setData(estimate.estimates); 
         }
     }
@@ -88,7 +88,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
     if (prevData === null || prevData === undefined) return [];
 
     const newData = prevData.map(item => {
-      // Обробка 'estimate' типу
+      
       if (type === 'estimate' && item.id === id) {
         if (name === 'update') {
           return { ...item, isShow: currentIsShow };
@@ -101,7 +101,6 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
         }
       }
 
-      // Обробка позицій у 'estimate'
       if (type === 'position' && item.positions) {
         const newPositions = item.positions.map(position => {
           if (position.id === id) {
@@ -121,7 +120,6 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
       return item;
     });
 
-    // Повертаємо оновлений масив
     return newData;
   });
 };
@@ -172,16 +170,11 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
             </ul>
             
             <section>
-                <div className="flex items-center gap-6 mt-6">
-                   <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-                     <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-                </div>
-                <ul>
-
                 
+                <ul>  
                 {data && data?.map((item) => (
-                    <li className="mb-6 relative" key={item?.id}>
-                        <div className={`${!item?.isShow ? 'mt-2 flex items-center gap-6 justify-center mb-8' : 'mt-2 flex items-center gap-6 justify-center mb-8 bg-blue-5 rounded-md'} `}>
+                    <li className="mb-6 relative bg-gray-0 p-3 rounded-lg" key={item?.id}>
+                        <div className={`${!item?.isShow ? 'mt-2 flex items-center gap-6 justify-center mb-3 p-2' : 'mt-2 flex items-center gap-6 justify-center mb-3 p-2 bg-white rounded-md'} `}>
                             {item?.isShow ?
                                 (<input onChange={onChange} className="w-28  font-semibold text-xl bg-transparent focus:outline-none"
                                    id={item?.id} name="title" value={item?.title} />) :
@@ -203,11 +196,11 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             }} />
                         </div>
 
-            <table>
+            <table className="bg-white rounded-lg shadow-pricesTablet">
                 <tbody className="table-auto">
                 <tr className="w-full">
-                   <td className="w-14 border border-gray-20 p-3"><p className="font-bold text-sm">№ з/п.</p></td>
-                   <td className="w-64 border border-gray-20 p-3"><p className="font-bold text-sm">Назва</p> </td>
+                   <td className="w-10 border border-gray-20 p-3"><p className="font-bold text-sm">№ з/п.</p></td>
+                   <td className="w-60 border border-gray-20 p-3"><p className="font-bold text-sm">Назва</p> </td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Одиниця</p></td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Кількість</p></td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Ціна в грн.</p></td>
@@ -216,14 +209,15 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                </tr>    
                        
                 {item?.positions && item?.positions?.map((position: EstimatePosition, index: number) => (         
-                    <tr key={position.id || index} className="">
+                    
+                    <tr key={position.id || index} className={`${position.isShow && 'bg-gray-25'}`}>
                         
-                        <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{index + 1}</p></td>
+                        <td className="border border-gray-20 p-3"><p className={`${position.isShow ? "text-white text-xs font-normal text-center" : "text-black text-xs font-normal text-center"}`}>{index + 1}</p></td>
 
                         <td className="border border-gray-20 p-3">
                             {position.isShow ? (
                                 <input type="text"
-                                className="w-full h-full text-xs font-normal focus:outline-none"
+                                className="w-full h-full bg-transparent text-white text-xs font-normal focus:outline-none"
                                 id={position.id} name='title' value={position.title}  
                                 onChange={onChange}
                                 />
@@ -234,7 +228,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                         <td className="border border-gray-20 p-3">
                             {position.isShow ? (
                              <input type="text"
-                                className="w-full h-full text-xs font-normal text-center focus:outline-none"
+                                className="w-full h-full bg-transparent text-white text-xs font-normal text-center focus:outline-none"
                                 id={position.id} name='unit' value={position.unit}  
                                 onChange={onChange}
                                 />
@@ -247,7 +241,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                         <td className="border border-gray-20 p-3">
                             {position.isShow ? (
                             <input type="number"
-                                className="w-full h-full text-xs font-normal text-center focus:outline-none"
+                                className="w-full h-full bg-transparent text-white text-xs font-normal text-center focus:outline-none"
                                 id={position.id} name='number' value={position.number}  
                                 onChange={onChange}
                                 />
@@ -256,10 +250,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             )} 
                         </td>
 
-                        <td className="border border-gray-20 p-3">
+                        <td className="w-28 border border-gray-20 p-3">
                             {position.isShow ? (
                              <input type="number"
-                                className="w-full h-full text-xs font-normal text-center focus:outline-none"
+                                className="w-full h-full bg-transparent text-white text-xs font-normal text-center focus:outline-none"
                                 id={position.id} name='price' value={position.price}  
                                 onChange={onChange}
                                 />
@@ -268,7 +262,8 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             )}
                         </td>   
 
-                        <td className="border border-gray-20 p-3"><p className="text-xs font-normal text-center">{position.result}</p></td>
+                        <td className="w-28 border border-gray-20 p-3"><p className={`${position.isShow ? "text-white text-xs font-normal text-center" : "text-black text-xs font-normal text-center"}`}>{position.result}</p>
+                        </td>
                         <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
                             <button
                                 onClick={async () => {
@@ -287,7 +282,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                  }   
                             }}
                                 type="button"> 
-                                {position.isShow ? (<PiFloppyDisk className="size-5 text-gray-25" />) : (<PencilSquareIcon className="size-5 text-gray-25" />)}
+                                {position.isShow ? (<PiFloppyDisk className="size-5 text-white" />) : (<PencilSquareIcon className="size-5 text-gray-25" />)}
                             </button>
                             <button
                                 onClick={async () => {
@@ -295,7 +290,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                     setCurrentData({id: projectId, estimateId: item?.id, positionId: position.id, title: position.title})
                                     toggleDeletePosition()
                                }}
-                                type="button"><TrashIcon className="size-5 text-red-0" />
+                                type="button"> {position.isShow ? (<TrashIcon className="size-5 text-white" />) : ((<TrashIcon className="size-5 text-red-0" />))}
                             </button>
                         </td>
                         
@@ -304,14 +299,14 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                 ))}
                     {item.isAdd && (<AddPosition projectId={projectId} isGetData={getDataPosition} />)}
                             
-                    <tr className="bg-gray-0 border border-gray-20 p-3">
-                            <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm">Всього:</p></td>
+                    <tr className="bg-gray-30 border border-gray-20 p-3">
+                            <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm text-white">Всього:</p></td>
                             <td className="p-3 border border-b-gray-20" ></td>
                             <td className="p-3 border border-b-gray-20" ></td>
                             <td className="p-3 border border-b-gray-20" ></td>
                             <td className="p-3 border border-b-gray-20" ></td>
                             <td className="p-3 border border-b-gray-20" ></td>
-                            <td className="p-3 border border-b-gray-20 border-r-gray-20 text-center"><p className="font-bold text-sm">{item.total &&  item.total}</p></td>
+                            <td className="p-3 border border-b-gray-20 border-r-gray-20 text-center"><p className="font-bold text-sm text-white">{item.total &&  item.total}</p></td>
                     </tr>
                 </tbody>
             </table>
@@ -323,12 +318,12 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             }
                                 
                                 
-                            } type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">Додати</button>
+                            } type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">{item.isAdd ? "Закрити" : "Додати" }</button>
                         </div>
                     </li>  
                 ))}
               </ul> 
-                {/* <div>
+                <div>
                     <div className="flex items-center justify-between mb-8">
                         <p className="text-lg font-normal">Загальна сума:</p>
                         <p className="text-lg font-normal">{project?.total}</p>
@@ -353,7 +348,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                         <p className="text-xl font-semibold">До сплати:</p>
                         <p className="text-xl font-semibold">{project?.general}</p>
                     </div>
-                </div> */}
+                </div>
             </section>
             <div className="flex items-center justify-end gap-8 mt-8">
                 <ButtonBlue title="Відправити кошторис" /> 

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { EstimatePosition, ProjectItem } from "@/app/interfaces/projects";
+import { ProjectItem } from "@/app/interfaces/projects";
 import { getProject } from "@/app/utils/projects";
 import EstimateItem from "./Estimate/Estimate";
 
@@ -18,29 +18,11 @@ useEffect(() => { getEstimate() }, [])
 
     async function getEstimate() {
        const estimate = await getProject(projectId);
-        if (estimate) {
-            const newEstimates = estimate?.estimates?.map(item => ({
-                        ...item,
-                        isShow: false,
-                        isDelete: false,
-                        isAdd: false,
-                        positions: item.positions?.map((position: EstimatePosition) => ({
-                            ...position,
-                            isShow: false,
-                            isDelete: false,
-                        })) || [],
-            }));
-
-            estimate.estimates = newEstimates;            
+        if (estimate) {            
             setData(estimate); 
         }
            
     }
-
-    
-
-   
-    
 
 
   return (
@@ -61,6 +43,11 @@ useEffect(() => { getEstimate() }, [])
                   <li><Link className="font-medium text-xl px-3 py-1 text-blue-25" href={`/`}>Аванс</Link><div className="w-full h-[1px] bg-blue-25"></div></li>
           </ul>
           
+         <div className="flex items-center justify-end gap-6 mt-6 mb-6">
+                   <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
+                    <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
+                </div>
+
           <EstimateItem projectId={projectId} />
       </section>
   );
