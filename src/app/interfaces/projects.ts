@@ -43,7 +43,7 @@ export interface EstimatePosition {
 }
 
 export interface Estimate {
-  map(arg0: (item: any) => import("react").JSX.Element): import("react").ReactNode;
+  map(arg0: (item: EstimatePosition) => import("react").JSX.Element): import("react").ReactNode;
   id?: string;
   title: string;
   isShow?: boolean;
