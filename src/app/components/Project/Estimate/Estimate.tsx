@@ -11,6 +11,7 @@ import { updateEstimate } from "@/app/utils/Estimates";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 import { Position } from "@/app/interfaces/positions";
 import AddPosition from "../../Modal/AddPosition";
+import { addPosition } from "@/app/utils/positions";
 
 interface EstimateProps {
     project: PriceItem | null;
@@ -25,17 +26,20 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
 
     const [data, setData] = useState<Estimate[] | null>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; title: string | undefined} | null>(null);
+   const [estId, setEstId] = useState<string | undefined>('');
     const [toggleModal, setToggleModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-    const [isAddPosition, setIsAddPosition] = useState<boolean>(false);
+   
 
-const toggleAddPosition = () => {
-    setIsAddPosition(toggle => !toggle);
-  
-    };
+
     
   
-
+    const getDataPosition = async (data: Position) => {
+        console.log(data, estId)
+        await addPosition({projectId: project._id, estimateId: estId, title: data.title,
+            unit: data.unit, number: data.number, price: data.price})
+        if (isRender) isRender();
+ } 
     
    
     const isShowModal = () => setToggleModal(toggle => !toggle);
@@ -49,6 +53,7 @@ const toggleAddPosition = () => {
             ...item,
             isShow: false,
             isDelete: false,
+            isAdd: false
         }));
 
         if (newEstimates?.length > 0) {
@@ -71,7 +76,7 @@ const toggleAddPosition = () => {
 
 
     
-    const addIsToggle = (id: string | undefined, currentIsShow: boolean, name: 'update' | 'delete', type: "estimate" | "position"): void => {
+    const addIsToggle = (id: string | undefined, currentIsShow: boolean, name: 'update' | 'delete' | "add", type: "estimate" | "position"): void => {
         if (type === 'estimate') {
            
          setData(prevData => {
@@ -83,6 +88,10 @@ const toggleAddPosition = () => {
                     }
                     if (name === 'delete') {
                         return { ...item, isDelete: currentIsShow };
+                    }
+
+                     if (name === 'add') {
+                        return { ...item, isAdd: currentIsShow };
                     }
                 }
                 return item;
@@ -194,7 +203,7 @@ const toggleAddPosition = () => {
                     
                          
 
-                ))}        {isAddPosition && (<AddPosition isShow={isRender} toggle={toggleAddPosition} prices={project?.prices} />)}
+                ))}        {item.isAdd && (<AddPosition isShow={isRender} isGetData={getDataPosition} prices={project?.prices} />)}
                             
                              <tr className="bg-gray-0 border border-gray-20 p-3">
                                 <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm">Всього:</p></td>
@@ -208,7 +217,13 @@ const toggleAddPosition = () => {
                         </tbody>
                         
                         <div className=" mt-8">
-                            <button onClick={() =>toggleAddPosition()} type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">Додати</button>
+                            <button onClick={() => {
+                                addIsToggle(item.id, !item.isAdd, "add", "estimate");
+                                setEstId(item.id);
+                            }
+                                
+                                
+                            } type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">Додати</button>
                         </div>
                     </div>  
                 ))}

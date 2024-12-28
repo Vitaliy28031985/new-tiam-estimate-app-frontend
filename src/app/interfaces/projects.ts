@@ -30,7 +30,7 @@ interface Price {
 
 export interface EstimatePosition {
   id: string;
- isShow?: boolean;
+  isShow?: boolean;
   isDelete?: boolean;
   title: string;
   unit: string;
@@ -48,6 +48,7 @@ export interface Estimate {
   title: string;
   isShow?: boolean;
   isDelete?: boolean;
+  isAdd?: boolean;
   positions?: EstimatePosition[];
   total?: number;
   _id?: string;

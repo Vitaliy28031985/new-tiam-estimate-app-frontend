@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 
 interface AddPositionProps {
     prices?: Price[];
-    isGetData?: (data: Position) => void;
+    isGetData: (data: Position) => Promise<void>;
     isShow?: () => void;
     toggle?: () => void;
 }
 
-const AddPosition: React.FC<AddPositionProps> = ({ isShow, toggle, prices }) => {
+const AddPosition: React.FC<AddPositionProps> = ({ isShow, toggle, prices, isGetData }) => {
     const [data, setData] = useState<Unit[] | null | undefined>(null);
     const [title, setTitle] = useState('');
     const [unit, setUnit] = useState('');
@@ -82,17 +82,12 @@ const AddPosition: React.FC<AddPositionProps> = ({ isShow, toggle, prices }) => 
     };
 
     const onSubmit = async () => {
-        console.log({ title, unit, number, price })
+        
         if (title !== '' && unit !== '' && number !== '' && price !== '') {
-            
+            if(isGetData)
+            isGetData({ title, unit, number: Number(number), price: Number(price) })
         }
-        try {
-
-            if (isShow) isShow();
-            if (toggle) toggle();
-        } catch {
-
-        }
+      
     }
   
 
