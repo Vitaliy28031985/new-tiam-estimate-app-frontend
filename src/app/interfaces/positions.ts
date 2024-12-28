@@ -2,10 +2,10 @@ export interface Position {
   projectId?: string | undefined;
   estimateId?: string | undefined;
   positionId?: string | undefined;
-  title: string |undefined;
-  unit: string  | undefined;
-  number: number;
-  price: number;
+  title?: string |undefined;
+  unit?: string  | undefined;
+  number?: number;
+  price?: number;
   
 }
 

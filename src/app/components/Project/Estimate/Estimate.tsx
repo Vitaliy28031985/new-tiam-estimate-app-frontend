@@ -26,10 +26,11 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
     } 
 
     const [data, setData] = useState<Estimate[] | null>(null);
-    const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; title: string | undefined} | null>(null);
+    const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; positionId?: string | undefined; title: string | undefined} | null>(null);
     const [estId, setEstId] = useState<string | undefined>('');
     const [toggleModal, setToggleModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+     const [isShowDeletePositionModal, setIsShowDeletePositionModal] = useState<boolean>(false);
    
 
 
@@ -45,6 +46,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
    
     const isShowModal = () => setToggleModal(toggle => !toggle);
     const toggleDelete = () => setIsShowDeleteModal(prev => !prev);
+    const toggleDeletePosition = () => setIsShowDeletePositionModal(toggle => !toggle);
     
 
     useEffect(() => {
@@ -281,10 +283,17 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
                                     if (isRender) isRender();
                                  }   
                             }}
-                                type="button">
+                                type="button"> 
                                 {position.isShow ? (<PiFloppyDisk className="size-5 text-gray-25" />) : (<PencilSquareIcon className="size-5 text-gray-25" />)}
-                                </button>
-                            <button type="button"><TrashIcon className="size-5 text-red-0"/></button>
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    addIsToggle(position.id, !position.isDelete, "delete", "position"); 
+                                    setCurrentData({id: project._id, estimateId: item?.id, positionId: position.id, title: position.title})
+                                    toggleDeletePosition()
+                               }}
+                                type="button"><TrashIcon className="size-5 text-red-0" />
+                            </button>
                         </td>
                         
                         </tr>
@@ -349,6 +358,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ project, isRender }) => {
             </div>
             {toggleModal && (<AddEstimateModal id={project?._id} toggle={isShowModal} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
+              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
         </div>
     )
 }

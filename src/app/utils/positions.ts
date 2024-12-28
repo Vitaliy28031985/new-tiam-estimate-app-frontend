@@ -57,3 +57,24 @@ export async function updatePosition(data: Position) {
   }
   } 
 }
+
+export async function deletePosition(data: Position) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'delete',
+      url: `${BASE_URL}api/positions/${data.projectId}/${data.estimateId}/${data.positionId}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+   return response.data;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
