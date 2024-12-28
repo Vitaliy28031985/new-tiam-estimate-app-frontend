@@ -36,12 +36,11 @@ const AddPosition: React.FC<AddPositionProps> = ({ prices, isGetData }) => {
         if (units) {
             const newData: Unit[] = [defaultData];
             units.map(item => newData.push(item))
-            
-         setData(newData);   
+            setData(newData);   
         } 
     }
 
-    useEffect(() => { getAllUnits() }, [defaultData]);
+    useEffect(() => { getAllUnits() }, []);
 
   const normalizeFilter = title.toLowerCase();
      
