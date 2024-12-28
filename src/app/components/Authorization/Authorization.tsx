@@ -9,59 +9,59 @@ import Login from "../Login/Login";
 export default function Authorization() {
 
   const [valueRadio, setValue] = useState('login');
-    const [isShowLogin, setIsShowLogin] = useState(true)
-    
-    
-    
+  const [isShowLogin, setIsShowLogin] = useState(true)
 
-    function chanceParams() {
+
+
+
+  function chanceParams() {
     const urlParams = new URLSearchParams(window.location.search);
-    const paramValue = urlParams.get('param'); 
+    const paramValue = urlParams.get('param');
 
     if (paramValue === 'true') {
       setIsShowLogin(true);
-    } else  {
-      setIsShowLogin(false); 
-       } 
+    } else {
+      setIsShowLogin(false);
+    }
+  }
+
+  useEffect(() => {
+    chanceParams()
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, } = e.currentTarget;
+    switch (name) {
+      case 'authorization':
+        setValue(value);
+        if (value === 'login') {
+          setIsShowLogin(true);
+        } else {
+          setIsShowLogin(false);
+        }
+        break;
+
+      default:
+        return;
     }
 
-   useEffect(() => {
-   chanceParams()    
-  }, []);
-     
-         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-       const {name, value,} = e.currentTarget;
-        switch (name) {            
-            case 'authorization':
-                setValue(value);
-                 if (value === 'login') {
-                setIsShowLogin(true);
-                } else {
-                setIsShowLogin(false);
-                }
-                break;
-            
-           default:
-           return;  
-        } 
-        
-    } 
-    
-    return (
-    <div>
-            <AuthorizationCheckbox value={valueRadio} changeCheckbox={handleChange} />
-            <ButtonGoogle />
+  }
 
-            <div className='flex items-center mb-6 gap-4'>
-                 <div className='w-[199px] h-[1px] bg-gray-20 '></div>
-                 <p className='text-xl text-gray-20 text-center font-normal'>або</p>
-                 <div className='w-[199px] h-[1px] bg-gray-20 '></div>
-            </div>
-            
-        {isShowLogin ? (<Login/>) : (<RegisterForm/>)} 
-         
+  return (
+    <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
+      <AuthorizationCheckbox value={valueRadio} changeCheckbox={handleChange} />
+      <ButtonGoogle />
+
+      <div className='flex items-center mb-6 gap-4'>
+        <div className='w-[199px] h-[1px] bg-gray-20 '></div>
+        <p className='text-xl text-gray-20 text-center font-normal'>або</p>
+        <div className='w-[199px] h-[1px] bg-gray-20 '></div>
+      </div>
+
+      {isShowLogin ? (<Login />) : (<RegisterForm />)}
+
     </div>
-        
 
-)
+
+  )
 }

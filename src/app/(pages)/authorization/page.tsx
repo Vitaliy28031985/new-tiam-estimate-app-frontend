@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Register() {
     return (
-        <div className="w-screen h-screen bg-gray-0 pt-[215px] relative overflow-hidden">
+        <div className="w-screen h-screen bg-gray-0 pt-[215px] relative overflow-y-scroll">
             <Link href="/" className='absolute top-7 left-9'>
                 <Image
                     src={logo}
@@ -25,9 +25,8 @@ export default function Register() {
             </Link>
             <div className='w-[1249px] ml-auto mr-auto container pb-[115px]'>
 
-                <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
-                    <Authorization />
-                </div>
+                <Authorization />
+
 
 
             </div>

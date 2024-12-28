@@ -120,7 +120,7 @@ export default function Reviews() {
             </div>
             <div className="flex justify-center mt-8 mb-[38px]">
                 <button
-                    className="px-[148px] py-4 border border-[#0C4A6E] rounded-3xl text-[#0C4A6E] text-xl font-semibold"
+                    className="px-[148px] py-4 border border-[#0C4A6E] rounded-3xl text-[#0C4A6E] text-xl font-semibold hover:bg-blue-30 hover:text-white focus:bg-blue-30 focus:text-white"
                     onClick={handleOpenAddReviewModal}
                 >
                     Залишити відгук
