@@ -1,6 +1,6 @@
-import EstimateItem from "@/app/components/Project/Estimate/Estimate";
 
-export default async function EstimatePage({
+
+export default async function  AdvancesPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -12,7 +12,7 @@ export default async function EstimatePage({
       <div className="w-[960px] mx-auto shadow-base p-8 bg-white rounded-3xl">
        <div className="h-[203px]"></div>
         
-         <EstimateItem projectId={projectId}/>
+         Advances {projectId}
         
           </div>
     </main>

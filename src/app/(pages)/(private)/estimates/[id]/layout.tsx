@@ -1,20 +1,21 @@
-'use client'
+import Project from "@/app/components/Project/Project";
 
 
+export default async function EstimateIdLayout(
+  {
+    params,
+    children,
+  }: {
+    params: { id: string };
+    children: React.ReactNode;
+  }
+) {
 
-
-export default function EstimateIdLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-
-
-
+  const projectId = (await params).id;
   return (
-    <div>
+    <div className=" ">
+      <Project projectId={projectId} />   
       {children}
     </div>
-  )
-
+  );
 }
