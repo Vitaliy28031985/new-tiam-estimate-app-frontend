@@ -21,7 +21,7 @@ interface EstimateProps {
 const PricesItem: React.FC<EstimateProps> = ({projectId}) => {
     
     const [data, setData] = useState<Price[] | null>(null);
-    const [currentData, setCurrentData] = useState<{id: string, title: string} | null>(null);
+    const [currentData, setCurrentData] = useState<{projectId: string, id: string, title: string} | null>(null);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
@@ -249,7 +249,7 @@ const handlePrint = () => {
                           <ButtonDelete
                             click={ () => {
                             addIsToggle(id, !isDelete, 'delete');
-                            setCurrentData({ id, title });
+                            setCurrentData({projectId, id, title });
                             toggleDelete();        
                         }} isActive={isShow}/>
 
@@ -271,7 +271,7 @@ const handlePrint = () => {
             
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
             
-            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
+            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project-price' toggleData={toggleRender}/>)}
             
          
         </section>

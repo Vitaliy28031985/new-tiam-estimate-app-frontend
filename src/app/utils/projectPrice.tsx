@@ -26,3 +26,25 @@ export async function updateProjectPrice(data: UpdatePrice) {
   }
   } 
 }
+
+
+export async function deleteProjectPrice(id: string | null, priceId: string | null) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'delete',
+      url: `${BASE_URL}api/project/prices/${id}/${priceId}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+   return response;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}

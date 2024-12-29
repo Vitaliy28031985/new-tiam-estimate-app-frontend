@@ -14,6 +14,6 @@ export interface Price {
 export interface UpdatePrice {
     id?: string;
     priceId?: string;
-    title: string;       
-    price: string | number;  
+    title?: string;       
+    price?: string | number;  
 }
