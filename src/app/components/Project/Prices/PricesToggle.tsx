@@ -1,3 +1,5 @@
+import PricesItem from "./PricesList";
+
  
  interface PricesToggleProps {
   projectId: string;
@@ -10,7 +12,8 @@ const PricesToggle: React.FC<PricesToggleProps> = ({ projectId }) => {
                 <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
                 <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
             </div>
-            Prices {projectId}
+            <PricesItem projectId={projectId} />
+            
         </div>
     )
  }
