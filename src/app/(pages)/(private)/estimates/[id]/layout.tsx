@@ -1,7 +1,6 @@
 import Project from "@/app/components/Project/Project";
 
-
-export default async function EstimateIdLayout(
+export default function EstimateIdLayout(
   {
     params,
     children,
@@ -10,8 +9,7 @@ export default async function EstimateIdLayout(
     children: React.ReactNode;
   }
 ) {
-
-  const projectId = (await params).id;
+  const projectId = params.id; 
   return (
     <div className=" ">
       <Project projectId={projectId} />   
@@ -19,3 +17,4 @@ export default async function EstimateIdLayout(
     </div>
   );
 }
+
