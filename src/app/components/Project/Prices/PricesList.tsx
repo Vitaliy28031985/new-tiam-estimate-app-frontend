@@ -269,7 +269,7 @@ const handlePrint = () => {
             
             
             
-            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} />)}
+            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} nameComponent='project-price' projectId={projectId} />)}
             
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project-price' toggleData={toggleRender}/>)}
             

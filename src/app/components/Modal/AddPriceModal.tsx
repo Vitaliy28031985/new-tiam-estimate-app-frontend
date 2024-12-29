@@ -132,15 +132,18 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import {  MicrophoneIcon } from '@heroicons/react/24/solid';
 import { Price } from '@/app/interfaces/PriceInterface';
 import { getMiddlePrices, addPrice } from '@/app/utils/prices';
+import { addProjectPrice } from '@/app/utils/projectPrice';
 
 
 interface AddPriceModalProps {
+    projectId?: string;
+    nameComponent?: string;
     toggle?: () => void;
     isShow?: () => void;
 }
 
 
-const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow }) => {
+const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow, nameComponent, projectId }) => {
 const [data, setData] = useState<Price[] | null>(null);
 const [title, setTitle] = useState<string>('');
 const [price, setPrice] = useState<string>('');
@@ -195,11 +198,18 @@ const [middle, setMiddle] = useState(false);
         e.preventDefault()
        if (title && price) {
            const newData = { title, price };
-           await addPrice(newData);
+           if (nameComponent === 'price') {
+             await addPrice(newData);  
+           }
+
+           if (nameComponent === 'project-price') {
+               await addProjectPrice({ projectId, title, price });
+           }
+           
         if (isShow) {
           isShow();
         }
-           console.log(newData);
+          
                   
   }     
        
