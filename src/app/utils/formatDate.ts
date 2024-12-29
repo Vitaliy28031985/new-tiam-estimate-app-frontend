@@ -14,5 +14,3 @@ const formatDate = (dateString: string): string => {
 
     return `${time}, ${dayMonthYear}`;
 }
-
-export default formatDate

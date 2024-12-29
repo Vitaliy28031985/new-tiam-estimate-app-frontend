@@ -80,15 +80,16 @@ interface LowEstimate {
 
 export interface Material {
   id: string;
+  projectId?: string;
   isShow?: boolean;
   isDelete?: boolean;
   title: string;
   order: string;
   date: string;
   sum: number;
-  _id: string;
-  createdAt: string;
-  updatedAt: string;
+  _id?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface Advance {

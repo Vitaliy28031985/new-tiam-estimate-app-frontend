@@ -1,4 +1,4 @@
-import EstimateItem from "@/app/components/Project/Estimate/Estimate";
+import EstimateToggle from "@/app/components/Project/Estimate/EstimateToggle";
 
 export default async function EstimatePage({
   params,
@@ -12,7 +12,7 @@ export default async function EstimatePage({
       <div className="w-[960px] mx-auto shadow-base p-8 bg-white rounded-3xl">
        <div className="h-[203px]"></div>
         
-         <EstimateItem projectId={projectId}/>
+         <EstimateToggle projectId={projectId}/>
         
           </div>
     </main>
