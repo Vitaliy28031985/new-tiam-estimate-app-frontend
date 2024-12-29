@@ -162,7 +162,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
     // console.log(project?.prices);
     
     return (
-        <div>
+        <div className="mx-auto">
             <ul className="mb-8 flex items-center gap-4 justify-center">
                 <li><ButtonBlue click={isShowModal} type="button" title="Додати таблицю" /></li>
                 <li><ButtonBlue type="button" title="Створити таблицю Excel" /></li>

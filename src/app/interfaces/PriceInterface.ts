@@ -12,7 +12,9 @@ export interface Price {
 }
 
 export interface UpdatePrice {
-    id?: string;  
-    title: string;       
-    price: string | number;  
+    id?: string;
+    priceId?: string;
+    projectId?: string;
+    title?: string;       
+    price?: string | number;  
 }
