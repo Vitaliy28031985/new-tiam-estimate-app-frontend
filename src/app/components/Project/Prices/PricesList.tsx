@@ -11,6 +11,7 @@ import AddPriceModal from '../../Modal/AddPriceModal';
 import DeleteModal from '../../Modal/DeleteModal/DeleteModal';
 import ButtonBlue from '@/app/UI/Buttons/ButtonBlue';
 import { getProject } from '@/app/utils/projects';
+import { updateProjectPrice } from '@/app/utils/projectPrice';
 
 
 interface EstimateProps {
@@ -229,7 +230,7 @@ const handlePrint = () => {
                                     onClick={async () => {
                                         addIsToggle(id, !isShow, 'update')
                                         if (isShow) {
-                                            await updatePrice({id, title, price})
+                                            await updateProjectPrice({ id: projectId, priceId: id, title, price });
                                             await toggleRender();  
                                         }
                                     }
