@@ -78,8 +78,10 @@ interface LowEstimate {
   updatedAt: string;
 }
 
-interface Material {
+export interface Material {
   id: string;
+  isShow?: boolean;
+  isDelete?: boolean;
   title: string;
   order: string;
   date: string;

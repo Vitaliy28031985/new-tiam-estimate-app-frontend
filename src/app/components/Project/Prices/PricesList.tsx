@@ -2,11 +2,8 @@
 import { useEffect, useState } from 'react';
 import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { PiFloppyDisk } from "react-icons/pi";
-import { updatePrice } from '@/app/utils/prices';
 import { Price } from '@/app/interfaces/PriceInterface';
 import ButtonDelete from '@/app/UI/Buttons/ButtonDeletePrices';
-import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
-import ViberPdfShare from '../../Prices/ViberPdfShare';
 import AddPriceModal from '../../Modal/AddPriceModal';
 import DeleteModal from '../../Modal/DeleteModal/DeleteModal';
 import ButtonBlue from '@/app/UI/Buttons/ButtonBlue';
@@ -35,75 +32,6 @@ const PricesItem: React.FC<EstimateProps> = ({projectId}) => {
     const filteredPrices =  data?.filter(item =>
         item.title.toLowerCase().includes(normalizeFilter)) ?? [];
     
-
-const handlePrint = () => {
-  const printContent = `
-    <div class="print-content">
-       <h3 class="title">Прайс робіт</h3>
-
-      <div class='flex items-center gap-4 mb-2'>
-        <div class='w-96'><p class='font-normal text-base text-black text-center'>Найменування роботи</p></div>
-        <div class='w-52'><p class='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
-     </div>
-                
-      ${data && data?.map(({ title, price }) => `
-        <div class='flex items-center gap-4 mb-3' key={id}>
-          <div class='w-96 relative'>
-            <div class='border border-blue-20 pl-12 pr-4 py-3 rounded-full'>
-              <p class='font-normal text-base text-gray-35 text-start'>${title}</p>
-            </div>       
-          </div>
-          <div class='w-52'>
-            <div class='border border-blue-20 px-5 py-3 rounded-full'>
-              <p class='font-normal text-base text-gray-35 text-center'>${price}</p>
-            </div>      
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-
-  const printWindow = window.open('', '', 'width=800,height=600');
-  if (printWindow) {
-    const styles = `
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          margin: 0;
-          padding: 0;
-        }
-        .print-content {
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        button {
-          display: none;
-        }
-
-        .title {
-          font-weight: 700; 
-          font-size: 3rem;
-          line-height: 1;
-          text-align: center;
-          margin-bottom: 20px;
-          margin-top: 10px;
-        }
-      </style>
-    `;
-      
-    printWindow.document.write('<html><head><title>Print</title>' + styles + '</head><body>');
-    printWindow.document.write(printContent);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    setTimeout(() => {
-      printWindow.print();
-    }, 500);
-  }
-};
-
-
   
     async function getPrices() {
         const project = await getProject(projectId);
@@ -256,15 +184,7 @@ const handlePrint = () => {
                     </div>   
                     ))}
                     </div>
-                    <div className='flex justify-end gap-4 items-center mr-12'>
-                        <ButtonPrint click={handlePrint} />
-                          {/* <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
-                            text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10`} >
-                             Відправити
-                    </button> */}
-                    <ViberPdfShare data={data}/>
-                    </div>
-                    
+                                        
             </div>
             
             
