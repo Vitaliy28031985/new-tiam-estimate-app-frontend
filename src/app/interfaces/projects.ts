@@ -79,7 +79,7 @@ interface LowEstimate {
 }
 
 export interface Material {
-  id: string;
+  id?: string;
   projectId?: string;
   isShow?: boolean;
   isDelete?: boolean;

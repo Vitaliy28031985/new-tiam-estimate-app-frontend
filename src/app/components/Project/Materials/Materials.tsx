@@ -3,21 +3,24 @@
 import { ProjectItem } from "@/app/interfaces/projects";
 import { updateMaterial } from "@/app/utils/materials";
 import { getProject } from "@/app/utils/projects";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
+import { dataFormat } from "@/app/utils/formatFunctions";
+import AddMaterialModal from "../../Modal/AddMaterialModal";
 
 interface EstimateProps {
     projectId: string;
 }
 
 const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => { 
-    const [data, setData] = useState<ProjectItem | null>(null);
-    const [isRender, setIsRender] = useState<boolean>(false);
+  const [data, setData] = useState<ProjectItem | null>(null);
+  const [isRender, setIsRender] = useState<boolean>(false);
+  const [toggleModal, setToggleModal] = useState<boolean>(false);
 
-       const toggleRender = (): void | undefined => {
-    setIsRender(prev => !prev);
-    }; 
+  const toggleRender = (): void | undefined => setIsRender(prev => !prev); 
+  
+  const isShowModal = () => setToggleModal(toggle => !toggle);
 
 useEffect(() => {getMaterial()}, [isRender])
 
@@ -73,11 +76,15 @@ useEffect(() => {getMaterial()}, [isRender])
 // console.log(data)
     return (
         <div className="flex justify-center">
+            
+                       
         <table className="bg-white rounded-lg shadow-pricesTablet">
                 <tbody className="table-auto">
                 <tr className="w-full">
                    <td className=" border border-gray-20 p-3"><p className="font-bold text-sm">№ з/п.</p></td>
-                   <td className="w-52 border border-gray-20 p-3"><p className="font-bold text-sm">Назва</p> </td>
+                        <td className="w-52 flex items-center gap-4 border border-gray-20 p-3"><p className="font-bold text-sm">Опис рахунку</p>
+                        <button onClick={isShowModal} type="button" className="bg-blue-30 p-1 rounded-full hover:bg-blue-25 focus:bg-blue-25"><PlusIcon className="size-6 text-white"/></button>
+                        </td>
                    <td className="w-52  border border-gray-20 p-3"><p className="font-bold text-sm text-center">№ рахунку</p></td>
                         <td className="w-28 border border-gray-20 p-3"><p className="font-bold text-sm text-center">Дата</p></td>
                         <td className="w-28 border border-gray-20 p-3"><p className="font-bold text-sm text-center">Сума в грн.</p></td>
@@ -118,10 +125,11 @@ useEffect(() => {getMaterial()}, [isRender])
                             </td>
                              <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
                             <button
-                                    onClick={async () => {
+                            onClick={async () => {
+                                        if(id)
                                         addIsToggle(id, !isShow, 'update');
                                         if (isShow) {
-                                        await updateMaterial({ id, projectId, title, order, date, sum })
+                                        await updateMaterial({ id, projectId, title, order, date: dataFormat(date), sum })
                                         await toggleRender();  
                                             }
                                }}
@@ -144,8 +152,11 @@ useEffect(() => {getMaterial()}, [isRender])
                             <td className="p-3 border border-b-gray-20 border-r-gray-20 text-center"><p className="font-bold text-sm text-white">{data?.materialsTotal &&  data.materialsTotal}</p></td>
                     </tr>
                 </tbody>
-                </table>
-        </div>
+        </table>
+        
+        {toggleModal && (<AddMaterialModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
+            </div>
+        
     )
 }
 
