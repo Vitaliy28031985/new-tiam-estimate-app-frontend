@@ -354,7 +354,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                 <ButtonBlue title="Відправити кошторис" /> 
                 <ButtonPrint/>
             </div>
-            {toggleModal && (<AddEstimateModal id={projectId} toggle={isShowModal} isShow={isRender} />)}
+            {toggleModal && (<AddEstimateModal componentName="estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
               {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
         </div>

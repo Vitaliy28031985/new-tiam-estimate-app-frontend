@@ -8,12 +8,12 @@ import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
 import ButtonPrint from "@/app/UI/Buttons/ButtonPrint";
 import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
-import { updateEstimate } from "@/app/utils/Estimates";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 import { Position } from "@/app/interfaces/positions";
 import AddPosition from "../../Modal/AddPosition";
 import { addPosition, updatePosition } from "@/app/utils/positions";
 import { getProject } from "@/app/utils/projects";
+import { updateLowEstimate } from "@/app/utils/lowEstimate";
 
 interface EstimateProps {
     projectId: string;
@@ -187,7 +187,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
                             <ButtonUpdate type="button" click={async () => {
                                 addIsToggle(item.id, !item.isShow, "update", "estimate");
                                 if (item.isShow) {
-                                   await updateEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
+                                   await updateLowEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
                                     if (isRender) isRender();  
                                 }
                             } }/>
@@ -353,8 +353,8 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
                 <ButtonBlue title="Відправити кошторис" /> 
                 <ButtonPrint/>
             </div>
-            {toggleModal && (<AddEstimateModal id={projectId} toggle={isShowModal} isShow={isRender} />)}
-             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
+            {toggleModal && (<AddEstimateModal componentName="low-estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
+             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='low-estimate' toggleData={isRender}/>)}
               {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
         </div>
     )

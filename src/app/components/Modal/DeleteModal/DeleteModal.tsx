@@ -8,6 +8,7 @@ import { deletePosition } from '@/app/utils/positions';
 import { deleteProjectPrice } from '@/app/utils/projectPrice';
 import { deleteMaterial } from '@/app/utils/materials';
 import { deleteAdvance } from '@/app/utils/advances';
+import { deleteLowEstimate } from '@/app/utils/lowEstimate';
 
 interface DeleteModalProps {
     data?: { _id?: string, projectId?: string | undefined, id?: string | undefined, estimateId?: string | undefined; positionId?: string | undefined; title: string | undefined } | null;
@@ -36,6 +37,11 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
             if (nameComponent === 'estimate') {
                 if (data) await deleteEstimate({ projectId: data.id, estimateId: data.estimateId });
                  if (toggleData) toggleData();
+            }
+
+            if (nameComponent === "low-estimate") {
+                if(data) await deleteLowEstimate({ projectId: data.id, estimateId: data.estimateId })
+                if (toggleData) toggleData();
             }
 
             if (nameComponent === 'position') {
