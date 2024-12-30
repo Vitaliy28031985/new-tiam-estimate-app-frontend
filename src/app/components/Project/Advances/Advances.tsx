@@ -5,6 +5,7 @@ import { PlusIcon } from "@heroicons/react/16/solid";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
+import AddAdvanceModal from "../../Modal/AddAdvanceModal";
 
 interface AdvancesProps {
     projectId: string;
@@ -13,8 +14,10 @@ interface AdvancesProps {
 const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
     const [data, setData] = useState<ProjectItem | null>(null);
     const [isRender, setIsRender] = useState<boolean>(false);
+    const [toggleModal, setToggleModal] = useState<boolean>(false);
 
     const toggleRender = (): void | undefined => setIsRender(prev => !prev);
+     const isShowModal = () => setToggleModal(toggle => !toggle);
 
     useEffect(() => {getAdvances()}, [isRender])
 
@@ -34,7 +37,7 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
                 <tr className="w-full">
                    <td className=" border border-gray-20 p-3"><p className="font-bold text-sm">№ з/п.</p></td>
                         <td className="w-96 flex items-center gap-4 border border-gray-20 p-3"><p className="font-bold text-sm">Коментар</p>
-                        <button type="button" className="bg-blue-30 p-1 rounded-full hover:bg-blue-25 focus:bg-blue-25"><PlusIcon className="size-6 text-white"/></button>
+                        <button onClick={isShowModal} type="button" className="bg-blue-30 p-1 rounded-full hover:bg-blue-25 focus:bg-blue-25"><PlusIcon className="size-6 text-white"/></button>
                         </td>
                         <td className="w-32 border border-gray-20 p-3"><p className="font-bold text-sm text-center">Дата</p></td>
                         <td className="w-32 border border-gray-20 p-3"><p className="font-bold text-sm text-center">Сума в грн.</p></td>
@@ -104,6 +107,7 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
 
                 </tbody>
             </table>
+             {toggleModal && (<AddAdvanceModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
         </div>
     )
 }
