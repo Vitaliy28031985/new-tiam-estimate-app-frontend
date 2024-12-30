@@ -5,6 +5,7 @@ import { useUser } from "@/app/context/UserContext";
 import { ProjectItem } from "@/app/interfaces/projects";
 import { getProject } from "@/app/utils/projects";
 import ChangeProject from "@/app/UI/ChangeProject";
+import PricesItemSmall from "./PriceListSmall";
 
  
  interface PricesToggleProps {
@@ -64,19 +65,19 @@ const PricesToggle: React.FC<PricesToggleProps> = ({ projectId }) => {
 
            
             {user?._id === project?.owner && (
-                <div> {sizeEstimate ? (<PricesItem projectId={projectId} />) : (<div>SMALL</div>)}</div>
+                <div> {sizeEstimate ? (<PricesItem projectId={projectId} />) : (<PricesItemSmall projectId={projectId}/>)}</div>
             )}
             
             {isAllow && isAllow[0]?.lookAt === 'all' && (
-                 <div> {sizeEstimate ? (<PricesItem projectId={projectId} />) : (<div>SMALL</div>)}</div>
+                 <div> {sizeEstimate ? (<PricesItem projectId={projectId} />) : (<PricesItemSmall projectId={projectId}/>)}</div>
             )}
 
             {isAllow && isAllow[0]?.lookAt === 'small' && (
-                <div>Small</div>
+                <PricesItemSmall projectId={projectId}/>
             )}
            
              {isAllow && isAllow[0]?.lookAt === 'large' && (
-                <div>Large</div>
+                <PricesItem projectId={projectId} />
             )}
 
         </div>

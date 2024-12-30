@@ -13,7 +13,11 @@ import EstimateSmallItem from "./EstimateSmall";
 }
 
 const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
-    const { user } = useUser();
+  const { user } = useUser();
+  
+  // if (!user) {
+  //   return (<p>Користувач відсутній!</p>)
+  // }
     const [project, setProject] = useState<ProjectItem | null>(null);
     const [data, setData] = useState('large');
     const [sizeEstimate, setSizeEstimate] = useState(true);
@@ -66,8 +70,9 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
 
             {isAllow && isAllow[0]?.lookAt === 'all' && project?.lowEstimates?.length !== 0 && (<ChangeProject changeCheckbox={handleChange} data={data} /> )}
 
-           
-            {user?._id === project?.owner  && (
+                    
+            
+           {user?._id === project?.owner && (
                 <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<EstimateSmallItem projectId={projectId}/>)}</div>
             )}
             
@@ -80,7 +85,7 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
             )}
            
              {isAllow && isAllow[0]?.lookAt === 'large' && (
-                <div>Large</div>
+                <EstimateItem projectId={projectId} />
             )}
 
         </div>
