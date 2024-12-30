@@ -1,4 +1,11 @@
+'use client'
+import { useEffect, useState } from "react";
 import EstimateItem from "./Estimate";
+import { useUser } from "@/app/context/UserContext";
+import { ProjectItem } from "@/app/interfaces/projects";
+import { getProject } from "@/app/utils/projects";
+import ChangeProject from "@/app/UI/ChangeProject";
+import EstimateSmallItem from "./EstimateSmall";
 
  
  interface EstimateToggleProps {
@@ -6,13 +13,81 @@ import EstimateItem from "./Estimate";
 }
 
 const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
+  const { user } = useUser();
+  
+  // if (!user) {
+  //   return (<p>Користувач відсутній!</p>)
+  // }
+    const [project, setProject] = useState<ProjectItem | null>(null);
+    const [data, setData] = useState('large');
+    const [sizeEstimate, setSizeEstimate] = useState(true);
+   
+    
+      useEffect(() => {
+        getEstimate()
+      }, []);
+      
+        async function getEstimate() {
+        if (projectId !== null) {  
+            const estimate = await getProject(projectId);
+            if (estimate) {
+            setProject(estimate); 
+            }
+        }
+    }
+
+ 
+    const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
+        
+   
+
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+       const { name, value, } = e.currentTarget;
+    switch (name) {
+      case 'project':
+            if (value === 'large') {
+                setData(value);
+                setSizeEstimate(true);
+        } else {
+                setSizeEstimate(false);
+                setData(value)
+        }
+        break;
+
+      default:
+        return;
+    }
+
+  }
+
+ 
+
     return (
         <div>
-           <div className="flex items-center justify-end gap-6 mt-6 mb-6">
-                <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-                <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-            </div>
-            <EstimateItem projectId={projectId} />
+            {user?._id === project?.owner && project?.lowEstimates?.length !== 0 && (
+           <ChangeProject changeCheckbox={handleChange} data={data} />    
+            )}
+
+            {isAllow && isAllow[0]?.lookAt === 'all' && project?.lowEstimates?.length !== 0 && (<ChangeProject changeCheckbox={handleChange} data={data} /> )}
+
+                    
+            
+           {user?._id === project?.owner && (
+                <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<EstimateSmallItem projectId={projectId}/>)}</div>
+            )}
+            
+            {isAllow && isAllow[0]?.lookAt === 'all' && (
+                 <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<EstimateSmallItem projectId={projectId}/>)}</div>
+            )}
+
+            {isAllow && isAllow[0]?.lookAt === 'small' && (
+                <EstimateSmallItem projectId={projectId}/>
+            )}
+           
+             {isAllow && isAllow[0]?.lookAt === 'large' && (
+                <EstimateItem projectId={projectId} />
+            )}
+
         </div>
     )
  }

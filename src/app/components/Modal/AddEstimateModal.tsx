@@ -3,21 +3,27 @@ import { XMarkIcon } from "@heroicons/react/16/solid";
 import { saveProject } from "../../utils/actionsProject";
 import { EstimateCreate } from "@/app/interfaces/estimateInterfaces";
 import { addEstimate } from "@/app/utils/Estimates";
+import { addLowEstimate } from "@/app/utils/lowEstimate";
 
 
 interface AddEstimateModalProps {
+    componentName?: string;
     id: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
 }
-const AddEstimateModal: React.FC<AddEstimateModalProps> = ({ toggle, isShow, id }) => {
+const AddEstimateModal: React.FC<AddEstimateModalProps> = ({ toggle, isShow, id, componentName }) => {
 
     const onSubmit = async (formData: FormData) => {
         const result = await saveProject(formData);
         if (id) {
             const newData: EstimateCreate = { title: result.title.toString(), projectId: id };
-
-            await addEstimate(newData);
+            if (componentName === "estimate") {
+             await addEstimate(newData);  
+           }
+            if (componentName === "low-estimate") {
+                await addLowEstimate(newData);
+            }
        
         }
        

@@ -8,22 +8,22 @@ import ButtonUpdate from "@/app/UI/Buttons/ButtonUpdate";
 import ButtonPrint from "@/app/UI/Buttons/ButtonPrint";
 import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
-import { updateEstimate } from "@/app/utils/Estimates";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 import { Position } from "@/app/interfaces/positions";
-import AddPosition from "../../Modal/AddPosition";
-import { addPosition, updatePosition } from "@/app/utils/positions";
 import { getProject } from "@/app/utils/projects";
+import { updateLowEstimate } from "@/app/utils/lowEstimate";
+import AddLowPosition from "../../Modal/AddLowPosition";
+import { addLowPosition, updateLowPosition } from "@/app/utils/lowPosition";
 
 interface EstimateProps {
     projectId: string;
 }
 
 
-const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
+const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
    
     const [project, setProject] = useState<ProjectItem| null>(null);
-    const [data, setData] = useState<Estimate[] | null | undefined>(null);
+    const [data, setData] = useState<Estimate[] | null | undefined | []>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; positionId?: string | undefined; title: string | undefined} | null>(null);
     const [estId, setEstId] = useState<string | undefined>('');
     const [toggleModal, setToggleModal] = useState<boolean>(false);
@@ -44,7 +44,8 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
     if (projectId !== null) {  
         const estimate = await getProject(projectId);
         if (estimate) {
-            const newEstimates = estimate?.estimates?.map(item => ({
+
+            const newEstimates = estimate?.lowEstimates?.map(item => ({
                 ...item,
                 isShow: false,
                 isDelete: false,
@@ -56,9 +57,13 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                 })) || [],
             }));
 
-            estimate.estimates = newEstimates;
+            estimate.lowEstimates = newEstimates;
+        
             setProject(estimate);
-            setData(estimate.estimates); 
+            if (estimate?.lowEstimates?.length !== 0) {
+              setData(estimate.lowEstimates  as Estimate[]);   
+            } 
+            
         }
     }
 }
@@ -66,13 +71,11 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
     
   
     const getDataPosition = async (data: Position) => {
-        console.log(data, estId)
-        await addPosition({ projectId, estimateId: estId, title: data.title,
+        await addLowPosition({ projectId, estimateId: estId, title: data.title,
             unit: data.unit, number: data.number, price: data.price})
         if (isRender) isRender();
  } 
     
-   
     const isShowModal = () => setToggleModal(toggle => !toggle);
     const toggleDelete = () => setIsShowDeleteModal(prev => !prev);
     const toggleDeletePosition = () => setIsShowDeletePositionModal(toggle => !toggle);
@@ -184,7 +187,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             <ButtonUpdate type="button" click={async () => {
                                 addIsToggle(item.id, !item.isShow, "update", "estimate");
                                 if (item.isShow) {
-                                   await updateEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
+                                   await updateLowEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
                                     if (isRender) isRender();  
                                 }
                             } }/>
@@ -269,7 +272,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                 onClick={async () => {
                                 addIsToggle(position.id, !position.isShow, "update", "position");
                                     if (position.isShow) {
-                                        await updatePosition({
+                                        await updateLowPosition({
                                             projectId: projectId,
                                             estimateId: item.id,
                                             positionId: position.id,
@@ -297,7 +300,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                     </tr>
    
                 ))}
-                    {item.isAdd && (<AddPosition projectId={projectId} isGetData={getDataPosition} />)}
+                    {item.isAdd && (<AddLowPosition projectId={projectId} isGetData={getDataPosition} />)}
                             
                     <tr className="bg-gray-30 border border-gray-20 p-3">
                             <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm text-white">Всього:</p></td>
@@ -324,17 +327,13 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                 ))}
               </ul> 
                 <div>
+                    {}
                     <div className="flex items-center justify-between mb-8">
                         <p className="text-lg font-normal">Загальна сума:</p>
-                        <p className="text-lg font-normal">{project?.total}</p>
+                        <p className="text-lg font-normal">{project?.lowTotal}</p>
                     </div>  
 
                     <div className="flex items-center justify-between mb-8">
-                        <p className="text-lg font-normal text-green">Знижка:</p>
-                        <p className="text-lg font-normal text-green">{project?.discount}</p>
-                    </div> 
-
-                     <div className="flex items-center justify-between mb-8">
                         <p className="text-lg font-normal">Аванс:</p>
                         <p className="text-lg font-normal">{project?.advancesTotal}</p>
                     </div>
@@ -346,7 +345,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
 
                      <div className="flex items-center justify-between p-6 bg-gray-5 rounded-full">
                         <p className="text-xl font-semibold">До сплати:</p>
-                        <p className="text-xl font-semibold">{project?.general}</p>
+                        <p className="text-xl font-semibold">{project?.lowGeneral}</p>
                     </div>
                 </div>
             </section>
@@ -354,11 +353,11 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                 <ButtonBlue title="Відправити кошторис" /> 
                 <ButtonPrint/>
             </div>
-            {toggleModal && (<AddEstimateModal componentName="estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
-             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
-              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
+            {toggleModal && (<AddEstimateModal componentName="low-estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
+             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='low-estimate' toggleData={isRender}/>)}
+              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='low-position' toggleData={isRender}/>)}
         </div>
     )
 }
 
-export default EstimateItem;
+export default EstimateSmallItem;

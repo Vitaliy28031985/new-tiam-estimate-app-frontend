@@ -133,6 +133,7 @@ import {  MicrophoneIcon } from '@heroicons/react/24/solid';
 import { Price } from '@/app/interfaces/PriceInterface';
 import { getMiddlePrices, addPrice } from '@/app/utils/prices';
 import { addProjectPrice } from '@/app/utils/projectPrice';
+import { addLowProjectPrice } from '@/app/utils/priceLow';
 
 
 interface AddPriceModalProps {
@@ -205,6 +206,11 @@ const [middle, setMiddle] = useState(false);
            if (nameComponent === 'project-price') {
                await addProjectPrice({ projectId, title, price });
            }
+
+             if (nameComponent === 'low-project-price') {
+               await addLowProjectPrice({ projectId, title, price });
+           }
+
            
         if (isShow) {
           isShow();
