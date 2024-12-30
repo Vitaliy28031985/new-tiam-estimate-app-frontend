@@ -94,6 +94,8 @@ export interface Material {
 
 interface Advance {
   id: string;
+  isShow?: boolean;
+  isDelete?: boolean;
   comment: string;
   date: string;
   sum: number;
