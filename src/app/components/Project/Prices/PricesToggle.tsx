@@ -31,7 +31,7 @@ const PricesToggle: React.FC<PricesToggleProps> = ({ projectId }) => {
         }
     }
 
-    const isAllow = user?.projectIds.filter(({ id }) => id === projectId);
+    const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
         
    
 

@@ -5,6 +5,7 @@ import { useUser } from "@/app/context/UserContext";
 import { ProjectItem } from "@/app/interfaces/projects";
 import { getProject } from "@/app/utils/projects";
 import ChangeProject from "@/app/UI/ChangeProject";
+import EstimateSmallItem from "./EstimateSmall";
 
  
  interface EstimateToggleProps {
@@ -31,7 +32,8 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
         }
     }
 
-    const isAllow = user?.projectIds.filter(({ id }) => id === projectId);
+ 
+    const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
         
    
 
@@ -58,23 +60,23 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
 
     return (
         <div>
-            {user?._id === project?.owner && (
+            {user?._id === project?.owner && project?.lowEstimates?.length !== 0 && (
            <ChangeProject changeCheckbox={handleChange} data={data} />    
             )}
 
-            {isAllow && isAllow[0]?.lookAt === 'all' && (<ChangeProject changeCheckbox={handleChange} data={data} /> )}
+            {isAllow && isAllow[0]?.lookAt === 'all' && project?.lowEstimates?.length !== 0 && (<ChangeProject changeCheckbox={handleChange} data={data} /> )}
 
            
-            {user?._id === project?.owner && (
-                <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<div>SMALL</div>)}</div>
+            {user?._id === project?.owner  && (
+                <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<EstimateSmallItem projectId={projectId}/>)}</div>
             )}
             
             {isAllow && isAllow[0]?.lookAt === 'all' && (
-                 <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<div>SMALL</div>)}</div>
+                 <div> {sizeEstimate ? (<EstimateItem projectId={projectId} />) : (<EstimateSmallItem projectId={projectId}/>)}</div>
             )}
 
             {isAllow && isAllow[0]?.lookAt === 'small' && (
-                <div>Small</div>
+                <EstimateSmallItem projectId={projectId}/>
             )}
            
              {isAllow && isAllow[0]?.lookAt === 'large' && (
