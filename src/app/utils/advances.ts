@@ -1,9 +1,9 @@
 import axios from "axios";
+import { Advance } from "../interfaces/projects";
 import BASE_URL from "./base";
-import { Material } from "../interfaces/projects";
 
 
-export async function addMaterial(data: Material) {
+export async function addAdvance(data: Advance) {
    const token = localStorage.getItem('token');
   if (!token) {
     return null;
@@ -11,13 +11,12 @@ export async function addMaterial(data: Material) {
     try {
     const response = await axios({
       method: 'post',
-      url: `${BASE_URL}api/materials/${data.projectId}`,
+      url: `${BASE_URL}api/advances/${data.projectId}`,
       headers: {
         'Authorization': `Bearer ${token}`
       }, 
         data: { 
-          title: data.title,
-          order: data.order,
+          comment: data.comment,
           date: data.date,
           sum: data.sum
         }
@@ -30,8 +29,7 @@ export async function addMaterial(data: Material) {
   } 
 }
 
-
-export async function updateMaterial(data: Material) {
+export async function updateAdvance(data: Advance) {
    const token = localStorage.getItem('token');
   if (!token) {
     return null;
@@ -39,15 +37,14 @@ export async function updateMaterial(data: Material) {
     try {
     const response = await axios({
       method: 'patch',
-      url: `${BASE_URL}api/materials/${data.projectId}/${data.id}`,
+      url: `${BASE_URL}api/advances/${data.projectId}/${data.id}`,
       headers: {
         'Authorization': `Bearer ${token}`
       }, 
         data: { 
-            title: data.title,
-            order: data.order,
-            date: data.date,
-            sum: data.sum
+          comment: data.comment,
+          date: data.date,
+          sum: data.sum
         }
     });
    return response.data;
@@ -58,7 +55,7 @@ export async function updateMaterial(data: Material) {
   } 
 }
 
-export async function deleteMaterial(data: Material) {
+export async function deleteAdvance(data: Advance) {
    const token = localStorage.getItem('token');
   if (!token) {
     return null;
@@ -66,7 +63,7 @@ export async function deleteMaterial(data: Material) {
     try {
     const response = await axios({
       method: 'delete',
-      url: `${BASE_URL}api/materials/${data.projectId}/${data.id}`,
+      url: `${BASE_URL}api/advances/${data.projectId}/${data.id}`,
       headers: {
         'Authorization': `Bearer ${token}`
       }
