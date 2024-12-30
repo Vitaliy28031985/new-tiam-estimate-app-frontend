@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 import { Position } from "@/app/interfaces/positions";
-import {updatePosition } from "@/app/utils/positions";
 import { getProject } from "@/app/utils/projects";
 import { updateLowEstimate } from "@/app/utils/lowEstimate";
 import AddLowPosition from "../../Modal/AddLowPosition";
