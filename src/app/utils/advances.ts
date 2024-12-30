@@ -28,3 +28,50 @@ export async function addAdvance(data: Advance) {
   }
   } 
 }
+
+export async function updateAdvance(data: Advance) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'patch',
+      url: `${BASE_URL}api/advances/${data.projectId}/${data.id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }, 
+        data: { 
+          comment: data.comment,
+          date: data.date,
+          sum: data.sum
+        }
+    });
+   return response.data;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
+
+export async function deleteAdvance(data: Advance) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'delete',
+      url: `${BASE_URL}api/advances/${data.projectId}/${data.id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+   return response;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}

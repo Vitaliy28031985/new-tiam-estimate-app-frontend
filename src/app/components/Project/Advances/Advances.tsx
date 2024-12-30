@@ -6,6 +6,9 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
 import AddAdvanceModal from "../../Modal/AddAdvanceModal";
+import { updateAdvance } from "@/app/utils/advances";
+import { dataFormat } from "@/app/utils/formatFunctions";
+import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 
 interface AdvancesProps {
     projectId: string;
@@ -13,11 +16,14 @@ interface AdvancesProps {
 
 const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
     const [data, setData] = useState<ProjectItem | null>(null);
+    const [currentData, setCurrentData] = useState<{ id: string | undefined, projectId: string | undefined; title: string | undefined} | null>(null);
+     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [toggleModal, setToggleModal] = useState<boolean>(false);
 
     const toggleRender = (): void | undefined => setIsRender(prev => !prev);
-     const isShowModal = () => setToggleModal(toggle => !toggle);
+    const isShowModal = () => setToggleModal(toggle => !toggle);
+    const toggleDelete = () => setIsShowDeleteModal(prev => !prev); 
 
     useEffect(() => {getAdvances()}, [isRender])
 
@@ -29,7 +35,48 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
                 setData(estimate);
             }
         } 
-//  console.log(data)
+
+    
+    const addIsToggle = (id: string, currentIsShow: boolean, name: string) => {
+    setData((prevData) => {
+      const newData = { ...prevData };
+      const newMaterials = newData.advances?.map((advance) => {
+        if (advance.id === id) {
+          if (name === "update") {
+            return { ...advance, isShow: currentIsShow };
+          }
+          if (name === "delete") {
+            return { ...advance, isDelete: currentIsShow };
+          }
+        }
+        return advance;
+      });
+      newData.advances = newMaterials;
+      return newData;
+    });
+    };
+    
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, id } = e.currentTarget;
+    setData((prevData) => {
+      const newData = { ...prevData };
+      const newMaterials = newData.advances?.map((advance) => {
+        if (advance.id === id) {
+          switch (name) {
+            case name:
+              return { ...advance, [name]: value };
+            default:
+              return advance;
+          }
+        }
+        return advance;
+      });
+      newData.advances = newMaterials;
+      return newData;
+    });
+  }
+    
+    
     return (
         <div>
         <table className="bg-white rounded-lg shadow-pricesTablet">
@@ -52,45 +99,45 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
                                  {isShow ? ( <input type="text"
                                 className="w-full h-full bg-transparent text-white text-xs font-normal focus:outline-none"
                                 id={id} name='title' value={comment}  
-                                // onChange={onChange}
+                                onChange={onChange}
                                 />) : (<p className="text-xs font-normal">{comment}</p>)}
                                 </td>
             
                             <td className=" border border-gray-20 p-3">
-                                {isShow ? (<input type="date"
+                                {isShow ? (<input type="text"
                                 className="w-full h-full bg-transparent text-center text-white text-xs font-normal focus:outline-none"
                                 id={id} name='date' value={date}  
-                                // onChange={onChange}
+                                onChange={onChange}
                                 />) : (<p className="text-xs font-normal text-center">{date}</p>)}
                             </td>
                             <td className=" border border-gray-20 p-3">
                                 {isShow ? (<input type="number"
                                 className="w-full h-full bg-transparent text-white text-center text-xs font-normal focus:outline-none"
                                 id={id} name='sum' value={sum}  
-                                // onChange={onChange}
+                                onChange={onChange}
                                 />) : (<p className="text-xs font-normal text-center">{sum}</p>)}
                                 
                             </td>
                              <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
                             <button
-                            // onClick={async () => {
-                            //             if(id)
-                            //             addIsToggle(id, !isShow, 'update');
-                            //             if (isShow) {
-                            //             await updateMaterial({ id, projectId, title, order, date: dataFormat(date), sum })
-                            //             await toggleRender();  
-                            //                 }
-                            //    }}
+                            onClick={async () => {
+                                        if(id)
+                                        addIsToggle(id, !isShow, 'update');
+                                         if (isShow) {
+                                        await updateAdvance({id, projectId, comment, date: date, sum: Number(sum)})
+                                        await toggleRender();  
+                                            }
+                               }}
                                 type="button"> 
                                 {isShow ? (<PiFloppyDisk className="size-5 text-white" />) : (<PencilSquareIcon className="size-5 text-gray-25" />)}
                             </button>
                             <button
-                            // onClick={() => {
-                            //   if(id)
-                            //     addIsToggle(id, !isDelete, 'delete');
-                            //     setCurrentData({ id, projectId: projectId ?? '', title });
-                            //     toggleDelete();
-                            //     }}
+                            onClick={() => {
+                              if(id)
+                                addIsToggle(id, !isDelete, 'delete');
+                                setCurrentData({ id, projectId: projectId ?? '', title: comment });
+                                toggleDelete();
+                                }}
                                 type="button"> {isShow ? (<TrashIcon className="size-5 text-white" />) : ((<TrashIcon className="size-5 text-red-0" />))}
                             </button>
                         </td>
@@ -107,7 +154,8 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
 
                 </tbody>
             </table>
-             {toggleModal && (<AddAdvanceModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
+            {toggleModal && (<AddAdvanceModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
+            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='advance' toggleData={toggleRender}/>)}
         </div>
     )
 }

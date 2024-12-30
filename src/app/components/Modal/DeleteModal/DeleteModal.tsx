@@ -7,6 +7,7 @@ import { deleteEstimate } from '@/app/utils/Estimates';
 import { deletePosition } from '@/app/utils/positions';
 import { deleteProjectPrice } from '@/app/utils/projectPrice';
 import { deleteMaterial } from '@/app/utils/materials';
+import { deleteAdvance } from '@/app/utils/advances';
 
 interface DeleteModalProps {
     data?: { _id?: string, projectId?: string | undefined, id?: string | undefined, estimateId?: string | undefined; positionId?: string | undefined; title: string | undefined } | null;
@@ -56,6 +57,20 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
                         projectId: data.projectId, id: data.id,
                         title: '',
                         order: '',
+                        date: '',
+                        sum: 0
+                    })
+                  if (toggleData) toggleData(); 
+               }     
+            }
+            
+               if (nameComponent === 'advance') {
+
+                if (data) {
+                    
+                    await deleteAdvance({
+                        projectId: data.projectId, id: data.id,
+                        comment: '',
                         date: '',
                         sum: 0
                     })

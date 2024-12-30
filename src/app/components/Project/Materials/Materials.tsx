@@ -113,7 +113,7 @@ useEffect(() => {getMaterial()}, [isRender])
                                 />) : (<p className="text-xs font-normal text-center">{order}</p>)}  
                             </td>
                             <td className=" border border-gray-20 p-3">
-                                {isShow ? (<input type="date"
+                                {isShow ? (<input type="text"
                                 className="w-full h-full bg-transparent text-center text-white text-xs font-normal focus:outline-none"
                                 id={id} name='date' value={date}  
                                 onChange={onChange}
@@ -133,7 +133,7 @@ useEffect(() => {getMaterial()}, [isRender])
                                         if(id)
                                         addIsToggle(id, !isShow, 'update');
                                         if (isShow) {
-                                        await updateMaterial({ id, projectId, title, order, date: dataFormat(date), sum })
+                                        await updateMaterial({ id, projectId, title, order, date: date, sum })
                                         await toggleRender();  
                                             }
                                }}
