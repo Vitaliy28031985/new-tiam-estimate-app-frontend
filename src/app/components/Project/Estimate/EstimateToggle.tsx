@@ -4,6 +4,7 @@ import EstimateItem from "./Estimate";
 import { useUser } from "@/app/context/UserContext";
 import { ProjectItem } from "@/app/interfaces/projects";
 import { getProject } from "@/app/utils/projects";
+import ChangeProject from "@/app/UI/ChangeProject";
 
  
  interface EstimateToggleProps {
@@ -33,17 +34,29 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
         
    
 
-    // console.log(isAllow);
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+       const { name, value, } = e.currentTarget;
+    switch (name) {
+      case 'project':
+        if (value === 'large') {
+          setSizeEstimate(true);
+        } else {
+          setSizeEstimate(false);
+        }
+        break;
 
-    
+      default:
+        return;
+    }
+
+  }
+
+    // console.log(sizeEstimate)
 
     return (
         <div>
             {user?._id === project?.owner && (
-            <div className="flex items-center justify-end gap-6 mt-6 mb-6">
-                <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-                <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-            </div>    
+           <ChangeProject changeCheckbox={handleChange}/>    
             )}
 
             {isAllow && isAllow[0]?.lookAt === 'all' && (
