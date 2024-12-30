@@ -6,7 +6,6 @@ import { getProject } from "@/app/utils/projects";
 import { PlusIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
-import { dataFormat } from "@/app/utils/formatFunctions";
 import AddMaterialModal from "../../Modal/AddMaterialModal";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 

@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
 import AddAdvanceModal from "../../Modal/AddAdvanceModal";
 import { updateAdvance } from "@/app/utils/advances";
-import { dataFormat } from "@/app/utils/formatFunctions";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 
 interface AdvancesProps {
