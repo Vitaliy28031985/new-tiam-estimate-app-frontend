@@ -10,10 +10,11 @@ import { useEffect, useState } from "react";
 import AddEstimateModal from "../../Modal/AddEstimateModal";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
 import { Position } from "@/app/interfaces/positions";
-import AddPosition from "../../Modal/AddPosition";
-import { addPosition, updatePosition } from "@/app/utils/positions";
+import {updatePosition } from "@/app/utils/positions";
 import { getProject } from "@/app/utils/projects";
 import { updateLowEstimate } from "@/app/utils/lowEstimate";
+import AddLowPosition from "../../Modal/AddLowPosition";
+import { addLowPosition, updateLowPosition } from "@/app/utils/lowPosition";
 
 interface EstimateProps {
     projectId: string;
@@ -71,7 +72,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
     
   
     const getDataPosition = async (data: Position) => {
-        await addPosition({ projectId, estimateId: estId, title: data.title,
+        await addLowPosition({ projectId, estimateId: estId, title: data.title,
             unit: data.unit, number: data.number, price: data.price})
         if (isRender) isRender();
  } 
@@ -272,7 +273,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
                                 onClick={async () => {
                                 addIsToggle(position.id, !position.isShow, "update", "position");
                                     if (position.isShow) {
-                                        await updatePosition({
+                                        await updateLowPosition({
                                             projectId: projectId,
                                             estimateId: item.id,
                                             positionId: position.id,
@@ -300,7 +301,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
                     </tr>
    
                 ))}
-                    {item.isAdd && (<AddPosition projectId={projectId} isGetData={getDataPosition} />)}
+                    {item.isAdd && (<AddLowPosition projectId={projectId} isGetData={getDataPosition} />)}
                             
                     <tr className="bg-gray-30 border border-gray-20 p-3">
                             <td className="p-3 border border-b-gray-20 border-l-gray-20" ><p className="font-bold text-sm text-white">Всього:</p></td>
@@ -355,7 +356,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId }) => {
             </div>
             {toggleModal && (<AddEstimateModal componentName="low-estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='low-estimate' toggleData={isRender}/>)}
-              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
+              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='low-position' toggleData={isRender}/>)}
         </div>
     )
 }
