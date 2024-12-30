@@ -14,6 +14,7 @@ import ChangeProject from "@/app/UI/ChangeProject";
 const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
     const { user } = useUser();
     const [project, setProject] = useState<ProjectItem | null>(null);
+    const [data, setData] = useState('large');
     const [sizeEstimate, setSizeEstimate] = useState(true);
    
     
@@ -38,10 +39,12 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
        const { name, value, } = e.currentTarget;
     switch (name) {
       case 'project':
-        if (value === 'large') {
-          setSizeEstimate(true);
+            if (value === 'large') {
+                setData(value);
+                setSizeEstimate(true);
         } else {
-          setSizeEstimate(false);
+                setSizeEstimate(false);
+                setData(value)
         }
         break;
 
@@ -51,20 +54,15 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
 
   }
 
-    // console.log(sizeEstimate)
+ 
 
     return (
         <div>
             {user?._id === project?.owner && (
-           <ChangeProject changeCheckbox={handleChange}/>    
+           <ChangeProject changeCheckbox={handleChange} data={data} />    
             )}
 
-            {isAllow && isAllow[0]?.lookAt === 'all' && (
-              <div className="flex items-center justify-end gap-6 mt-6 mb-6">
-                <div> <button className="block font-medium text-sm px-3 py-1 text-blue-25" >Основний</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-                <div><button className="block font-medium text-sm px-3 py-1 text-blue-25" >Знижений</button><div className="w-full h-[1px] bg-blue-25"></div></div>
-            </div>    
-            )}
+            {isAllow && isAllow[0]?.lookAt === 'all' && (<ChangeProject changeCheckbox={handleChange} data={data} /> )}
 
            
             {user?._id === project?.owner && (
