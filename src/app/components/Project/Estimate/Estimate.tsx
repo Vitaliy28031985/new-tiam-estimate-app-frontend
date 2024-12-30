@@ -188,7 +188,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                     if (isRender) isRender();  
                                 }
                             } }/>
-                            <ButtonDelete type="button" isActive={item.isShow} click={async () => {
+                            <ButtonDelete type="button" isActive={item.isShow} click={() => {
                                 addIsToggle(item.id, !item.isDelete, "delete", "estimate");
                                 setCurrentData({ id: projectId, estimateId: item?.id, title: item?.title })
                                 toggleDelete();

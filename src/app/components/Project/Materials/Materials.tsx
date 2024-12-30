@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
 import { dataFormat } from "@/app/utils/formatFunctions";
 import AddMaterialModal from "../../Modal/AddMaterialModal";
+import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
+import { isDate } from "util/types";
 
 interface EstimateProps {
     projectId: string;
@@ -15,11 +17,13 @@ interface EstimateProps {
 
 const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => { 
   const [data, setData] = useState<ProjectItem | null>(null);
+  const [currentData, setCurrentData] = useState<{ id: string | undefined, projectId: string | undefined; title: string | undefined} | null>(null);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [isRender, setIsRender] = useState<boolean>(false);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
 
   const toggleRender = (): void | undefined => setIsRender(prev => !prev); 
-  
+  const toggleDelete = () => setIsShowDeleteModal(prev => !prev); 
   const isShowModal = () => setToggleModal(toggle => !toggle);
 
 useEffect(() => {getMaterial()}, [isRender])
@@ -90,7 +94,7 @@ useEffect(() => {getMaterial()}, [isRender])
                         <td className="w-28 border border-gray-20 p-3"><p className="font-bold text-sm text-center">Сума в грн.</p></td>
                    <td className="w-40 border border-gray-20 p-3"><p className="font-bold text-sm text-center">Редагувати</p></td>
                     </tr> 
-                    {data && data.materials?.map(({id, title, order, date, sum, isShow}, index) => (
+                    {data && data.materials?.map(({id, title, order, date, sum, isShow, isDelete}, index) => (
                         <tr key={id} className={`full ${isShow && 'bg-gray-25'}`}>
                             <td className=" border border-gray-20 p-3"><p className="text-xs font-normal text-center">{index + 1}</p></td>
                            
@@ -137,7 +141,12 @@ useEffect(() => {getMaterial()}, [isRender])
                                 {isShow ? (<PiFloppyDisk className="size-5 text-white" />) : (<PencilSquareIcon className="size-5 text-gray-25" />)}
                             </button>
                             <button
-                                
+                            onClick={() => {
+                              if(id)
+                                addIsToggle(id, !isDelete, 'delete');
+                                setCurrentData({ id, projectId: projectId ?? '', title });
+                                toggleDelete();
+                                }}
                                 type="button"> {isShow ? (<TrashIcon className="size-5 text-white" />) : ((<TrashIcon className="size-5 text-red-0" />))}
                             </button>
                         </td>
@@ -155,6 +164,7 @@ useEffect(() => {getMaterial()}, [isRender])
         </table>
         
         {toggleModal && (<AddMaterialModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
+        {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='material' toggleData={toggleRender}/>)}
             </div>
         
     )

@@ -57,3 +57,24 @@ export async function updateMaterial(data: Material) {
   }
   } 
 }
+
+export async function deleteMaterial(data: Material) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'delete',
+      url: `${BASE_URL}api/materials/${data.projectId}/${data.id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+   return response;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
