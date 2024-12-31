@@ -2,6 +2,7 @@ import ChangeSettingsProject from "@/app/UI/ChangeSettingsProject";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import AddDiscount from "../Project/Settings/AddDiscount";
+import AddLowEstimate from "../Project/Settings/AddLowEstimate";
 
 
 interface SettingsProps {
@@ -56,6 +57,7 @@ const SettingsModal: React.FC<SettingsProps> = ({ toggle, isShow, id }) => {
                 <ChangeSettingsProject data={data} changeCheckbox={handleChange} />
 
                 {page === 'discount' && (<AddDiscount id={id} toggle={toggle} />)}
+                {page === 'low-estimate' && (<AddLowEstimate id={id} toggle={toggle} />)}
             </section>
         </div>
     )
