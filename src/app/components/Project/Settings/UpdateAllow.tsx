@@ -4,7 +4,8 @@ import { User } from "@/app/interfaces/user";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
 import { saveProject } from "@/app/utils/actionsProject";
 import { updateAllow } from "@/app/utils/settingsProject";
-import { useState } from "react";
+import { getUsers } from "@/app/utils/user";
+import { useEffect, useState } from "react";
 
 
 interface AddEstimateModalProps {
@@ -13,16 +14,48 @@ interface AddEstimateModalProps {
      toggle?: () => void;
    }
 const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) => {
+    const [userData, setUserData] = useState<User[] | null>(null);
+    const [email, setEmail] = useState('');
     const [data, setData] = useState('read');
     const [dataLookAt, setDataLookAt] = useState('large')
     const [allowLevel, setAllowLevel] = useState('read');
     const [totals, setTotals] = useState('show')
     const [lookAt, setLookAt] = useState('large');
-    const [lookAtTotals, setLookAtTotals] = useState('show')
+    const [lookAtTotals, setLookAtTotals] = useState('show');
 
+    useEffect(() => {
+      getAllUsers()  
+    }, [])
+ 
+    async function getAllUsers() {
+        const users = await getUsers();
+        
+        if (users && Array.isArray(users)) {
+        setUserData(users);
+       } else {
+        setUserData(null);
+        }
+     }
+    
+     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+        const { name, value } = e.currentTarget;
+        
+        switch (name) {
+               case 'email':
+                setEmail(value);
+                break;
+               default:
+               return;  
+        }
+    }
+    
+    
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, } = e.currentTarget;
         switch (name) {
+        
+            
             case 'allowLevel':
                 if (value === 'read') {
                     setData(value);
@@ -72,8 +105,7 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
         }
     }
    
-    const onSubmit = async (formData: FormData) => {
-        const result = await saveProject(formData);
+    const onSubmit = async () => {
         if (id) {
             const newData: {
                 email: string,
@@ -83,7 +115,7 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
                 lookAtTotals: string
             } =
             {
-                email: result.email.toString(),
+                email,
                 allowLevel,
                 projectId: id,
                 lookAt,
@@ -101,35 +133,39 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
     }
 
 
-    // const userIdList = project?.allowList;
-    // const userEmailList: string[] = [];
+    const userIdList = project?.allowList;
+    const userEmailList: string[] = [];
 
-    // const renderData = () => {
-    //     if (!userIdList || userIdList.length === 0) {
-    //         return;
-    //     }
+    const renderData = () => {
+        if (!userIdList || userIdList.length === 0) {
+            return;
+        }
 
-    //     for (let i = 0; i < userIdList.length; i++) {
-    //         const userWithProject = userData?._id === userIdList[i];
+        for (let i = 0; i < userIdList.length; i++) {
+            const userWithProject = userData?.filter(({_id}) => _id === userIdList[i]) 
 
-    //         if (userWithProject)
-    //             userEmailList.push(userData.email);
-    //     }
-    //     console.log(userEmailList);
-    // };
+      if (userWithProject && userWithProject.length > 0) {
+        userEmailList.push(userWithProject[0].email);
+      }
+        }
+
+    };
 
 
-    // renderData()
+    renderData()
     
-    
-
 
     return (
         <div className="flex justify-center">
                <form action={onSubmit}>
                     <div className="mb-6">
                         <label className="block font-normal text-base mb-2" htmlFor="email">Email користувача якому потрібно надати дозвіл</label>
-                        <input name="email" autoComplete="off" defaultValue="" className="w-[580px] h-[49px] p-4 border border-gray-15 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none" type="estimate" id="email" placeholder="Введіть email" />
+                    <select name="email" id="email" onChange={onChange}
+                    className="w-[580px] h-[49px] p-4 border border-gray-15 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none">
+                        {userEmailList?.map(email =>
+                           (<option value={email} >{email}</option>))}
+                           {email === '' && (<option value="" selected>Вибери email для обновлення даних</option>)}
+                     </select>
                 </div>
                 
                 <div className="mb-6">

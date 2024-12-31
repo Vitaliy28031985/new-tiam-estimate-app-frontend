@@ -6,7 +6,7 @@ import AddLowEstimate from "../Project/Settings/AddLowEstimate";
 import AddAlow from "../Project/Settings/AddAllow";
 import { ProjectItem } from "@/app/interfaces/projects";
 import UpdateAlow from "../Project/Settings/UpdateAllow";
-import { User } from "@/app/interfaces/user";
+
 
 
 interface SettingsProps {
@@ -19,6 +19,8 @@ interface SettingsProps {
 const SettingsModal: React.FC<SettingsProps> = ({ toggle, id, project }) => {
     const [page, setPage] = useState('add-allow');
     const [data, setData] = useState('add-allow');
+
+  
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
        const { name, value, } = e.currentTarget;
