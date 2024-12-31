@@ -7,18 +7,22 @@ import ChangeProject from "@/app/UI/ChangeProject";
 import EstimateSmallItem from "./EstimateSmall";
 import { getCurrentUser } from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
+import SettingsModal from "../../Modal/SettingsModal";
+import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 
  
- interface EstimateToggleProps {
+interface EstimateToggleProps {
    projectId: string;
 }
 
-const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
+const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId, }) => {
   const [user, setUser] = useState<User | null>(null);
-  
+  const [isShowModal, setIsShowModal] = useState(false);
   const [project, setProject] = useState<ProjectItem | null>(null);
   const [data, setData] = useState('large');
   const [sizeEstimate, setSizeEstimate] = useState(true);
+
+   const toggleShow = () => setIsShowModal(toggle => !toggle);
       
       useEffect(() => {
         getEstimate()
@@ -70,7 +74,8 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
  
 
     return (
-        <div>
+      <div className="relative">
+         <button type="button" onClick={toggleShow}  className="absolute right-0 top-[-200px] z-50"><Cog8ToothIcon className="size-6 text-gray-25 "/></button>
             {user?._id === project?.owner && project?.lowEstimates?.length !== 0 && (
            <ChangeProject changeCheckbox={handleChange} data={data} />    
             )}
@@ -94,7 +99,7 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId }) => {
              {isAllow && isAllow[0]?.lookAt === 'large' && (
                 <EstimateItem user={user} projectId={projectId} />
             )}
-
+     {isShowModal && (<SettingsModal toggle={toggleShow}/>)} 
         </div>
     )
  }

@@ -6,6 +6,7 @@ import { getProject } from "@/app/utils/projects";
 import { usePathname } from "next/navigation";
 
 
+
 interface ProjectProps {
   projectId: string;
 }
@@ -13,9 +14,10 @@ interface ProjectProps {
 const Project: React.FC<ProjectProps> = ({ projectId }) => {
 
     const pathname = usePathname();
-
     const [data, setData] = useState<ProjectItem | null>(null);
     const [scrollY, setScrollY] = useState(0);
+
+   
     
     useEffect(() => {
         getEstimate()
@@ -42,7 +44,6 @@ const Project: React.FC<ProjectProps> = ({ projectId }) => {
     return (
         <section className={`${scrollY > 80 ? "fixed w-[960px] left-1/2 transform -translate-x-1/2 top-0 bg-white z-50" : "fixed w-[960px] left-1/2 transform -translate-x-1/2 top-60 bg-white z-50"}` }>
           <div className="flex justify-center">
-             
               <span>
                   <p className="block mb-8 font-semibold text-2xl">Назва кошторису: <span className="font-normal text-base ml-3">{data?.title}</span> </p>
                   <p className="block mb-8 font-semibold text-2xl">Адреса об’єкту: <span className="font-normal text-base ml-3">{ data?.description}</span> </p>
