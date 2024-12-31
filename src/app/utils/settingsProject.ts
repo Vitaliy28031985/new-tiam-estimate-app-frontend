@@ -64,6 +64,30 @@ export async function updateAllow(data: Allow) {
   } 
 }
 
+export async function deleteAllow(data: Allow) {
+   const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'patch',
+      url: `${BASE_URL}api/setting/project/delete/${data.projectId}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }, 
+        data: { 
+        email: data.email,
+        }
+    });
+   return response.data;
+  } catch (error) {
+      console.error('Error during request:', error);
+      return null;
+  }
+  } 
+}
+
 export async function addDiscount(data: { discount: number;  projectId: string}) {
    const token = localStorage.getItem('token');
   if (!token) {

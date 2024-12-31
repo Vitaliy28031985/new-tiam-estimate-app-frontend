@@ -2,7 +2,6 @@
 import { ProjectItem } from "@/app/interfaces/projects";
 import { User } from "@/app/interfaces/user";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
-import { saveProject } from "@/app/utils/actionsProject";
 import { updateAllow } from "@/app/utils/settingsProject";
 import { getUsers } from "@/app/utils/user";
 import { useEffect, useState } from "react";
@@ -159,11 +158,11 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
         <div className="flex justify-center">
                <form action={onSubmit}>
                     <div className="mb-6">
-                        <label className="block font-normal text-base mb-2" htmlFor="email">Email користувача якому потрібно надати дозвіл</label>
+                        <label className="block font-normal text-base mb-2" htmlFor="email">Email користувача якому потрібно обновити дозвіл</label>
                     <select name="email" id="email" onChange={onChange}
                     className="w-[580px] h-[49px] p-4 border border-gray-15 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none">
                         {userEmailList?.map(email =>
-                           (<option value={email} >{email}</option>))}
+                           (<option key={id} value={email} >{email}</option>))}
                            {email === '' && (<option value="" selected>Вибери email для обновлення даних</option>)}
                      </select>
                 </div>
@@ -193,7 +192,7 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
                     </div>
                 </div>
 
-                    <button className="w-[580px] h-[49px] bg-blue-30 py-4 rounded-full text-white text-center text-sm font-bold  focus:bg-blue-25 hover:bg-blue-25">Надати доступ</button>
+                    <button className="w-[580px] h-[49px] bg-blue-30 py-4 rounded-full text-white text-center text-sm font-bold  focus:bg-blue-25 hover:bg-blue-25">Обновити доступ</button>
                 </form>
         </div>
     )
