@@ -9,13 +9,15 @@ import DeleteModal from '../../Modal/DeleteModal/DeleteModal';
 import ButtonBlue from '@/app/UI/Buttons/ButtonBlue';
 import { getProject } from '@/app/utils/projects';
 import { updateLowProjectPrice } from '@/app/utils/priceLow';
+import { User } from '@/app/interfaces/user';
 
 
 interface PriceSmallProps {
     projectId: string;
+    user: User | null;
 }
 
-const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId}) => {
+const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId, user}) => {
     
     const [data, setData] = useState<Price[] | null>(null);
     const [currentData, setCurrentData] = useState<{projectId: string, id: string, title: string} | null>(null);
@@ -24,6 +26,7 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId}) => {
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [filter, setFilter] = useState('')
    
+    const isRead = user?.role !== "customer";
 
     const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
     
@@ -113,7 +116,8 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId}) => {
                     placeholder='Пошук'
                     type="text" name="filter" />
                 </div>
-                <ButtonBlue click={isToggle} type="button" title="Додати роботу" />
+                {isRead && (<ButtonBlue click={isToggle} type="button" title="Додати роботу" />)}
+                
             </div>
 
             <div className=''>
@@ -153,8 +157,8 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId}) => {
                                 )}  
                             
                         </div>
-
-                              <button
+                            {isRead && (
+                             <button
                                     onClick={async () => {
                                         addIsToggle(id, !isShow, 'update')
                                         if (isShow) {
@@ -172,14 +176,18 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId}) => {
                                 type='button'>
                                 {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)}
                                  
-                            </button>
-
-                          <ButtonDelete
+                            </button>   
+                            )}
+                              
+                            {isRead && (
+                            <ButtonDelete
                             click={ () => {
                             addIsToggle(id, !isDelete, 'delete');
                             setCurrentData({projectId, id, title });
                             toggleDelete();        
-                        }} isActive={isShow}/>
+                            }} isActive={isShow}/>    
+                            )}
+                          
 
                     </div>   
                     ))}

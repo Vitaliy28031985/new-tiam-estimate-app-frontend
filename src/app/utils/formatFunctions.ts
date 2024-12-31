@@ -29,4 +29,29 @@ export function dataFormat (data: string): string {
    
 }
 
+export function roundingNumber (number: number): number | undefined {
+  let newNumber = null;
+  const convertNumber =  number.toFixed(2);
+  const numberArray = convertNumber.toString().split('');
+
+  if(numberArray[numberArray.length - 1] === "0" && numberArray[numberArray.length - 2] === "0") {
+    const newArray = numberArray.slice(0, numberArray.length - 3)
+    newNumber = newArray.join('');
+    return Number(newNumber);
+    }
+
+
+  if(numberArray[numberArray.length - 1] === "0") {
+  const newArray = numberArray.slice(0, numberArray.length - 1)
+  newNumber = newArray.join('');
+  return Number(newNumber);
+  }
+  if(numberArray[numberArray.length - 1] !== "0") {
+   return Number(convertNumber);
+  }
+
+  }
+  
+  
+
  
