@@ -5,14 +5,14 @@ import { getCurrentUser } from "@/app/utils/user";
 
 interface UserContextProps {
     user: User | null;
-    setUser: (user: User | null) => void;
+    setUser: (user: User | null) => void;   
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
-
+    
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -25,6 +25,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         };
         fetchUser();
     }, []);
+
+
+
+    
+
+    
+
+
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

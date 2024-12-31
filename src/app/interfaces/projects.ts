@@ -125,5 +125,6 @@ export interface ProjectItem {
   materials?: Material[];
   advances?: Advance[];
   lowPrices?: Price[];
+  allowList?: [];
 }
 

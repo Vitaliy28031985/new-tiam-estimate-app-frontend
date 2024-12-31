@@ -14,13 +14,16 @@ import { Position } from "@/app/interfaces/positions";
 import AddPosition from "../../Modal/AddPosition";
 import { addPosition, updatePosition } from "@/app/utils/positions";
 import { getProject } from "@/app/utils/projects";
+import { User } from "@/app/interfaces/user";
+import { roundingNumber } from "@/app/utils/formatFunctions";
 
 interface EstimateProps {
     projectId: string;
+     user: User | null;
 }
 
 
-const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
+const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
    
     const [project, setProject] = useState<ProjectItem| null>(null);
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
@@ -34,6 +37,12 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
    
     const isRender = () => setIsRenderEstimate(render => !render);
      
+    const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
+    const owner = user?._id === project?.owner;
+
+    const isShowTotals = owner || (isAllow && isAllow[0]?.lookAtTotals === "show");
+
+    const isRead = user?.role !== "customer";
 
     useEffect(() => {
     getEstimate()
@@ -171,7 +180,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
             
             <section>
                 
-                <ul>  
+                <ul className="flex flex-wrap justify-center ">  
                 {data && data?.map((item) => (
                     <li className="mb-6 relative bg-gray-0 p-3 rounded-lg" key={item?.id}>
                         <div className={`${!item?.isShow ? 'mt-2 flex items-center gap-6 justify-center mb-3 p-2' : 'mt-2 flex items-center gap-6 justify-center mb-3 p-2 bg-white rounded-md'} `}>
@@ -180,20 +189,24 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                    id={item?.id} name="title" value={item?.title} />) :
                                 (<p className="font-semibold text-xl">{ item?.title}</p>)
                             }        
-                        
+                            {isRead && (
                             <ButtonUpdate type="button" click={async () => {
                                 addIsToggle(item.id, !item.isShow, "update", "estimate");
                                 if (item.isShow) {
                                    await updateEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
                                     if (isRender) isRender();  
                                 }
-                            } }/>
-                            <ButtonDelete type="button" isActive={item.isShow} click={() => {
+                            } }/>    
+                           )}
+                            {isRead && (
+                              <ButtonDelete type="button" isActive={item.isShow} click={() => {
                                 addIsToggle(item.id, !item.isDelete, "delete", "estimate");
                                 setCurrentData({ id: projectId, estimateId: item?.id, title: item?.title })
                                 toggleDelete();
                                                                
-                            }} />
+                            }} />   
+                            )}
+                           
                         </div>
 
             <table className="bg-white rounded-lg shadow-pricesTablet">
@@ -205,7 +218,8 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Кількість</p></td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Ціна в грн.</p></td>
                    <td className="border border-gray-20 p-3"><p className="font-bold text-sm">Сума в грн.</p></td>
-                   <td className="w-36 border border-gray-20 p-3"><p className="font-bold text-sm">Редагувати</p></td>
+                   {isRead && (<td className="w-36 border border-gray-20 p-3"><p className="font-bold text-sm">Редагувати</p></td>)}
+                   
                </tr>    
                        
                 {item?.positions && item?.positions?.map((position: EstimatePosition, index: number) => (         
@@ -262,9 +276,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             )}
                         </td>   
 
-                        <td className="w-28 border border-gray-20 p-3"><p className={`${position.isShow ? "text-white text-xs font-normal text-center" : "text-black text-xs font-normal text-center"}`}>{position.result}</p>
+                        <td className="w-28 border border-gray-20 p-3"><p className={`${position.isShow ? "text-white text-xs font-normal text-center" : "text-black text-xs font-normal text-center"}`}>{roundingNumber(position.result)}</p>
                         </td>
-                        <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
+                        {isRead && (
+                         <td className="border border-gray-20 p-3 flex items-center justify-center gap-6">
                             <button
                                 onClick={async () => {
                                 addIsToggle(position.id, !position.isShow, "update", "position");
@@ -292,7 +307,9 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                }}
                                 type="button"> {position.isShow ? (<TrashIcon className="size-5 text-white" />) : ((<TrashIcon className="size-5 text-red-0" />))}
                             </button>
-                        </td>
+                        </td>    
+                        )}
+                       
                         
                     </tr>
    
@@ -305,13 +322,14 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                             <td className="p-3 border border-b-gray-20" ></td>
                             <td className="p-3 border border-b-gray-20" ></td>
                             <td className="p-3 border border-b-gray-20" ></td>
-                            <td className="p-3 border border-b-gray-20" ></td>
-                            <td className="p-3 border border-b-gray-20 border-r-gray-20 text-center"><p className="font-bold text-sm text-white">{item.total &&  item.total}</p></td>
+                            {isRead && (<td className="p-3 border border-b-gray-20" ></td>)}
+                            
+                            <td className="p-3 border border-b-gray-20 border-r-gray-20 text-center"><p className="font-bold text-sm text-white">{item.total &&  roundingNumber(item.total)}</p></td>
                     </tr>
                 </tbody>
             </table>
-                        
-                        <div className=" mt-8">
+                        {isRead && (
+                         <div className=" mt-8">
                             <button onClick={() => {
                                 addIsToggle(item.id, !item.isAdd, "add", "estimate");
                                 setEstId(item.id);
@@ -319,21 +337,27 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
                                 
                                 
                             } type="button" className="py-4 px-12 border border-blue-30 rounded-full text-sm text-blue-30 font-bold hover:bg-blue-30 focus:bg-blue-30 hover:text-white focus:text-white">{item.isAdd ? "Закрити" : "Додати" }</button>
-                        </div>
+                        </div>    
+                      )}  
+                       
                     </li>  
                 ))}
               </ul> 
                 <div>
                     <div className="flex items-center justify-between mb-8">
                         <p className="text-lg font-normal">Загальна сума:</p>
-                        <p className="text-lg font-normal">{project?.total}</p>
+                        <p className="text-lg font-normal">{project?.total && roundingNumber(project?.total)}</p>
                     </div>  
 
-                    <div className="flex items-center justify-between mb-8">
+                    {isShowTotals && (
+                        <>
+                         {project?.discount !== 0 && (
+                      <div className="flex items-center justify-between mb-8">
                         <p className="text-lg font-normal text-green">Знижка:</p>
-                        <p className="text-lg font-normal text-green">{project?.discount}</p>
-                    </div> 
-
+                        <p className="text-lg font-normal text-green">{project?.discount && roundingNumber(project?.discount)}</p>
+                    </div>    
+                    )}
+                   
                      <div className="flex items-center justify-between mb-8">
                         <p className="text-lg font-normal">Аванс:</p>
                         <p className="text-lg font-normal">{project?.advancesTotal}</p>
@@ -346,8 +370,11 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId }) => {
 
                      <div className="flex items-center justify-between p-6 bg-gray-5 rounded-full">
                         <p className="text-xl font-semibold">До сплати:</p>
-                        <p className="text-xl font-semibold">{project?.general}</p>
+                        <p className="text-xl font-semibold">{project?.general && roundingNumber(project?.general)}</p>
                     </div>
+                        </>
+                    )}
+                   
                 </div>
             </section>
             <div className="flex items-center justify-end gap-8 mt-8">

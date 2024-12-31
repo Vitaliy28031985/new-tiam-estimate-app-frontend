@@ -9,20 +9,24 @@ import DeleteModal from '../../Modal/DeleteModal/DeleteModal';
 import ButtonBlue from '@/app/UI/Buttons/ButtonBlue';
 import { getProject } from '@/app/utils/projects';
 import { updateProjectPrice } from '@/app/utils/projectPrice';
+import { User } from '@/app/interfaces/user';
 
 
 interface EstimateProps {
     projectId: string;
+    user: User | null;
 }
 
-const PricesItem: React.FC<EstimateProps> = ({projectId}) => {
+const PricesItem: React.FC<EstimateProps> = ({projectId, user}) => {
     
     const [data, setData] = useState<Price[] | null>(null);
     const [currentData, setCurrentData] = useState<{projectId: string, id: string, title: string} | null>(null);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-    const [filter, setFilter] = useState('')
+    const [filter, setFilter] = useState('');
+
+    const isRead = user?.role !== "customer";
    
 
     const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
@@ -113,7 +117,10 @@ const PricesItem: React.FC<EstimateProps> = ({projectId}) => {
                     placeholder='Пошук'
                     type="text" name="filter" />
                 </div>
-                <ButtonBlue click={isToggle} type="button" title="Додати роботу" />
+                {isRead && (
+                 <ButtonBlue click={isToggle} type="button" title="Додати роботу" />   
+                )}
+                
             </div>
 
             <div className=''>
@@ -153,8 +160,8 @@ const PricesItem: React.FC<EstimateProps> = ({projectId}) => {
                                 )}  
                             
                         </div>
-
-                              <button
+                            {isRead && (
+                               <button
                                     onClick={async () => {
                                         addIsToggle(id, !isShow, 'update')
                                         if (isShow) {
@@ -172,14 +179,18 @@ const PricesItem: React.FC<EstimateProps> = ({projectId}) => {
                                 type='button'>
                                 {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)}
                                  
-                            </button>
-
-                          <ButtonDelete
+                            </button>  
+                            )}
+                             
+                            {isRead && (
+                              <ButtonDelete
                             click={ () => {
                             addIsToggle(id, !isDelete, 'delete');
                             setCurrentData({projectId, id, title });
                             toggleDelete();        
-                        }} isActive={isShow}/>
+                        }} isActive={isShow}/>     
+                          )}
+                       
 
                     </div>   
                     ))}

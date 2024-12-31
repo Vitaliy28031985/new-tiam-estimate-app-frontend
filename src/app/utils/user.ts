@@ -25,6 +25,29 @@ export async function getCurrentUser(): Promise<User | null> {
   }  
 }
 
+export async function getUsers(): Promise<User | null> {
+  
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  } else {
+    try {
+    const response = await axios({
+      method: 'get',
+      url: `${BASE_URL}api/user`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const userData: User = response.data;
+    return userData;
+  } catch (error) {
+    console.error('Error during request:', error);
+    return null;
+  }
+  }  
+}
+
 export async function refreshToken(): Promise<{ token: string; refreshToken: string} | null> {
   
   const token = localStorage.getItem('refreshToken');
