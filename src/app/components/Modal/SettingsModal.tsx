@@ -4,15 +4,19 @@ import { useState } from "react";
 import AddDiscount from "../Project/Settings/AddDiscount";
 import AddLowEstimate from "../Project/Settings/AddLowEstimate";
 import AddAlow from "../Project/Settings/AddAllow";
+import { ProjectItem } from "@/app/interfaces/projects";
+import UpdateAlow from "../Project/Settings/UpdateAllow";
+import { User } from "@/app/interfaces/user";
 
 
 interface SettingsProps {
+    project: ProjectItem | null;
     id?: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
 }
 
-const SettingsModal: React.FC<SettingsProps> = ({ toggle, isShow, id }) => {
+const SettingsModal: React.FC<SettingsProps> = ({ toggle, id, project }) => {
     const [page, setPage] = useState('add-allow');
     const [data, setData] = useState('add-allow');
 
@@ -57,6 +61,7 @@ const SettingsModal: React.FC<SettingsProps> = ({ toggle, isShow, id }) => {
               <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black' /></button>
                 <ChangeSettingsProject data={data} changeCheckbox={handleChange} />
                 {page === 'add-allow' && (<AddAlow id={id} toggle={toggle} />)}
+                {page === 'update-allow' && (<UpdateAlow project={project} id={id} toggle={toggle} />)}
                 {page === 'discount' && (<AddDiscount id={id} toggle={toggle} />)}
                 {page === 'low-estimate' && (<AddLowEstimate id={id} toggle={toggle} />)}
             </section>
