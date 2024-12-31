@@ -1,6 +1,8 @@
 import ChangeSettingsProject from "@/app/UI/ChangeSettingsProject";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import AddDiscount from "../Project/Settings/AddDiscount";
+
 
 interface SettingsProps {
     id?: string | undefined;
@@ -52,6 +54,8 @@ const SettingsModal: React.FC<SettingsProps> = ({ toggle, isShow, id }) => {
             <section className="relative bg-white px-[20px] p-8 rounded-[24px] w-[908px] shadow-lg">  
               <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black' /></button>
                 <ChangeSettingsProject data={data} changeCheckbox={handleChange} />
+
+                {page === 'discount' && (<AddDiscount id={id} toggle={toggle} />)}
             </section>
         </div>
     )

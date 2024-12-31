@@ -99,7 +99,7 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId, }) => {
              {isAllow && isAllow[0]?.lookAt === 'large' && (
                 <EstimateItem user={user} projectId={projectId} />
             )}
-     {isShowModal && (<SettingsModal toggle={toggleShow}/>)} 
+        {isShowModal && (<SettingsModal toggle={toggleShow} id={projectId} />)} 
         </div>
     )
  }
