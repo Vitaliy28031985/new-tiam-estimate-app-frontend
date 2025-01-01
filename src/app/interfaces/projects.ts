@@ -106,6 +106,7 @@ export interface Advance {
 }
 
 export interface ProjectItem {
+  rooms: any;
   _id?: string;
   title?: string;
   description?: string;
