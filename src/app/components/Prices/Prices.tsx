@@ -9,6 +9,8 @@ import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import AddPriceModal from '../Modal/AddPriceModal';
 import DeleteModal from '../Modal/DeleteModal/DeleteModal';
 import ViberPdfShare from './ViberPdfShare';
+import NotificationsGoodModal from '@/app/UI/Notifications/NotificationsGood';
+import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
 
 
 export default function PricesComponent() {
@@ -18,8 +20,15 @@ export default function PricesComponent() {
     const [isRender, setIsRender] = useState<boolean>(false);
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-    const [filter, setFilter] = useState('')
+    const [filter, setFilter] = useState('');
+  const [notificationToggle, setNotificationToggle] = useState(false);
+  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+
+  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
    
+  console.log(notificationToggle);
 
     const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
     
@@ -230,10 +239,26 @@ const handlePrint = () => {
                               <button
                                     onClick={async () => {
                                         addIsToggle(id, !isShow, 'update')
-                                        if (isShow) {
-                                            await updatePrice({id, title, price})
-                                            await toggleRender();  
-                                        }
+                                     if (isShow) {      
+                                     const data =  await updatePrice({ id, title, price })
+                                       if(data !== null) {
+                                          await toggleRender();
+                                         setNotificationMessage('Роботу успішно оновлено!');
+                                         toggleNotification();
+                                         setTimeout(function () {
+                                         toggleNotification(); 
+                                         }, 1700);   
+                                       } else {
+                                           setNotificationMessage('Роботу не оновлено!');
+                                           toggleFallNotification();
+                                           setTimeout(function () {
+                                           toggleFallNotification(); 
+                                          }, 1700);
+                                       }
+                                                                             
+                                       
+                                       }
+                                       
                                     }
                                     }
                                 
@@ -269,7 +294,8 @@ const handlePrint = () => {
             </div>
             
             
-            
+        {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+        {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} nameComponent='price' />)}
             
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
