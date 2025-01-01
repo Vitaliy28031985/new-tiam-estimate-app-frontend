@@ -16,6 +16,7 @@ import AddLowPosition from "../../Modal/AddLowPosition";
 import { addLowPosition, updateLowPosition } from "@/app/utils/lowPosition";
 import { User } from "@/app/interfaces/user";
 import { roundingNumber } from "@/app/utils/formatFunctions";
+import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
 
 interface EstimateProps {
     projectId: string;
@@ -168,13 +169,21 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
 
         return newData;
     });
-};
+    };
+    
+       const handleExcelGeneration = () => {
+            if (project && data) {
+                generateAndDownloadExcel(project, data);
+            } else {
+                console.error('Project or estimate data is missing');
+            }
+        };
    
     return (
         <div className="mx-auto">
             <ul className="mb-8 flex items-center gap-4 justify-center">
                 <li><ButtonBlue click={isShowModal} type="button" title="Додати таблицю" /></li>
-                <li><ButtonBlue type="button" title="Створити таблицю Excel" /></li>
+                <li><ButtonBlue click={handleExcelGeneration} type="button" title="Створити таблицю Excel" /></li>
                 <li><ButtonBlue type="button" title="Створити PDF файл" /></li>
             </ul>
             

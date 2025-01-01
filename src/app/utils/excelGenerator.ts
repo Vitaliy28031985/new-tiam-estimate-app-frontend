@@ -32,7 +32,7 @@ export async function generateAndDownloadExcel(project: ProjectItem, estimates: 
   };
 
   // Формуємо дані для аркуша
-  let wsData: (string | number)[][] = [];
+  const wsData: (string | number)[][] = [];
 
   // Додаємо дані для кожної оцінки
   estimates.forEach((estimate, index) => {
