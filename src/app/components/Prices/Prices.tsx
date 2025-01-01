@@ -28,7 +28,6 @@ export default function PricesComponent() {
   const toggleNotification = () => setNotificationToggle(toggle => !toggle);
   const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
    
-  console.log(notificationToggle);
 
     const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
     
