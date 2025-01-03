@@ -239,9 +239,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                                            setTimeout(function () {
                                            toggleFallNotification(); 
                                           }, 1700);
-                                    }
-                                  
-                                      
+                                    }    
                                 }
                             } }/>    
                            )}
