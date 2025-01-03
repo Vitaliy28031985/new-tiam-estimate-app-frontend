@@ -17,6 +17,8 @@ import { getProject } from "@/app/utils/projects";
 import { User } from "@/app/interfaces/user";
 import { roundingNumber } from "@/app/utils/formatFunctions";
 import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
+import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
+import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
 
 interface EstimateProps {
     projectId: string;
@@ -34,8 +36,15 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [isShowDeletePositionModal, setIsShowDeletePositionModal] = useState<boolean>(false);
     const [isRenderEstimate, setIsRenderEstimate] = useState<boolean | null | undefined>(false);
+    const [notificationToggle, setNotificationToggle] = useState(false);
+    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
    
-   
+
+    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
+
+
     const isRender = () => setIsRenderEstimate(render => !render);
      
     const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
@@ -201,8 +210,23 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                             <ButtonUpdate type="button" click={async () => {
                                 addIsToggle(item.id, !item.isShow, "update", "estimate");
                                 if (item.isShow) {
-                                   await updateEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
-                                    if (isRender) isRender();  
+                                    const data = await updateEstimate({ projectId: projectId, estimateId: item?.id, title: item?.title }) 
+                                    if (!data.status) {
+                                        if (isRender) isRender();
+                                         setNotificationMessage('Назву таблиці успішно оновлено!');
+                                         toggleNotification();
+                                         setTimeout(function () {
+                                         toggleNotification(); 
+                                         }, 1700);      
+                                    } else {
+                                         setNotificationMessage(data.data?.message);
+                                           toggleFallNotification();
+                                           setTimeout(function () {
+                                           toggleFallNotification(); 
+                                          }, 1700);
+                                    }
+                                  
+                                      
                                 }
                             } }/>    
                            )}
@@ -389,6 +413,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                 <ButtonBlue title="Відправити кошторис" /> 
                 <ButtonPrint/>
             </div>
+
+            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+
             {toggleModal && (<AddEstimateModal componentName="estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
               {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
