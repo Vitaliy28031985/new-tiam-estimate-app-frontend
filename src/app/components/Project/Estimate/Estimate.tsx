@@ -85,10 +85,25 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     
   
     const getDataPosition = async (data: Position) => {
-        console.log(data, estId)
-        await addPosition({ projectId, estimateId: estId, title: data.title,
-            unit: data.unit, number: data.number, price: data.price})
-        if (isRender) isRender();
+        
+      const newData =  await addPosition({ projectId, estimateId: estId, title: data.title,
+            unit: data.unit, number: data.number, price: data.price
+        })
+        if (!newData.status) {
+            if (isRender) isRender();
+            setNotificationMessage('Рядок успішно додано!');
+            toggleNotification();
+            setTimeout(function () {
+            toggleNotification(); 
+            }, 1700);      
+        } else {
+            setNotificationMessage(newData.data?.message);
+            toggleFallNotification();
+            setTimeout(function () {
+            toggleFallNotification(); 
+            }, 1700);
+            }      
+        
  } 
     
    
@@ -315,8 +330,10 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                             <button
                                 onClick={async () => {
                                 addIsToggle(position.id, !position.isShow, "update", "position");
-                                    if (position.isShow) {
-                                        await updatePosition({
+                                        if (position.isShow) {
+                                        
+                                            
+                                     const data =   await updatePosition({
                                             projectId: projectId,
                                             estimateId: item.id,
                                             positionId: position.id,
@@ -324,8 +341,22 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                                             unit: position.unit,
                                             number: position.number,
                                             price: position.price,
-                                        });
-                                    if (isRender) isRender();
+                                     });
+                                    if (!data?.status) {
+                                         if (isRender) isRender(); 
+                                         setNotificationMessage('Рядок змінено!');
+                                         toggleNotification();
+                                         setTimeout(function () {
+                                         toggleNotification(); 
+                                         }, 1700);      
+                                    } else {
+                                         setNotificationMessage(data.data?.message);
+                                           toggleFallNotification();
+                                           setTimeout(function () {
+                                           toggleFallNotification(); 
+                                          }, 1700);
+                                    }
+                                    
                                  }   
                             }}
                                 type="button"> 
