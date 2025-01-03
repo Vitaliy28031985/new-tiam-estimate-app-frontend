@@ -15,12 +15,12 @@ import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
 
 export default function PricesComponent() {
     
-    const [data, setData] = useState<Price[] | null>(null);
-    const [currentData, setCurrentData] = useState<{id: string, title: string} | null>(null);
-    const [isRender, setIsRender] = useState<boolean>(false);
-    const [isShowModal, setIsShowModal] = useState<boolean>(false);
-    const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-    const [filter, setFilter] = useState('');
+  const [data, setData] = useState<Price[] | null>(null);
+  const [currentData, setCurrentData] = useState<{id: string, title: string} | null>(null);
+  const [isRender, setIsRender] = useState<boolean>(false);
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+  const [filter, setFilter] = useState('');
   const [notificationToggle, setNotificationToggle] = useState(false);
   const [notificationFallToggle, setNotificationFallToggle] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
@@ -239,8 +239,11 @@ const handlePrint = () => {
                                     onClick={async () => {
                                         addIsToggle(id, !isShow, 'update')
                                      if (isShow) {      
-                                     const data =  await updatePrice({ id, title, price })
-                                       if(data !== null) {
+                                       const data = await updatePrice({ id, title, price })
+
+                                       console.log(data)
+                                       
+                                       if(!data.status) {
                                           await toggleRender();
                                          setNotificationMessage('Роботу успішно оновлено!');
                                          toggleNotification();
@@ -248,13 +251,12 @@ const handlePrint = () => {
                                          toggleNotification(); 
                                          }, 1700);   
                                        } else {
-                                           setNotificationMessage('Роботу не оновлено!');
+                                           setNotificationMessage(data.data?.message);
                                            toggleFallNotification();
                                            setTimeout(function () {
                                            toggleFallNotification(); 
                                           }, 1700);
-                                       }
-                                                                             
+                                       }                                       
                                        
                                        }
                                        

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import BASE_URL from './base';
 import { Price, UpdatePrice } from '../interfaces/PriceInterface';
 
@@ -68,7 +68,7 @@ export async function addPrice(data: UpdatePrice) {
         }
     });
    return response.data;
-  } catch (error) {
+    } catch (error) {
       console.error('Error during request:', error);
       return null;
   }
@@ -82,23 +82,27 @@ export async function updatePrice(data: UpdatePrice) {
     return null;
   } else {
     try {
-    const response = await axios({
-      method: 'put',
-      url: `${BASE_URL}api/prices/${data.id}`,
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }, 
-        data: { 
+      const response = await axios({
+        method: 'put',
+        url: `${BASE_URL}api/prices/${data.id}`,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        data: {
           price: Number(data.price),
           title: data.title,
         }
-    });
-   return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
-  } 
+      });
+      
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        return error.response;
+      } else {
+        console.log("Unknown error", error);
+      }
+    }
+  }  
 }
 
 export async function deletePrice(id: string | null) {
