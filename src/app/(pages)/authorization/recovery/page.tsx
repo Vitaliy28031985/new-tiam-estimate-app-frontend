@@ -1,0 +1,190 @@
+'use client';
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import fon from '@/app/assets/bg-img.png';
+import logo from '@/app/assets/logo_mob.svg';
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import BASE_URL from '@/app/utils/base';
+import { IoMdArrowRoundBack } from "react-icons/io";
+
+
+export default function RecoveryPassword() {
+  const [step, setStep] = useState<'email' | 'code' | 'new-password' | 'succes'>('email');
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const router = useRouter();
+
+
+  const handleEmailSubmit = async () => {
+    try {
+      const data = {
+        'email': email
+      }
+      const response = await axios.post(`${BASE_URL}api/auth/send/verify`, data);
+      console.log(response.data);
+      if (response) {
+        setMessage(response.data.message);
+        setStep('code');
+      }
+    } catch (error) {
+      setMessage('Помилка: ' + ('Не вдалося відправити код: такого email не зареєстровано.'));
+    }
+  };
+
+  const handleCodeSubmit = () => {
+    setStep('new-password');
+  };
+
+  // Обработчик смены пароля
+  const handlePasswordSubmit = async () => {
+    if (password !== confirmPassword) {
+      setMessage('Пароли не совпадают.');
+      return;
+    }
+    try {
+      const data = {
+        'email': email,
+        'password': password,
+        'code': code
+      }
+
+      const response = await axios.post(`${BASE_URL}api/auth/verify`, data);
+      if (response.data.success) {
+        setMessage('Пароль успешно изменен.');
+        setStep('succes');
+        setEmail('');
+        setCode('');
+        setPassword('');
+        setConfirmPassword('');
+      }
+    } catch (error) {
+      setMessage('Ошибка: Не удалось сменить пароль.');
+    }
+  };
+
+  return (
+    <div className="w-screen h-screen bg-gray-0 pt-[215px] relative overflow-y-scroll">
+      <Link href="/" className='absolute top-7 left-9'>
+        <Image
+          src={logo}
+          alt="logo"
+          width={64}
+          height={64}
+          quality={100}
+          priority
+        />
+      </Link>
+      <div className='w-[1249px] ml-auto mr-auto container pb-[115px]'>
+        <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
+          <Link className="flex items-center font-medium text-blue-30 test-sm mb-6" href="#" onClick={(e) => { e.preventDefault(); router.push('/authorization?param=true'); }}><IoMdArrowRoundBack className="size-5 text-blue-30" />Повернутись назад</Link>
+          <div className='flex-col items-center mb-6 gap-4'>
+
+            {step === 'email' && (
+              <>
+                <h2 className="text-4xl font-bold text-center mx-auto mb-6">Відновлення паролю</h2>
+                <p className="text-left text-gray-20 mb-6 p-2">Введіть свою електрону пошту, на яку зареєстровано акаунт</p>
+                <p className="text-regular text-black mb-3">E-mail</p>
+                <input
+                  type="email"
+                  placeholder="Введіть email"
+                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {message && <p className="text-center text-red-500 mb-4">{message}</p>}
+                <button
+                  onClick={handleEmailSubmit}
+                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20">
+                  Отправить код
+                </button>
+              </>
+            )}
+
+            {step === 'code' && (
+              <>
+                <h2 className="text-4xl font-bold text-center mx-auto mb-6">Код підтвердження</h2>
+                <p className="text-left text-gray-20 mb-6 p-2">Введіть код підтвердження, який ми надіслали Вам на електронну пошту {email}</p>
+                <p className="text-regular text-black mb-3">Код підтвердження</p>
+                <input
+                  type="text"
+                  placeholder="Код*"
+                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+                <button
+                  onClick={handleCodeSubmit}
+                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
+                >
+                  Далі
+                </button>
+              </>
+            )}
+
+            {step === 'new-password' && (
+              <>
+                <h2 className="text-4xl font-bold text-center mx-auto mb-6">Новий пароль</h2>
+                <p className="text-left text-gray-20 mb-6 p-2">Створіть новий пароль</p>
+                <p className="text-regular text-black mb-3">Введіть новий пароль</p>
+                <input
+                  type="password"
+                  placeholder="Введіть новий пароль"
+                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <p className="text-regular text-black mb-3">Повторіть пароль</p>
+                <input
+                  type="password"
+                  placeholder="Повторіть пароль"
+                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  onClick={handlePasswordSubmit}
+                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
+                >
+                  Далі
+                </button>
+              </>
+            )}
+
+            {step === 'succes' && (
+              <>
+                <h2 className="text-2xl font-bold text-center mb-6">{message}</h2>
+                <button
+                  onClick={() => router.push('/')}
+                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
+                >
+                  Повернутися на головну
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className='absolute right-0 top-0'>
+        <Image
+          src={fon}
+          alt="fon"
+          width={609}
+          height={679}
+          quality={100}
+          priority
+        />
+      </div>
+    </div >
+
+
+
+
+  )
+}
