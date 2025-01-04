@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import BASE_URL from "./base";
 import { Position } from "../interfaces/positions";
 
@@ -23,12 +23,16 @@ export async function addPosition(data: Position) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+              return error.response;
+            } else {
+              console.log("Unknown error", error);
+            }
+          }
+        }  
   } 
-}
+
 
 export async function updatePosition(data: Position) {
   const token = localStorage.getItem('token');
@@ -51,11 +55,14 @@ export async function updatePosition(data: Position) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
-  } 
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+              return error.response;
+            } else {
+              console.log("Unknown error", error);
+            }
+          }
+        }  
 }
 
 export async function deletePosition(data: Position) {

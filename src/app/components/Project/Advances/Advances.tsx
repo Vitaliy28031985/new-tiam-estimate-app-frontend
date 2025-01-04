@@ -8,6 +8,8 @@ import { PiFloppyDisk } from "react-icons/pi";
 import AddAdvanceModal from "../../Modal/AddAdvanceModal";
 import { updateAdvance } from "@/app/utils/advances";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
+import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
+import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
 
 interface AdvancesProps {
     projectId: string;
@@ -19,6 +21,12 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
      const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [toggleModal, setToggleModal] = useState<boolean>(false);
+    const [notificationToggle, setNotificationToggle] = useState(false);
+    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
+
+    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
 
     const toggleRender = (): void | undefined => setIsRender(prev => !prev);
     const isShowModal = () => setToggleModal(toggle => !toggle);
@@ -123,8 +131,21 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
                                         if(id)
                                         addIsToggle(id, !isShow, 'update');
                                          if (isShow) {
-                                        await updateAdvance({id, projectId, comment, date: date, sum: Number(sum)})
-                                        await toggleRender();  
+                                      const data =  await updateAdvance({id, projectId, comment, date: date, sum: Number(sum)})
+                                        if(!data.status) {
+                                          await toggleRender();
+                                         setNotificationMessage('Позицію авансу успішно оновлено!');
+                                         toggleNotification();
+                                         setTimeout(function () {
+                                         toggleNotification(); 
+                                         }, 1700);   
+                                       } else {
+                                           setNotificationMessage(data.data?.message);
+                                           toggleFallNotification();
+                                           setTimeout(function () {
+                                           toggleFallNotification(); 
+                                          }, 1700);
+                                       } 
                                             }
                                }}
                                 type="button"> 
@@ -152,7 +173,10 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
                     </tr>
 
                 </tbody>
-            </table>
+        </table>
+            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+
             {toggleModal && (<AddAdvanceModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='advance' toggleData={toggleRender}/>)}
         </div>

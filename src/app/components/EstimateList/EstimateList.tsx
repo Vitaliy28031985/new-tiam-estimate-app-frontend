@@ -9,6 +9,8 @@ import { getAllProjects, updatePrice } from "@/app/utils/projects";
 import AddProjectModal from "../Modal/AddProjectModal";
 import { PiFloppyDisk } from "react-icons/pi";
 import DeleteModal from "../Modal/DeleteModal/DeleteModal";
+import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
+import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
 
 
 
@@ -21,7 +23,12 @@ export default function EstimateList() {
     const [toggleRender, setToggleRender] = useState<boolean | null | undefined>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 
-    
+    const [notificationToggle, setNotificationToggle] = useState(false);
+    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
+
+    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
    
     const isToggle = () => setToggleModal(toggle => !toggle);
     const isRender = () => setToggleRender(toggle => !toggle);
@@ -118,8 +125,20 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                         addIsToggle(_id, !isShow, 'update')
                                     if (isShow) {
                                         console.log(isShow);
-                                            await updatePrice({_id, title, description})
-                                            // window.location.reload();  
+                                        const data = await updatePrice({ _id, title, description })
+                                        if (data !== null) {
+                                           setNotificationMessage('Кошторис успішно оновлено!');
+                                           toggleNotification();
+                                           setTimeout(function () {
+                                           toggleNotification(); 
+                                           }, 1700);   
+                                        } else {
+                                         setNotificationMessage('Кошторис не оновлено!');
+                                           toggleFallNotification();
+                                           setTimeout(function () {
+                                           toggleFallNotification(); 
+                                          }, 1700);
+                                        }
                                         }
                                     }
                                     }
@@ -169,6 +188,9 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button>
             </div>
            
+            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+
             {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project' toggleData={isRender}/>)}
         </section>

@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
 import AddMaterialModal from "../../Modal/AddMaterialModal";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
+import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
+import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
 
 
 interface EstimateProps {
@@ -20,12 +22,18 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [isRender, setIsRender] = useState<boolean>(false);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [notificationToggle, setNotificationToggle] = useState(false);
+  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+
+  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
 
   const toggleRender = (): void | undefined => setIsRender(prev => !prev); 
   const toggleDelete = () => setIsShowDeleteModal(prev => !prev); 
   const isShowModal = () => setToggleModal(toggle => !toggle);
 
-useEffect(() => {getMaterial()}, [isRender])
+  useEffect(() => {getMaterial()}, [isRender])
 
     async function getMaterial() {
         const estimate = await getProject(projectId);
@@ -132,8 +140,21 @@ useEffect(() => {getMaterial()}, [isRender])
                                         if(id)
                                         addIsToggle(id, !isShow, 'update');
                                         if (isShow) {
-                                        await updateMaterial({ id, projectId, title, order, date: date, sum })
-                                        await toggleRender();  
+                                       const data = await updateMaterial({ id, projectId, title, order, date: date, sum }) 
+                                      if(!data.status) {
+                                          await toggleRender();
+                                         setNotificationMessage('Чек успішно оновлено!');
+                                         toggleNotification();
+                                         setTimeout(function () {
+                                         toggleNotification(); 
+                                         }, 1700);   
+                                       } else {
+                                           setNotificationMessage(data.data?.message);
+                                           toggleFallNotification();
+                                           setTimeout(function () {
+                                           toggleFallNotification(); 
+                                          }, 1700);
+                                       } 
                                             }
                                }}
                                 type="button"> 
@@ -162,6 +183,9 @@ useEffect(() => {getMaterial()}, [isRender])
                 </tbody>
         </table>
         
+        {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+        {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+
         {toggleModal && (<AddMaterialModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
         {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='material' toggleData={toggleRender}/>)}
             </div>

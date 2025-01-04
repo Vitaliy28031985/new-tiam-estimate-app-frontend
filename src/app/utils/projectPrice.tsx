@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { UpdatePrice } from "../interfaces/PriceInterface";
 import BASE_URL from "./base";
 
@@ -21,11 +21,15 @@ export async function addProjectPrice(data: UpdatePrice) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
-  } 
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          console.log(error)
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
+    }  
 }
 
 
@@ -47,11 +51,15 @@ export async function updateProjectPrice(data: UpdatePrice) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
-  } 
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          console.log(error)
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
+    }  
 }
 
 

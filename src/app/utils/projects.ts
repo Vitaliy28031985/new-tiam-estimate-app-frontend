@@ -92,7 +92,7 @@ export async function updatePrice(data: ProjectsData) {
         }
     });
    return response.data;
-  } catch (error) {
+    } catch (error) {
       console.error('Error during request:', error);
       return null;
   }
