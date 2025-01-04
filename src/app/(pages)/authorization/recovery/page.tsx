@@ -41,7 +41,7 @@ export default function RecoveryPassword() {
     setStep('new-password');
   };
 
-  // Обработчик смены пароля
+
   const handlePasswordSubmit = async () => {
     if (password !== confirmPassword) {
       setMessage('Пароли не совпадают.');
@@ -97,7 +97,6 @@ export default function RecoveryPassword() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {message && <p className="text-center text-red-500 mb-4">{message}</p>}
                 <button
                   onClick={handleEmailSubmit}
                   className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20">
@@ -120,10 +119,22 @@ export default function RecoveryPassword() {
                 />
                 <button
                   onClick={handleCodeSubmit}
-                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
+                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 mb-6 focus:bg-blue-20"
                 >
                   Далі
                 </button>
+                <p className="text-left text-gray-20 mb-6 p-2">Не надійшов код?</p>
+                <div className="flex items-center justify-center">
+                  <button
+                    onClick={handleEmailSubmit}
+                    className="mx-auto text-center font-semibold border-b border-blue-30 text-xl text-blue-30"
+                  >
+                    Надіслати код повторно
+
+                  </button>
+
+                </div>
+
               </>
             )}
 
