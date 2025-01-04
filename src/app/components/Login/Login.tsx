@@ -5,6 +5,9 @@ import { useForm, Resolver } from "react-hook-form";
 import { loginApi } from '@/app/utils/auth';
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/app/context/UserContext';
+import NotificationsGoodModal from '@/app/UI/Notifications/NotificationsGood';
+import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
+import { AxiosError } from 'axios';
 
 
 type FormValues = {
@@ -77,6 +80,14 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 export default function Login() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [notificationToggle, setNotificationToggle] = useState(false);
+  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+
+  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
+
+
   const { setUser } = useUser();
   const router = useRouter()
 
@@ -106,11 +117,28 @@ export default function Login() {
         localStorage.setItem('refreshToken', response.data.refreshToken);
 
       }
-
+      setNotificationMessage('Вхід в систему пройшов успшно!');
+      toggleNotification();
+      setTimeout(function () {
+      toggleNotification(); 
+      }, 1700);   
       reset();
-    } catch (error) {
-      console.error('Login failed:', error);
+    } catch (error: unknown) {
+  if (error instanceof AxiosError) {
+    if (error.response) {
+      setNotificationMessage(error.response.data?.message);
+    } else {
+      setNotificationMessage("No response from server");
     }
+    toggleFallNotification();
+    setTimeout(function () {
+      toggleFallNotification();
+    }, 1700);
+  } else {
+    console.log("Unknown error", error);
+  }
+  console.error('Login failed:', error);
+}
   });
 
 
@@ -154,6 +182,9 @@ export default function Login() {
         <input type="submit" value="Увійти" className={`w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
        text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10` } />
       </form>
+
+       {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+       {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
     </div>
   );
 }
