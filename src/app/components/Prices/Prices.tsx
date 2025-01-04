@@ -240,8 +240,6 @@ const handlePrint = () => {
                                         addIsToggle(id, !isShow, 'update')
                                      if (isShow) {      
                                        const data = await updatePrice({ id, title, price })
-
-                                       console.log(data)
                                        
                                        if(!data.status) {
                                           await toggleRender();
