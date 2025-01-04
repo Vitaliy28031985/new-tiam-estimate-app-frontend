@@ -19,6 +19,7 @@ import { roundingNumber } from "@/app/utils/formatFunctions";
 import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
 import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
 import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import SendEstimatePdf from "./SendEstimate";
 
 interface EstimateProps {
     projectId: string;
@@ -438,8 +439,9 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                    
                 </div>
             </section>
-            <div className="flex items-center justify-end gap-8 mt-8">
-                <ButtonBlue title="Відправити кошторис" /> 
+            <div className="flex items-center justify-end mt-8">
+                {/* <ButtonBlue title="Відправити кошторис" />  */}
+                <SendEstimatePdf data={project}/>
                 <ButtonPrint/>
             </div>
 
