@@ -1,6 +1,8 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { usePDF } from 'react-to-pdf';
+
+import React, { useState, useEffect, useRef } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { Price } from '@/app/interfaces/PriceInterface';
 
 interface ViberPdfShareProps {
@@ -8,20 +10,17 @@ interface ViberPdfShareProps {
 }
 
 const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
-  const { toPDF, targetRef } = usePDF({ filename: 'price-list.pdf' });
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
-  console.log('targetRef', targetRef)
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Використовуємо useEffect, щоб дізнатися, чи код виконується на клієнті
   useEffect(() => {
-    setIsClient(true); // Встановлюємо прапор для клієнтського середовища
+    setIsClient(true);
   }, []);
 
-  // Генерація HTML-контенту, якщо дані доступні
   const generatePrintContent = () => {
     if (!data || data.length === 0) {
-      return <p>Дані не доступні</p>; // Повертаємо повідомлення, якщо дані відсутні
+      return <p>Дані не доступні</p>;
     }
 
     return (
@@ -53,40 +52,47 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
     );
   };
 
-  // Обробка події для спільного використання прайс-листа
+  const generatePDF = async (): Promise<Blob> => {
+    if (!contentRef.current) {
+      throw new Error('Content not found');
+    }
+
+    const canvas = await html2canvas(contentRef.current);
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+    return pdf.output('blob');
+  };
+
   const handleShare = async () => {
     setError(null);
     try {
-      console.log('Generating PDF...');
+      const pdfBlob = await generatePDF();
 
-      // Викликаємо toPDF() для створення PDF, не зберігаючи результат у змінну
-      await toPDF();
-
-      console.log('PDF generated successfully');
-
-      // Якщо підтримується Web Share API
       if (navigator.share) {
-        console.log('Web Share API is supported, attempting to share...');
         try {
-          // Отримуємо доступ до PDF після його створення через targetRef
-          const pdfBlob = new Blob([targetRef.current], { type: 'application/pdf' });
-
-          // Поділитися через Web Share API
           await navigator.share({
             files: [new File([pdfBlob], 'price-list.pdf', { type: 'application/pdf' })],
             title: 'Прайс робіт',
             text: 'Перегляньте наш прайс-лист',
           });
-          console.log('Shared successfully');
         } catch (shareError) {
           console.error('Error in Web Share API:', shareError);
           throw new Error('Не вдалося поділитися файлом. Спробуйте інший метод.');
         }
       } else {
-        console.log('Web Share API is not supported, opening PDF in new tab...');
-        // Відкриваємо PDF в новій вкладці
-        const pdfUrl = URL.createObjectURL(targetRef.current);
-        console.log('PDF URL:', pdfUrl);
+        const pdfUrl = URL.createObjectURL(pdfBlob);
         window.open(pdfUrl, '_blank');
       }
     } catch (error) {
@@ -95,15 +101,13 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
     }
   };
 
-  // Перевірка, чи відбувається рендеринг на клієнті
   if (!isClient) {
-    return null; // Повертаємо нічого, поки не завантажиться клієнт
+    return null;
   }
 
   return (
     <div>
-      <div className='absolute -z-50 top-44' ref={targetRef}>
-        {/* Вставка HTML-контенту */}
+      <div className='absolute -z-50 top-44' ref={contentRef}>
         {generatePrintContent()}
       </div>
       <button
