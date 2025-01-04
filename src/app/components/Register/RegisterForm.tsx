@@ -4,6 +4,9 @@ import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/2
 import { useForm, Resolver } from "react-hook-form";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
 import { registerApi } from "@/app/utils/auth";
+import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
+import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import { AxiosError } from "axios";
 
 
 
@@ -150,6 +153,12 @@ export default function RegisterForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [repeatPasswordVisible, setRepeatPasswordVisible] = useState(false);
   const [role, setRole] = useState('customer');
+  const [notificationToggle, setNotificationToggle] = useState(false);
+  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  
+  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
+  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -187,9 +196,27 @@ export default function RegisterForm() {
     try {
       const response = await registerApi(registerData);
       console.log('Registration successful:', response);
+      setNotificationMessage('Реєстрація пройшла успшно! Пепейдіть на свою скриньку щоб підтвердити реєстрацію!');
+      toggleNotification();
+      setTimeout(function () {
+      toggleNotification(); 
+      }, 1700);
       reset();
-    } catch (error) {
-      console.error('Registration failed:', error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          setNotificationMessage(error.response.data?.message);
+        } else {
+          setNotificationMessage("No response from server");
+        }
+        toggleFallNotification();
+        setTimeout(function () {
+          toggleFallNotification();
+        }, 1700);
+      } else {
+        console.log("Unknown error", error);
+      }
+      console.error('Login failed:', error);
     }
 
   });
@@ -299,6 +326,9 @@ export default function RegisterForm() {
        text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10`} />
 
       </form>
+
+       {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+       {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
     </div>
   )
 }
