@@ -20,6 +20,7 @@ import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
 import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
 import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
 import SendLowEstimatePdf from "./SendEstimateLow";
+import { handlePrintEstimateSmall } from "./printSmallEstimate";
 
 interface EstimateProps {
     projectId: string;
@@ -431,10 +432,10 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                     
                 </div>
             </section>
-            <div className="flex items-center justify-end gap-8 mt-8">
+            <div className="flex items-center justify-end mt-8">
                 {/* <ButtonBlue title="Відправити кошторис" />  */}
                 <SendLowEstimatePdf data={project} />
-                <ButtonPrint/>
+                <ButtonPrint click={() => handlePrintEstimateSmall(project)}/>
             </div>
 
             {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}

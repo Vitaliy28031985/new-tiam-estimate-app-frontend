@@ -192,7 +192,7 @@ const SendLowEstimatePdf: React.FC<SendEstimatePdfProps> = ({ data }) => {
         {generatePrintContent()}
       </div>
       <button
-        className="mr-16 bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10"
+        className="mr-3 bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10"
         onClick={handleShare}
       >
         Відправити
