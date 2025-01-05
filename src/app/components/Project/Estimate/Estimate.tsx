@@ -20,6 +20,7 @@ import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
 import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
 import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
 import SendEstimatePdf from "./SendEstimate";
+import { handlePrint } from "./printEstimate";
 
 interface EstimateProps {
     projectId: string;
@@ -29,7 +30,7 @@ interface EstimateProps {
 
 const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
    
-    const [project, setProject] = useState<ProjectItem| null>(null);
+    const [project, setProject] = useState<ProjectItem | null>(null);
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, estimateId: string | undefined; positionId?: string | undefined; title: string | undefined} | null>(null);
     const [estId, setEstId] = useState<string | undefined>('');
@@ -442,7 +443,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
             <div className="flex items-center justify-end mt-8">
                 {/* <ButtonBlue title="Відправити кошторис" />  */}
                 <SendEstimatePdf data={project}/>
-                <ButtonPrint/>
+                <ButtonPrint click={() => handlePrint(project)}/>
             </div>
 
             {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
