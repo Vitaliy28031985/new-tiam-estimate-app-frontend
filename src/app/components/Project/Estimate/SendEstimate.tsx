@@ -108,7 +108,7 @@ const SendEstimatePdf: React.FC<SendEstimatePdfProps> = ({ data }) => {
 
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-    const margin = 10; // margin in mm
+    const margin = 10; 
 
     for (let i = 0; i < contentRefs.current.length; i++) {
       const element = contentRefs.current[i];
@@ -197,7 +197,7 @@ const SendEstimatePdf: React.FC<SendEstimatePdfProps> = ({ data }) => {
         {generatePrintContent()}
       </div>
       <button
-        className="mr-16 bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10"
+        className="mr-3 bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10"
         onClick={handleShare}
       >
         Відправити

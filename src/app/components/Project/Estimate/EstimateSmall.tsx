@@ -432,7 +432,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                     
                 </div>
             </section>
-            <div className="flex items-center justify-end gap-8 mt-8">
+            <div className="flex items-center justify-end mt-8">
                 {/* <ButtonBlue title="Відправити кошторис" />  */}
                 <SendLowEstimatePdf data={project} />
                 <ButtonPrint click={() => handlePrintEstimateSmall(project)}/>
