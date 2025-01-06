@@ -12,6 +12,9 @@ export default {
         sans: ['Montserrat', 'sans-serif'],
         alternates: ['Montserrat Alternates', 'sans-serif'],
       },
+      fontSize: {
+        '404-size': '17.125rem',  
+      },
      container: {
       center: true,
       // padding: { DEFAULT: '16px', md: '60px', lg: '120px' },
@@ -63,10 +66,10 @@ export default {
           0: 'rgb(239, 68, 68)'
         }
       },
-      //   backgroundImage: {
-      //   bgImg: 'url("/bg-img.png")'
+        backgroundImage: {
+        bgImg: 'url("/bg-404.png")'
         
-      // },
+      },
      
     },
   },
