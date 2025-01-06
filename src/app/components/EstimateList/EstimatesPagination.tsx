@@ -18,7 +18,7 @@ const EstimatesPagination: React.FC<EstimatePaginationProps> = ({changePage, cha
            <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button> 
             <div className="flex items-center gap-4 " >
                 {amountPagesArr?.map(item => (
-                    <div className={`${item === page ? "cursor-pointer py-2 px-4 rounded-md bg-white text-sm font-bold" : "cursor-pointer text-sm font-normal p-2 rounded-md"}`} id={item.toString()} onClick={() => changePageButton(item)}>{item}</div>
+                    <div key={item} className={`${item === page ? "cursor-pointer py-2 px-4 rounded-md bg-white text-sm font-bold" : "cursor-pointer text-sm font-normal p-2 rounded-md"}`} id={item.toString()} onClick={() => changePageButton(item)}>{item}</div>
               ))}  
            </div>
             <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button>  
