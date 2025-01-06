@@ -8,6 +8,7 @@ import { useUser } from '@/app/context/UserContext';
 import NotificationsGoodModal from '@/app/UI/Notifications/NotificationsGood';
 import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
 import { AxiosError } from 'axios';
+import Link from 'next/link';
 
 
 type FormValues = {
@@ -111,7 +112,7 @@ export default function Login() {
       setUser(response.data);
       if (response?.data?.token) {
         localStorage.setItem('token', response.data.token);
-        router.push('/prices');   
+        router.push('/prices');
       }
       if (response?.data?.refreshToken) {
         localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -120,25 +121,25 @@ export default function Login() {
       setNotificationMessage('Вхід в систему пройшов успшно!');
       toggleNotification();
       setTimeout(function () {
-      toggleNotification(); 
-      }, 1700);   
+        toggleNotification();
+      }, 1700);
       reset();
     } catch (error: unknown) {
-  if (error instanceof AxiosError) {
-    if (error.response) {
-      setNotificationMessage(error.response.data?.message);
-    } else {
-      setNotificationMessage("No response from server");
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          setNotificationMessage(error.response.data?.message);
+        } else {
+          setNotificationMessage("No response from server");
+        }
+        toggleFallNotification();
+        setTimeout(function () {
+          toggleFallNotification();
+        }, 1700);
+      } else {
+        console.log("Unknown error", error);
+      }
+      console.error('Login failed:', error);
     }
-    toggleFallNotification();
-    setTimeout(function () {
-      toggleFallNotification();
-    }, 1700);
-  } else {
-    console.log("Unknown error", error);
-  }
-  console.error('Login failed:', error);
-}
   });
 
 
@@ -158,7 +159,7 @@ export default function Login() {
               <p className="text-red-500 text-xs font-normal">{errors.email.message}</p></div>)}
         </div>
 
-        <div className='relative'>
+        <div className='relative mb-14' >
           <label className="inline-block text-bas text-black font-normal mb-3">Пароль</label>
           <input type={passwordVisible ? "text" : "password"} className={
             errors?.password ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-3 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
@@ -179,12 +180,17 @@ export default function Login() {
           </button>
         </div>
 
-        <input type="submit" value="Увійти" className={`w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
-       text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10` } />
+        <Link href="authorization/recovery" className='text-blue-30 text-sm font-normal hover:text-blue-20 focus:text-blue-20 mb-6'>Забули пароль?</Link>
+
+        <button type="submit" className={`w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
+       text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10` } >
+          Увійти
+        </button>
+
       </form>
 
-       {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-       {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+      {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
+      {notificationFallToggle && <NotificationsFallModal title={notificationMessage} />}
     </div>
   );
 }

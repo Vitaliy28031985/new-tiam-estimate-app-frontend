@@ -9,6 +9,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import BASE_URL from '@/app/utils/base';
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+
 
 
 export default function RecoveryPassword() {
@@ -17,6 +19,7 @@ export default function RecoveryPassword() {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [message, setMessage] = useState('');
   const router = useRouter();
 
@@ -30,40 +33,49 @@ export default function RecoveryPassword() {
       console.log(response.data);
       if (response) {
         setMessage(response.data.message);
+        alert(response.data.message);
         setStep('code');
       }
     } catch (error) {
+      alert(error.response.data.message);
       setMessage('Помилка: ' + ('Не вдалося відправити код: такого email не зареєстровано.'));
     }
   };
 
   const handleCodeSubmit = () => {
+    alert('Well done!');
     setStep('new-password');
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
 
   const handlePasswordSubmit = async () => {
     if (password !== confirmPassword) {
       setMessage('Пароли не совпадают.');
+      alert('Пароли не совпадают.');
       return;
     }
     try {
       const data = {
         'email': email,
         'password': password,
-        'code': code
+        'code': Number(code)
       }
-
+      console.log(data);
       const response = await axios.post(`${BASE_URL}api/auth/verify`, data);
-      if (response.data.success) {
+      if (response) {
         setMessage('Пароль успешно изменен.');
         setStep('succes');
         setEmail('');
         setCode('');
         setPassword('');
         setConfirmPassword('');
+        alert('Пароль успешно изменен.');
       }
     } catch (error) {
+      alert(error.response.data.message);
       setMessage('Ошибка: Не удалось сменить пароль.');
     }
   };
@@ -82,7 +94,24 @@ export default function RecoveryPassword() {
       </Link>
       <div className='w-[1249px] ml-auto mr-auto container pb-[115px]'>
         <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
-          <Link className="flex items-center font-medium text-blue-30 test-sm mb-6" href="#" onClick={(e) => { e.preventDefault(); router.push('/authorization?param=true'); }}><IoMdArrowRoundBack className="size-5 text-blue-30" />Повернутись назад</Link>
+          {/* <Link className="flex items-center font-medium text-blue-30 test-sm mb-6" href="#" onClick={(e) => { e.preventDefault(); router.push('/authorization?param=true'); }}>
+            <IoMdArrowRoundBack className="size-5 text-blue-30" />
+            Повернутись назад
+          </Link> */}
+
+          <Link
+            className="flex items-center font-medium text-blue-30 text-sm mb-6"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.history.back(); // Возвращаемся на предыдущую страницу
+            }}
+          >
+            <IoMdArrowRoundBack className="size-5 text-blue-30" />
+            Повернутись назад
+          </Link>
+
+
           <div className='flex-col items-center mb-6 gap-4'>
 
             {step === 'email' && (
@@ -142,22 +171,48 @@ export default function RecoveryPassword() {
               <>
                 <h2 className="text-4xl font-bold text-center mx-auto mb-6">Новий пароль</h2>
                 <p className="text-left text-gray-20 mb-6 p-2">Створіть новий пароль</p>
-                <p className="text-regular text-black mb-3">Введіть новий пароль</p>
-                <input
-                  type="password"
-                  placeholder="Введіть новий пароль"
-                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <p className="text-regular text-black mb-3">Повторіть пароль</p>
-                <input
-                  type="password"
-                  placeholder="Повторіть пароль"
-                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+
+                <div className='relative mb-6' >
+                  <label className="text-regular text-black mb-3">Введіть новий пароль</label>
+                  <input type={passwordVisible ? "text" : "password"}
+                    className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute top-1/2 -translate-y-1/3  right-5"
+                  >
+                    {!passwordVisible ? (
+                      <EyeSlashIcon className={`size-6 text-blue-20`} />
+                    ) : (
+                      <EyeIcon className={`size-6 text-blue-20`} />
+                    )}
+                  </button>
+                </div>
+                <div className='relative mb-6' >
+                  <label className="text-regular text-black mb-3">Повторіть пароль</label>
+                  <input type={passwordVisible ? "text" : "password"}
+                    className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute top-1/2 -translate-y-1/3 right-5"
+                  >
+                    {!passwordVisible ? (
+                      <EyeSlashIcon className={`size-6 text-blue-20`} />
+                    ) : (
+                      <EyeIcon className={`size-6 text-blue-20`} />
+                    )}
+                  </button>
+                </div>
+
                 <button
                   onClick={handlePasswordSubmit}
                   className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
