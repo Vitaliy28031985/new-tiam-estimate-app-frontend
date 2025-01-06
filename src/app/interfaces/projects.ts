@@ -5,6 +5,7 @@ export interface Projects {
     description: string;
   }[];  
   total: number;
+  amountPages: number;
 }
 
 export interface ProjectsData {

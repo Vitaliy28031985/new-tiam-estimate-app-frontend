@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ProjectsData } from "@/app/interfaces/projects";
+import { Projects, ProjectsData } from "@/app/interfaces/projects";
 import ButtonDelete from "@/app/UI/Buttons/ButtonDeletePrices";
-import { PlusIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
+import { PlusIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { getAllProjects, updatePrice } from "@/app/utils/projects";
 import AddProjectModal from "../Modal/AddProjectModal";
@@ -11,12 +11,14 @@ import { PiFloppyDisk } from "react-icons/pi";
 import DeleteModal from "../Modal/DeleteModal/DeleteModal";
 import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
 import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import EstimatesPagination from "./EstimatesPagination";
 
 
 
 
 export default function EstimateList() {
     const [data, setData] = useState<ProjectsData[] | null | []>(null);
+    const [projects, setProjects] = useState<Projects | null>(null)
     const [currentData, setCurrentData] = useState<{_id: string, title: string} | null>(null);
     const [page, setPage] = useState(1);
     const [toggleModal, setToggleModal] = useState<boolean | null | undefined>(false);
@@ -35,7 +37,7 @@ export default function EstimateList() {
     const toggleDelete = () => setIsShowDeleteModal(prev => !prev);
 
 
-    
+    // пагінація
     const changePage = (name?: string) => {
         if (name === "+") {
           setPage(prevState => prevState + 1);  
@@ -46,16 +48,22 @@ export default function EstimateList() {
         
     }; 
 
+    const changePageButton = (currentPage: number) => {
+        setPage(currentPage);
+    }
+// console.log(page); 
+
   // рендер даних
     async function getProjects() {
         const projectsItems = await getAllProjects(page, 8);
         if (projectsItems) {
+            
            const addElementsData = projectsItems?.projects?.map(item => ({ ...item, isShow: false, isDelete: false }))
             if (projectsItems.total === 0) setPage(page - 1);
             if (page === 0) setPage(1);
             
                 setData(addElementsData);
-            
+                setProjects(projectsItems);
         }
       
     }
@@ -183,9 +191,10 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 
             </ul>
             
-            <div className="flex items-center gap-3">
-                <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button> 
-                <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button>
+            <div className="flex items-center justify-center">
+                <EstimatesPagination changePage={changePage} changePageButton={changePageButton} amountPages={projects?.amountPages} />
+                {/* <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button> 
+                <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button> */}
             </div>
            
             {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}

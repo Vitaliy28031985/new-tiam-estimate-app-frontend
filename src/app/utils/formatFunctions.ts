@@ -52,6 +52,14 @@ export function roundingNumber (number: number): number | undefined {
 
   }
   
+export function grtPaginationArr(amount: number | undefined): number[] | null {
+  if (amount) {
+   return Array.from({ length: amount }, (_, index) => index + 1);  
+  }
+
+  return null;
+ 
+}
   
 
  
