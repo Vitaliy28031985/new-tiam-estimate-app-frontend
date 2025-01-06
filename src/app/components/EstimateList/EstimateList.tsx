@@ -192,9 +192,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             </ul>
             
             <div className="flex items-center justify-center">
-                <EstimatesPagination changePage={changePage} changePageButton={changePageButton} amountPages={projects?.amountPages} />
-                {/* <button type="button" onClick={() => changePage("-")}><ChevronLeftIcon className="size-8 text-blue-30" /></button> 
-                <button type="button" onClick={() => changePage("+")}><ChevronRightIcon className="size-8 text-blue-30" /></button> */}
+                <EstimatesPagination changePage={changePage} changePageButton={changePageButton} amountPages={projects?.amountPages} page={page} />
             </div>
            
             {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
