@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import { PiFloppyDisk } from "react-icons/pi";
 import AddMaterialModal from "../../Modal/AddMaterialModal";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
-import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
-import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import Notification from "@/app/UI/Notifications/Notifications";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 
 
 interface EstimateProps {
@@ -25,6 +25,11 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
   const [notificationToggle, setNotificationToggle] = useState(false);
   const [notificationFallToggle, setNotificationFallToggle] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+
+    const [message, setMessage] = useState('');
+    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
   const toggleNotification = () => setNotificationToggle(toggle => !toggle);
   const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
@@ -142,18 +147,16 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
                                         if (isShow) {
                                        const data = await updateMaterial({ id, projectId, title, order, date: date, sum }) 
                                       if(!data.status) {
-                                          await toggleRender();
-                                         setNotificationMessage('Чек успішно оновлено!');
-                                         toggleNotification();
-                                         setTimeout(function () {
-                                         toggleNotification(); 
-                                         }, 1700);   
+                                        await toggleRender();
+                                        setMessage('Чек на матеріали успішно оновлено!');
+                                        setType('info');
+                                        setNotificationTitle('Оновлення');
+                                        setNotificationIsOpen(true);   
                                        } else {
-                                           setNotificationMessage(data.data?.message);
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                        setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося оновити чек на матеріали!'));
+                                        setType('error');
+                                        setNotificationTitle('Помилка');
+                                        setNotificationIsOpen(true);
                                        } 
                                             }
                                }}
@@ -183,10 +186,28 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
                 </tbody>
         </table>
         
-        {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-        {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+      
+        {notificationIsOpen && (
 
-        {toggleModal && (<AddMaterialModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
+          <Notification
+            
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+
+      )}
+
+        {toggleModal && (<AddMaterialModal
+          id={projectId}
+          toggle={isShowModal}
+          isShow={toggleRender}
+          setMessage={setMessage}
+          setType={setType}
+          setNotificationIsOpen={setNotificationIsOpen}
+          setNotificationTitle={setNotificationTitle}
+        />)}
         {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='material' toggleData={toggleRender}/>)}
             </div>
         

@@ -2,7 +2,7 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import { saveProject } from "../../utils/actionsProject";
 import { Material } from "@/app/interfaces/projects";
-import { dataFormat } from "@/app/utils/formatFunctions";
+import { dataFormat, forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { addMaterial } from "@/app/utils/materials";
 
 
@@ -11,8 +11,20 @@ interface AddMaterialModalProps {
     id: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання'>>;
 }
-const AddMaterialModal: React.FC<AddMaterialModalProps> = ({ toggle, isShow, id }) => {
+const AddMaterialModal: React.FC<AddMaterialModalProps> = ({
+    toggle,
+    isShow,
+    id,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
 
     const onSubmit = async (formData: FormData) => {
         const result = await saveProject(formData);
@@ -24,7 +36,26 @@ const AddMaterialModal: React.FC<AddMaterialModalProps> = ({ toggle, isShow, id 
                 sum: Number(result.sum),
                 projectId: id
             };
-            await addMaterial(newData);
+            const data = await addMaterial(newData);
+            if (!data.status) {
+              if (setMessage)
+                  setMessage('Чек на матеріали успішно додано!');
+              if (setType)
+                  setType('info');
+              if (setNotificationTitle)
+                  setNotificationTitle('Додавання');
+              if (setNotificationIsOpen)
+                  setNotificationIsOpen(true);
+           } else { 
+                  if(setMessage)
+                  setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося додати чек на матеріали!'));
+              if(setType)                       
+                  setType('error');
+              if(setNotificationTitle)
+                  setNotificationTitle('Помилка');
+              if(setNotificationIsOpen)
+                  setNotificationIsOpen(true);
+          }    
         }
        
         try {

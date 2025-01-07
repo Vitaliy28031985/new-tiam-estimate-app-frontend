@@ -23,10 +23,13 @@ export async function addMaterial(data: Material) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
 
@@ -75,9 +78,12 @@ export async function deleteMaterial(data: Material) {
       }
     });
    return response;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
