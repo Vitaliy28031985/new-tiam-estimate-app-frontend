@@ -141,10 +141,25 @@ interface AddPriceModalProps {
     nameComponent?: string;
     toggle?: () => void;
     isShow?: () => void;
+    
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання'>>;
+
 }
 
 
-const AddPriceModal: React.FC<AddPriceModalProps> = ({ toggle, isShow, nameComponent, projectId }) => {
+const AddPriceModal: React.FC<AddPriceModalProps> = ({
+    toggle,
+    isShow,
+    nameComponent,
+    projectId,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
 const [data, setData] = useState<Price[] | null>(null);
 const [title, setTitle] = useState<string>('');
 const [price, setPrice] = useState<string>('');
@@ -200,8 +215,27 @@ const [middle, setMiddle] = useState(false);
        if (title && price) {
            const newData = { title, price };
            if (nameComponent === 'price') {
-             await addPrice(newData);  
-           }
+               const data = await addPrice(newData);
+               if (!data.status) {  
+               if(setMessage)
+                   setMessage('Роботу успішно додано!');
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Додавання');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (data.data?.message || 'Не вдалося додати роботу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
+        }
 
            if (nameComponent === 'project-price') {
                await addProjectPrice({ projectId, title, price });

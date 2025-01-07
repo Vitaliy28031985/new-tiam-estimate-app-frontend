@@ -25,7 +25,7 @@ export default function PricesComponent() {
   const [message, setMessage] = useState('');
   const [notificationIsOpen, setNotificationIsOpen] = useState(false);
   const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення'>('Оновлення');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
  
    
@@ -305,7 +305,15 @@ const handlePrint = () => {
 
       )}
 
-            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} nameComponent='price' />)}
+        {isShowModal && (<AddPriceModal
+          toggle={isToggle}
+          isShow={toggleRender}
+          nameComponent='price'
+          setMessage={setMessage}
+          setNotificationIsOpen={setNotificationIsOpen}
+          setType={setType}
+          setNotificationTitle={setNotificationTitle}
+        />)}
             
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
             
