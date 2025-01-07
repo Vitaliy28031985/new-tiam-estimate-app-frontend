@@ -2,7 +2,7 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import { saveProject } from "../../utils/actionsProject";
 import { Advance } from "@/app/interfaces/projects";
-import { dataFormat } from "@/app/utils/formatFunctions";
+import { dataFormat, forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { addAdvance } from "@/app/utils/advances";
 
 
@@ -12,8 +12,20 @@ interface AddAdvanceModalProps {
     id: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання'>>;
 }
-const AddAdvanceModal: React.FC<AddAdvanceModalProps> = ({ toggle, isShow, id }) => {
+const AddAdvanceModal: React.FC<AddAdvanceModalProps> = ({
+    toggle,
+    isShow,
+    id,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
 
     const onSubmit = async (formData: FormData) => {
         const result = await saveProject(formData);
@@ -24,7 +36,26 @@ const AddAdvanceModal: React.FC<AddAdvanceModalProps> = ({ toggle, isShow, id })
                 sum: Number(result.sum),
                 projectId: id
             };
-            await addAdvance(newData);
+            const data = await addAdvance(newData);
+            if (!data.status) {
+             if (setMessage)
+                 setMessage('Позицію авансу успішно додано!');
+             if (setType)
+                 setType('info');
+             if (setNotificationTitle)
+                 setNotificationTitle('Додавання');
+             if (setNotificationIsOpen)
+                 setNotificationIsOpen(true);
+         } else { 
+             if(setMessage)
+                  setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося додати позицію авансу!'));
+             if(setType)                       
+                 setType('error');
+             if(setNotificationTitle)
+                 setNotificationTitle('Помилка');
+             if(setNotificationIsOpen)
+                 setNotificationIsOpen(true);
+         }    
         }
        
         try {

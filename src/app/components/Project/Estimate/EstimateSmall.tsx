@@ -15,10 +15,9 @@ import { updateLowEstimate } from "@/app/utils/lowEstimate";
 import AddLowPosition from "../../Modal/AddLowPosition";
 import { addLowPosition, updateLowPosition } from "@/app/utils/lowPosition";
 import { User } from "@/app/interfaces/user";
-import { roundingNumber } from "@/app/utils/formatFunctions";
+import { forbiddenFormatMessage, roundingNumber } from "@/app/utils/formatFunctions";
 import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
-import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
-import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import Notification from "@/app/UI/Notifications/Notifications";
 import SendLowEstimatePdf from "./SendEstimateLow";
 import { handlePrintEstimateSmall } from "./printSmallEstimate";
 
@@ -38,14 +37,13 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [isShowDeletePositionModal, setIsShowDeletePositionModal] = useState<boolean>(false);
     const [isRenderEstimate, setIsRenderEstimate] = useState<boolean | null | undefined>(false);
-    const [notificationToggle, setNotificationToggle] = useState(false);
-    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState('');
+ 
+    const [message, setMessage] = useState('');
+    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
    
-
-    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
-   
+  
     
 
     const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
@@ -98,17 +96,15 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
             unit: data.unit, number: data.number, price: data.price})
          if (!newData.status) {
             if (isRender) isRender();
-            setNotificationMessage('Рядок успішно додано!');
-            toggleNotification();
-            setTimeout(function () {
-            toggleNotification(); 
-            }, 1700);      
+            setMessage('Рядок успішно додано!');
+            setType('info');
+            setNotificationTitle('Оновлення');
+            setNotificationIsOpen(true);       
         } else {
-            setNotificationMessage(newData.data?.message);
-            toggleFallNotification();
-            setTimeout(function () {
-            toggleFallNotification(); 
-            }, 1700);
+            setMessage('Помилка: ' + (forbiddenFormatMessage(newData.data?.message) || 'Не вдалося додати рядок!'));
+            setType('error');
+            setNotificationTitle('Помилка');
+            setNotificationIsOpen(true);
             }      
  } 
     
@@ -229,17 +225,15 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                                  const data =  await updateLowEstimate({projectId: projectId, estimateId: item?.id, title: item?.title}) 
                                     if (!data.status) {
                                         if (isRender) isRender();
-                                         setNotificationMessage('Назву таблиці успішно оновлено!');
-                                         toggleNotification();
-                                         setTimeout(function () {
-                                         toggleNotification(); 
-                                         }, 1700);      
+                                        setMessage('Назву таблиці успішно оновлено!');
+                                        setType('info');
+                                        setNotificationTitle('Оновлення');
+                                        setNotificationIsOpen(true);      
                                     } else {
-                                         setNotificationMessage(data.data?.message);
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                        setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося оновити назву таблиці!'));
+                                        setType('error');
+                                        setNotificationTitle('Помилка');
+                                        setNotificationIsOpen(true);
                                     }     
                                 }
                             } }/>     
@@ -344,17 +338,15 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                                         });
                                      if (!data?.status) {
                                          if (isRender) isRender(); 
-                                         setNotificationMessage('Рядок змінено!');
-                                         toggleNotification();
-                                         setTimeout(function () {
-                                         toggleNotification(); 
-                                         }, 1700);      
+                                        setMessage('Рядок змінено!');
+                                        setType('info');
+                                        setNotificationTitle('Оновлення');
+                                        setNotificationIsOpen(true);       
                                     } else {
-                                         setNotificationMessage(data.data?.message);
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                        setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося оновити рядок!'));
+                                        setType('error');
+                                        setNotificationTitle('Помилка');
+                                        setNotificationIsOpen(true);
                                     }
                                  }   
                             }}
@@ -438,10 +430,26 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                 <ButtonPrint click={() => handlePrintEstimateSmall(project)}/>
             </div>
 
-            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+    {notificationIsOpen && (
+          <Notification     
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
 
-            {toggleModal && (<AddEstimateModal componentName="low-estimate" id={projectId} toggle={isShowModal} isShow={isRender} />)}
+      )}
+
+            {toggleModal && (<AddEstimateModal
+                componentName="low-estimate"
+                id={projectId}
+                toggle={isShowModal}
+                isShow={isRender}
+                 setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='low-estimate' toggleData={isRender}/>)}
               {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='low-position' toggleData={isRender}/>)}
         </div>

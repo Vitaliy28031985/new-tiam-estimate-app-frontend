@@ -8,10 +8,10 @@ interface NotificationProps {
 }
 
 const notificationClasses: { [key: string]: string } = {
-    success: 'bg-green-100 border-green-500 text-green-700',
-    error: 'bg-red-100 border-red-500 text-red-700',
-    warning: 'bg-yellow-100 border-yellow-500 text-yellow-700',
-    info: 'bg-blue-100 border-blue-500 text-blue-700',
+    success: 'bg-green text-white border-green-500 text-green-700 z-50',
+    error: 'bg-red-100 border-red-500 text-red-700 z-50',
+    warning: 'bg-yellow-100 border-yellow-500 text-yellow-700 z-50',
+    info: 'bg-blue-100 border-blue-500 text-blue-700 z-50',
 };
 
 const Notification: React.FC<NotificationProps> = ({ type, title, text, onClose }) => {

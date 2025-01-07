@@ -4,9 +4,9 @@ import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/2
 import { useForm, Resolver } from "react-hook-form";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
 import { registerApi } from "@/app/utils/auth";
-import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
-import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import Notification from "@/app/UI/Notifications/Notifications";
 import { AxiosError } from "axios";
+
 
 
 
@@ -144,6 +144,8 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 export default function RegisterForm() {
 
+ 
+
   const messagePassword = 'Пароль має містити щонайменше 6 символів, включаючи літери та спеціальні знаки (, #, & тощо)';
   const messageEmail = 'Потрібно ввести E-mail у наступному форматі: email@org.ua.';
   const messageName = 'Ім`я є обов`язковим полем.';
@@ -153,12 +155,12 @@ export default function RegisterForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [repeatPasswordVisible, setRepeatPasswordVisible] = useState(false);
   const [role, setRole] = useState('customer');
-  const [notificationToggle, setNotificationToggle] = useState(false);
-  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
+
+  const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Успіх' >('Успіх');
   
-  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -194,25 +196,22 @@ export default function RegisterForm() {
     const registerData = { ...data, role };
 
     try {
-      const response = await registerApi(registerData);
-      console.log('Registration successful:', response);
-      setNotificationMessage('Реєстрація пройшла успшно! Пепейдіть на свою скриньку щоб підтвердити реєстрацію!');
-      toggleNotification();
-      setTimeout(function () {
-      toggleNotification(); 
-      }, 1700);
+       await registerApi(registerData);
+      setMessage('Реєстрація пройшла успшно! Пепейдіть на свою скриньку щоб підтвердити реєстрацію!');
+      setType('success');
+      setNotificationTitle('Успіх');
+      setNotificationIsOpen(true);
       reset();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response) {
-          setNotificationMessage(error.response.data?.message);
+        setMessage('Помилка: ' + (error.response?.data?.message || 'Не вдалося зареєструватися в систему'));
+        setType('error');
+        setNotificationTitle('Помилка');
+        setNotificationIsOpen(true);
         } else {
-          setNotificationMessage("No response from server");
+          setMessage("No response from server");
         }
-        toggleFallNotification();
-        setTimeout(function () {
-          toggleFallNotification();
-        }, 1700);
       } else {
         console.log("Unknown error", error);
       }
@@ -327,8 +326,14 @@ export default function RegisterForm() {
 
       </form>
 
-       {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-       {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+    {notificationIsOpen && (
+          <Notification  
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+      )}
     </div>
   )
 }

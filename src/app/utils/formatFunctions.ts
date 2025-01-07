@@ -61,5 +61,12 @@ export function grtPaginationArr(amount: number | undefined): number[] | null {
  
 }
   
+export function forbiddenFormatMessage(message: string): string {
+  if (message === "Forbidden resource") {
+    return 'Ця дія Вам не дозволена!'
+  } else {
+    return message;
+  }
+}
 
  
