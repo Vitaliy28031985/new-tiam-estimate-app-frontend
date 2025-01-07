@@ -9,9 +9,9 @@ import { getAllProjects, updatePrice } from "@/app/utils/projects";
 import AddProjectModal from "../Modal/AddProjectModal";
 import { PiFloppyDisk } from "react-icons/pi";
 import DeleteModal from "../Modal/DeleteModal/DeleteModal";
-import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
-import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import Notification from "@/app/UI/Notifications/Notifications";
 import EstimatesPagination from "./EstimatesPagination";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 
 
 
@@ -28,6 +28,11 @@ export default function EstimateList() {
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [notificationFallToggle, setNotificationFallToggle] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
+
+    const [message, setMessage] = useState('');
+    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
     const toggleNotification = () => setNotificationToggle(toggle => !toggle);
     const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
@@ -132,20 +137,20 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                       if(_id)
                                         addIsToggle(_id, !isShow, 'update')
                                     if (isShow) {
-                                        console.log(isShow);
+                                      
                                         const data = await updatePrice({ _id, title, description })
-                                        if (data !== null) {
-                                           setNotificationMessage('Кошторис успішно оновлено!');
-                                           toggleNotification();
-                                           setTimeout(function () {
-                                           toggleNotification(); 
-                                           }, 1700);   
+                                        if (!data.status) {
+                                        isRender()
+                                        setMessage('РКошторис успішно оновлено!');
+                                        setType('info');
+                                        setNotificationTitle('Оновлення');
+                                        setNotificationIsOpen(true);     
                                         } else {
-                                         setNotificationMessage('Кошторис не оновлено!');
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                            
+                                          setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося оновити кошторис!'));
+                                          setType('error');
+                                          setNotificationTitle('Помилка');
+                                          setNotificationIsOpen(true);
                                         }
                                         }
                                     }
@@ -195,8 +200,17 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 <EstimatesPagination changePage={changePage} changePageButton={changePageButton} amountPages={projects?.amountPages} page={page} />
             </div>
            
-            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+              {notificationIsOpen && (
+
+          <Notification
+            
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+
+      )}
 
             {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project' toggleData={isRender}/>)}

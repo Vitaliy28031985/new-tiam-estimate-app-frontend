@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ProjectItem, Projects, ProjectsData } from "../interfaces/projects";
 import BASE_URL from "./base";
 
@@ -92,10 +92,13 @@ export async function updatePrice(data: ProjectsData) {
         }
     });
    return response.data;
-    } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+    } catch (error: unknown) {
+          if (error instanceof AxiosError) {
+            return error.response;
+          } else {
+            console.log("Unknown error", error);
+          }
+        }
   } 
 }
 
