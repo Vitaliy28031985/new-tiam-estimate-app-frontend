@@ -22,12 +22,16 @@ export async function addAdvance(data: Advance) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            return error.response;
+          } else {
+            console.log("Unknown error", error);
+          }
+        }
+      }
   } 
-}
+
 
 export async function updateAdvance(data: Advance) {
    const token = localStorage.getItem('token');
@@ -72,9 +76,12 @@ export async function deleteAdvance(data: Advance) {
       }
     });
    return response;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
-  } 
+  } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            return error.response;
+          } else {
+            console.log("Unknown error", error);
+          }
+        }
+      }
 }

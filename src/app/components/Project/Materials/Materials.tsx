@@ -22,18 +22,13 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [isRender, setIsRender] = useState<boolean>(false);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
-  const [notificationToggle, setNotificationToggle] = useState(false);
-  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
+ 
+  const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
-    const [message, setMessage] = useState('');
-    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
-    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
-
-  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
-
+ 
   const toggleRender = (): void | undefined => setIsRender(prev => !prev); 
   const toggleDelete = () => setIsShowDeleteModal(prev => !prev); 
   const isShowModal = () => setToggleModal(toggle => !toggle);
@@ -187,16 +182,13 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
         </table>
         
       
-        {notificationIsOpen && (
-
-          <Notification
-            
+      {notificationIsOpen && (
+          <Notification  
           type={type}
           title={notificationTitle}
           text={message}
           onClose={() => setNotificationIsOpen(false)}
         />
-
       )}
 
         {toggleModal && (<AddMaterialModal

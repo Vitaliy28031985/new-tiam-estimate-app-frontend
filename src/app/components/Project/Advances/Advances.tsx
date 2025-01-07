@@ -8,8 +8,8 @@ import { PiFloppyDisk } from "react-icons/pi";
 import AddAdvanceModal from "../../Modal/AddAdvanceModal";
 import { updateAdvance } from "@/app/utils/advances";
 import DeleteModal from "../../Modal/DeleteModal/DeleteModal";
-import NotificationsGoodModal from "@/app/UI/Notifications/NotificationsGood";
-import NotificationsFallModal from "@/app/UI/Notifications/NotificationsFall";
+import Notification from "@/app/UI/Notifications/Notifications";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 
 interface AdvancesProps {
     projectId: string;
@@ -18,16 +18,17 @@ interface AdvancesProps {
 const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
     const [data, setData] = useState<ProjectItem | null>(null);
     const [currentData, setCurrentData] = useState<{ id: string | undefined, projectId: string | undefined; title: string | undefined} | null>(null);
-     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+    const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [isRender, setIsRender] = useState<boolean>(false);
     const [toggleModal, setToggleModal] = useState<boolean>(false);
-    const [notificationToggle, setNotificationToggle] = useState(false);
-    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState('');
+   
 
-    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
+    const [message, setMessage] = useState('');
+    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
+   
     const toggleRender = (): void | undefined => setIsRender(prev => !prev);
     const isShowModal = () => setToggleModal(toggle => !toggle);
     const toggleDelete = () => setIsShowDeleteModal(prev => !prev); 
@@ -133,18 +134,16 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
                                          if (isShow) {
                                       const data =  await updateAdvance({id, projectId, comment, date: date, sum: Number(sum)})
                                         if(!data.status) {
-                                          await toggleRender();
-                                         setNotificationMessage('Позицію авансу успішно оновлено!');
-                                         toggleNotification();
-                                         setTimeout(function () {
-                                         toggleNotification(); 
-                                         }, 1700);   
+                                        await toggleRender();
+                                        setMessage('Позицію авансу успішно оновлено!');
+                                        setType('info');
+                                        setNotificationTitle('Оновлення');
+                                        setNotificationIsOpen(true);   
                                        } else {
-                                           setNotificationMessage(data.data?.message);
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                          setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося оновити позицію авансу!'));
+                                          setType('error');
+                                          setNotificationTitle('Помилка');
+                                          setNotificationIsOpen(true);
                                        } 
                                             }
                                }}
@@ -174,10 +173,26 @@ const AdvancesItem: React.FC<AdvancesProps> = ({ projectId }) => {
 
                 </tbody>
         </table>
-            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+            
+        
+        {notificationIsOpen && (
+          <Notification  
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+      )}
 
-            {toggleModal && (<AddAdvanceModal id={projectId} toggle={isShowModal} isShow={toggleRender} />)}
+        {toggleModal && (<AddAdvanceModal
+          id={projectId}
+          toggle={isShowModal}
+          isShow={toggleRender}
+          setMessage={setMessage}
+          setType={setType}
+          setNotificationIsOpen={setNotificationIsOpen}
+          setNotificationTitle={setNotificationTitle}
+        />)}
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='advance' toggleData={toggleRender}/>)}
         </div>
     )
