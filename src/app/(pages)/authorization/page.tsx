@@ -27,8 +27,6 @@ export default function Register() {
 
                 <Authorization />
 
-
-
             </div>
             <div className='absolute right-0 top-0'>
                 <Image
