@@ -27,18 +27,14 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId, user}) => {
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [filter, setFilter] = useState('');
-    const [notificationToggle, setNotificationToggle] = useState(false);
-    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState('');
+
 
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
     const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
-    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
-   
+     
     const isRead = user?.role !== "customer";
 
     const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);

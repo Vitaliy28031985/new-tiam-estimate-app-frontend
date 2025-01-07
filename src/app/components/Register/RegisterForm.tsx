@@ -196,7 +196,7 @@ export default function RegisterForm() {
     const registerData = { ...data, role };
 
     try {
-      const response = await registerApi(registerData);
+       await registerApi(registerData);
       setMessage('Реєстрація пройшла успшно! Пепейдіть на свою скриньку щоб підтвердити реєстрацію!');
       setType('success');
       setNotificationTitle('Успіх');
