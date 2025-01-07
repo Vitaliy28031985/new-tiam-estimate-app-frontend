@@ -66,10 +66,13 @@ export async function addProject(data: ProjectsData) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+          if (error instanceof AxiosError) {
+            return error.response;
+          } else {
+            console.log("Unknown error", error);
+          }
+        }
   } 
 }
 

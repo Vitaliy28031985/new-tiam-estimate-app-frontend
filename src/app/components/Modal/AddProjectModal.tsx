@@ -7,19 +7,48 @@ import { addProject } from "@/app/utils/projects";
 interface AddProjectModalProps {
     toggle?: () => void;
     isShow?: () => void;
+
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання'>>;
 }
-const AddProjectModal: React.FC<AddProjectModalProps> = ({ toggle, isShow }) => {
+const AddProjectModal: React.FC<AddProjectModalProps> = ({
+    toggle,
+    isShow,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
 
     const onSubmit = async (formData: FormData) => {
         const result = await saveProject(formData);
         const newData: ProjectsData = {title: result.title.toString(), description: result.description.toString()}
-         await addProject(newData)
+        const data = await addProject(newData)
        
-        try {
+        if (!data.status) {
+             if(setMessage)
+                   setMessage('Кошторис успішно додано!');
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Додавання');
+               if(setNotificationIsOpen)
+                    setNotificationIsOpen(true);
             if (toggle) toggle();
             if (isShow) isShow();
-        } catch {
-            console.error('Щось пішло не так!');  
+        } else {
+            if(setMessage)
+                setMessage('Помилка: ' + (data.data?.message || 'Не вдалося додати кошторис!'));
+            if(setType)                       
+                setType('error');
+            if(setNotificationTitle)
+                setNotificationTitle('Помилка');
+             if(setNotificationIsOpen)
+                setNotificationIsOpen(true);  
+             if (toggle) toggle();
+            if (isShow) isShow();
       }
        
     }

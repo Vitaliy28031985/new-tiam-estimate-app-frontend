@@ -212,7 +212,14 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 
       )}
 
-            {toggleModal && (<AddProjectModal toggle={isToggle} isShow={isRender} />)}
+            {toggleModal && (<AddProjectModal
+                toggle={isToggle}
+                isShow={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
              {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project' toggleData={isRender}/>)}
         </section>
     )
