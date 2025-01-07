@@ -9,8 +9,7 @@ import ButtonPrint from '@/app/UI/Buttons/ButtonPrint';
 import AddPriceModal from '../Modal/AddPriceModal';
 import DeleteModal from '../Modal/DeleteModal/DeleteModal';
 import ViberPdfShare from './ViberPdfShare';
-import NotificationsGoodModal from '@/app/UI/Notifications/NotificationsGood';
-import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
+import Notification from '@/app/UI/Notifications/Notifications';
 
 
 export default function PricesComponent() {
@@ -21,12 +20,14 @@ export default function PricesComponent() {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [filter, setFilter] = useState('');
-  const [notificationToggle, setNotificationToggle] = useState(false);
-  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
+  
 
-  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
+  const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення'>('Оновлення');
+
+ 
    
 
     const filterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
@@ -242,18 +243,16 @@ const handlePrint = () => {
                                        const data = await updatePrice({ id, title, price })
                                        
                                        if(!data.status) {
-                                          await toggleRender();
-                                         setNotificationMessage('Роботу успішно оновлено!');
-                                         toggleNotification();
-                                         setTimeout(function () {
-                                         toggleNotification(); 
-                                         }, 1700);   
+                                         await toggleRender();
+                                          setMessage('Роботу успішно оновлено!');
+                                         setType('info');
+                                         setNotificationTitle('Оновлення');
+                                         setNotificationIsOpen(true);  
                                        } else {
-                                           setNotificationMessage(data.data?.message);
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                          setMessage('Помилка: ' + (data.data?.message || 'Не вдалося змінити роботу!'));
+                                          setType('error');
+                                          setNotificationTitle('Помилка');
+                                          setNotificationIsOpen(true);
                                        }                                       
                                        
                                        }
@@ -280,7 +279,7 @@ const handlePrint = () => {
 
                     </div>   
                     ))}
-</div>
+                 </div>
                     <div className='flex justify-end gap-4 items-center'>
                         <ButtonPrint click={handlePrint} />
                           {/* <button type='button' className={`bg-blue-30  py-3 px-8 font-bold text-base
@@ -293,8 +292,19 @@ const handlePrint = () => {
             </div>
             
             
-        {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-        {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+             
+        {notificationIsOpen && (
+
+          <Notification
+            
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+
+      )}
+
             {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} nameComponent='price' />)}
             
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='price' toggleData={toggleRender}/>)}
