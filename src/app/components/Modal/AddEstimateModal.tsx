@@ -4,6 +4,7 @@ import { saveProject } from "../../utils/actionsProject";
 import { EstimateCreate } from "@/app/interfaces/estimateInterfaces";
 import { addEstimate } from "@/app/utils/Estimates";
 import { addLowEstimate } from "@/app/utils/lowEstimate";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 
 
 interface AddEstimateModalProps {
@@ -45,7 +46,7 @@ const AddEstimateModal: React.FC<AddEstimateModalProps> = ({
                         setNotificationIsOpen(true);
                 } else { 
                      if(setMessage)
-                      setMessage('Помилка: ' + (data.data?.message || 'Не вдалося додати таблицю!'));
+                      setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося додати таблицю!'));
                     if(setType)                       
                        setType('error');
                     if(setNotificationTitle)
@@ -55,7 +56,26 @@ const AddEstimateModal: React.FC<AddEstimateModalProps> = ({
                 }    
            }
             if (componentName === "low-estimate") {
-                await addLowEstimate(newData);
+                const data = await addLowEstimate(newData);
+                   if (!data.status) {
+                    if (setMessage)
+                        setMessage('Таблицю успішно додано!');
+                    if (setType)
+                        setType('info');
+                    if (setNotificationTitle)
+                        setNotificationTitle('Додавання');
+                    if (setNotificationIsOpen)
+                        setNotificationIsOpen(true);
+                } else { 
+                     if(setMessage)
+                      setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося додати таблицю!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+                }
             }
        
         }

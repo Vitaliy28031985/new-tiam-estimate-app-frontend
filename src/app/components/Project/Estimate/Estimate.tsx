@@ -440,7 +440,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                 <ButtonPrint click={() => handlePrint(project)}/>
             </div>
 
-           {notificationIsOpen && (
+    {notificationIsOpen && (
           <Notification     
           type={type}
           title={notificationTitle}
