@@ -10,6 +10,9 @@ import { useRouter } from "next/navigation";
 import BASE_URL from '@/app/utils/base';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import Notification from "@/app/UI/Notifications/Notifications";
+
+
 
 
 
@@ -21,29 +24,40 @@ export default function RecoveryPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Успіх'>('Успіх');
   const router = useRouter();
 
 
   const handleEmailSubmit = async () => {
     try {
-      const data = {
-        'email': email
-      }
+      const data = { email };
       const response = await axios.post(`${BASE_URL}api/auth/send/verify`, data);
-      console.log(response.data);
+
       if (response) {
         setMessage(response.data.message);
-        alert(response.data.message);
+        setType('success');
+        setNotificationTitle('Успіх');
+        setNotificationIsOpen(true);
         setStep('code');
       }
-    } catch (error) {
-      alert(error.response.data.message);
-      setMessage('Помилка: ' + ('Не вдалося відправити код: такого email не зареєстровано.'));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setMessage((error.response?.data?.message || 'Не вдалося відправити код.'));
+        setType('error');
+        setNotificationTitle('Помилка');
+        setNotificationIsOpen(true);
+      } else {
+        setType('error');
+        setNotificationTitle('Помилка');
+        setNotificationIsOpen(true);
+        setMessage('Помилка: Щось пішло не так.');
+      }
     }
   };
 
   const handleCodeSubmit = () => {
-    alert('Well done!');
     setStep('new-password');
   };
 
@@ -53,8 +67,8 @@ export default function RecoveryPassword() {
 
   const handlePasswordSubmit = async () => {
     if (password !== confirmPassword) {
-      setMessage('Пароли не совпадают.');
-      alert('Пароли не совпадают.');
+      setMessage('Пароли не співпадають.');
+      alert('Пароли не співпадають.');
       return;
     }
     try {
@@ -66,17 +80,28 @@ export default function RecoveryPassword() {
       console.log(data);
       const response = await axios.post(`${BASE_URL}api/auth/verify`, data);
       if (response) {
-        setMessage('Пароль успешно изменен.');
+        setMessage('Пароль змінено.');
         setStep('succes');
         setEmail('');
         setCode('');
         setPassword('');
         setConfirmPassword('');
-        alert('Пароль успешно изменен.');
+        setType('success');
+        setNotificationTitle('Успіх');
+        setNotificationIsOpen(true);
       }
-    } catch (error) {
-      alert(error.response.data.message);
-      setMessage('Ошибка: Не удалось сменить пароль.');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setMessage('Помилка: ' + (error.response?.data?.message || 'Не вдалося змінити пароль'));
+        setType('error');
+        setNotificationTitle('Помилка');
+        setNotificationIsOpen(true);
+      } else {
+        setMessage('Помилка: Щось пішло не так.');
+        setType('error');
+        setNotificationTitle('Помилка');
+        setNotificationIsOpen(true);
+      }
     }
   };
 
@@ -94,17 +119,14 @@ export default function RecoveryPassword() {
       </Link>
       <div className='w-[1249px] ml-auto mr-auto container pb-[115px]'>
         <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
-          {/* <Link className="flex items-center font-medium text-blue-30 test-sm mb-6" href="#" onClick={(e) => { e.preventDefault(); router.push('/authorization?param=true'); }}>
-            <IoMdArrowRoundBack className="size-5 text-blue-30" />
-            Повернутись назад
-          </Link> */}
+
 
           <Link
             className="flex items-center font-medium text-blue-30 text-sm mb-6"
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              window.history.back(); // Возвращаемся на предыдущую страницу
+              window.history.back();
             }}
           >
             <IoMdArrowRoundBack className="size-5 text-blue-30" />
@@ -236,7 +258,6 @@ export default function RecoveryPassword() {
           </div>
         </div>
       </div>
-
       <div className='absolute right-0 top-0'>
         <Image
           src={fon}
@@ -247,10 +268,19 @@ export default function RecoveryPassword() {
           priority
         />
       </div>
+
+
+      {notificationIsOpen && (
+
+        <Notification
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+
+      )}
+
     </div >
-
-
-
-
   )
 }
