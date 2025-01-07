@@ -5,8 +5,7 @@ import { useForm, Resolver } from "react-hook-form";
 import { loginApi } from '@/app/utils/auth';
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/app/context/UserContext';
-import NotificationsGoodModal from '@/app/UI/Notifications/NotificationsGood';
-import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
+import Notification from '@/app/UI/Notifications/Notifications';
 import { AxiosError } from 'axios';
 import Link from 'next/link';
 
@@ -81,12 +80,12 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 export default function Login() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [notificationToggle, setNotificationToggle] = useState(false);
-  const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
+  const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Успіх' >('Успіх');
 
-  const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-  const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
+
 
 
   const { setUser } = useUser();
@@ -118,23 +117,22 @@ export default function Login() {
         localStorage.setItem('refreshToken', response.data.refreshToken);
 
       }
-      setNotificationMessage('Вхід в систему пройшов успшно!');
-      toggleNotification();
-      setTimeout(function () {
-        toggleNotification();
-      }, 1700);
+      setMessage('Вхід в систему пройшов успшно!');
+      setType('success');
+      setNotificationTitle('Успіх');
+      setNotificationIsOpen(true);
       reset();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response) {
-          setNotificationMessage(error.response.data?.message);
+        setMessage('Помилка: ' + (error.response?.data?.message || 'Не вдалося увійти в систему'));
+        setType('error');
+        setNotificationTitle('Помилка');
+        setNotificationIsOpen(true);
         } else {
-          setNotificationMessage("No response from server");
+          setMessage("No response from server");
         }
-        toggleFallNotification();
-        setTimeout(function () {
-          toggleFallNotification();
-        }, 1700);
+      
       } else {
         console.log("Unknown error", error);
       }
@@ -189,8 +187,14 @@ export default function Login() {
 
       </form>
 
-      {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-      {notificationFallToggle && <NotificationsFallModal title={notificationMessage} />}
+       {notificationIsOpen && (
+          <Notification  
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+      )}
     </div>
   );
 }
