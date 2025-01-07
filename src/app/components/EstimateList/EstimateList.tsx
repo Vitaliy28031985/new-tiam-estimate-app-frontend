@@ -25,17 +25,12 @@ export default function EstimateList() {
     const [toggleRender, setToggleRender] = useState<boolean | null | undefined>(false);
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 
-    const [notificationToggle, setNotificationToggle] = useState(false);
-    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState('');
-
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
     const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
-    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
+    
    
     const isToggle = () => setToggleModal(toggle => !toggle);
     const isRender = () => setToggleRender(toggle => !toggle);
@@ -141,7 +136,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                                         const data = await updatePrice({ _id, title, description })
                                         if (!data.status) {
                                         isRender()
-                                        setMessage('РКошторис успішно оновлено!');
+                                        setMessage('Кошторис успішно оновлено!');
                                         setType('info');
                                         setNotificationTitle('Оновлення');
                                         setNotificationIsOpen(true);     
@@ -200,10 +195,8 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 <EstimatesPagination changePage={changePage} changePageButton={changePageButton} amountPages={projects?.amountPages} page={page} />
             </div>
            
-              {notificationIsOpen && (
-
-          <Notification
-            
+     {notificationIsOpen && (
+          <Notification     
           type={type}
           title={notificationTitle}
           text={message}

@@ -11,15 +11,48 @@ interface AddEstimateModalProps {
     id: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання'>>;
 }
-const AddEstimateModal: React.FC<AddEstimateModalProps> = ({ toggle, isShow, id, componentName }) => {
+const AddEstimateModal: React.FC<AddEstimateModalProps> = ({
+    toggle,
+    isShow,
+    id,
+    componentName,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+
+}) => {
 
     const onSubmit = async (formData: FormData) => {
         const result = await saveProject(formData);
         if (id) {
             const newData: EstimateCreate = { title: result.title.toString(), projectId: id };
             if (componentName === "estimate") {
-             await addEstimate(newData);  
+                const data = await addEstimate(newData);
+                if (!data.status) {
+                    if (setMessage)
+                        setMessage('Таблицю успішно додано!');
+                    if (setType)
+                        setType('info');
+                    if (setNotificationTitle)
+                        setNotificationTitle('Додавання');
+                    if (setNotificationIsOpen)
+                        setNotificationIsOpen(true);
+                } else { 
+                     if(setMessage)
+                      setMessage('Помилка: ' + (data.data?.message || 'Не вдалося додати таблицю!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+                }    
            }
             if (componentName === "low-estimate") {
                 await addLowEstimate(newData);
