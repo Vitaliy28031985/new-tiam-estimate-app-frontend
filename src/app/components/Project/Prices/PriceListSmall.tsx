@@ -10,8 +10,8 @@ import ButtonBlue from '@/app/UI/Buttons/ButtonBlue';
 import { getProject } from '@/app/utils/projects';
 import { updateLowProjectPrice } from '@/app/utils/priceLow';
 import { User } from '@/app/interfaces/user';
-import NotificationsGoodModal from '@/app/UI/Notifications/NotificationsGood';
-import NotificationsFallModal from '@/app/UI/Notifications/NotificationsFall';
+import Notification from '@/app/UI/Notifications/Notifications';
+import { forbiddenFormatMessage } from '@/app/utils/formatFunctions';
 
 
 interface PriceSmallProps {
@@ -30,6 +30,11 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId, user}) => {
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [notificationFallToggle, setNotificationFallToggle] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
+
+    const [message, setMessage] = useState('');
+    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
 
     const toggleNotification = () => setNotificationToggle(toggle => !toggle);
     const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
@@ -172,18 +177,16 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId, user}) => {
                                         if (isShow) {
                                           const data = await updateLowProjectPrice({ id: projectId, priceId: id, title, price });
                                         if(!data.status) {
-                                         await toggleRender();
-                                         setNotificationMessage('Роботу успішно оновлено!');
-                                         toggleNotification();
-                                         setTimeout(function () {
-                                         toggleNotification(); 
-                                         }, 1700);   
+                                        await toggleRender();
+                                        setMessage('Роботу успішно оновлено!');
+                                        setType('info');
+                                        setNotificationTitle('Оновлення');
+                                        setNotificationIsOpen(true);  
                                        } else {
-                                           setNotificationMessage(data.data?.message);
-                                           toggleFallNotification();
-                                           setTimeout(function () {
-                                           toggleFallNotification(); 
-                                          }, 1700);
+                                        setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося змінити роботу!'));
+                                        setType('error');
+                                        setNotificationTitle('Помилка');
+                                        setNotificationIsOpen(true);
                                        }  
                                         }
                                     }
@@ -216,10 +219,28 @@ const PricesItemSmall: React.FC<PriceSmallProps> = ({projectId, user}) => {
                                         
             </div>
             
-            {notificationToggle && <NotificationsGoodModal title={notificationMessage} />}
-            {notificationFallToggle && <NotificationsFallModal title={notificationMessage}/>}
+    {notificationIsOpen && (
+
+          <Notification
             
-            {isShowModal && (<AddPriceModal toggle={isToggle} isShow={toggleRender} nameComponent='low-project-price' projectId={projectId} />)}
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+
+      )}
+            
+            {isShowModal && (<AddPriceModal
+                toggle={isToggle}
+                isShow={toggleRender}
+                nameComponent='low-project-price'
+                projectId={projectId}
+                setMessage={setMessage}
+                setType={setType}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setNotificationTitle={setNotificationTitle}
+            />)}
             
             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='low-project-price' toggleData={toggleRender}/>)}
             

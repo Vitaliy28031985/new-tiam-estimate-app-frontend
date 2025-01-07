@@ -134,6 +134,7 @@ import { Price } from '@/app/interfaces/PriceInterface';
 import { getMiddlePrices, addPrice } from '@/app/utils/prices';
 import { addProjectPrice } from '@/app/utils/projectPrice';
 import { addLowProjectPrice } from '@/app/utils/priceLow';
+import { forbiddenFormatMessage } from '@/app/utils/formatFunctions';
 
 
 interface AddPriceModalProps {
@@ -238,11 +239,49 @@ const [middle, setMiddle] = useState(false);
         }
 
            if (nameComponent === 'project-price') {
-               await addProjectPrice({ projectId, title, price });
+               const data = await addProjectPrice({ projectId, title, price });
+            if (!data.status) {  
+               if(setMessage)
+                   setMessage('Роботу успішно додано!');
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Додавання');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося додати роботу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
            }
 
              if (nameComponent === 'low-project-price') {
-               await addLowProjectPrice({ projectId, title, price });
+                 const data = await addLowProjectPrice({ projectId, title, price });
+             if (!data.status) {  
+               if(setMessage)
+                   setMessage('Роботу успішно додано!');
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Додавання');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (forbiddenFormatMessage(data.data?.message) || 'Не вдалося додати роботу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
            }
 
            

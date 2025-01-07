@@ -37,19 +37,13 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
     const [isShowDeletePositionModal, setIsShowDeletePositionModal] = useState<boolean>(false);
     const [isRenderEstimate, setIsRenderEstimate] = useState<boolean | null | undefined>(false);
-    const [notificationToggle, setNotificationToggle] = useState(false);
-    const [notificationFallToggle, setNotificationFallToggle] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState('');
-
+ 
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
     const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
    
-
-    const toggleNotification = () => setNotificationToggle(toggle => !toggle);
-    const toggleFallNotification = () => setNotificationFallToggle(toggle => !toggle);
-   
+  
     
 
     const isAllow = user?.projectIds?.filter(({ id }) => id === projectId);
