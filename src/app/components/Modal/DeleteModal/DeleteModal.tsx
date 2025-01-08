@@ -224,7 +224,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
                 }  
             }
 
-               if (nameComponent === 'low-project-price') {
+            if (nameComponent === 'low-project-price') {
                if (data) {
                const dataDelete = await deleteLowProjectPrice(data.projectId ?? null, data.id ?? null);
                if (dataDelete?.status === 200) {  
@@ -253,13 +253,32 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 
                 if (data) {
                     
-                    await deleteMaterial({
+                   const dataDelete = await deleteMaterial({
                         projectId: data.projectId, id: data.id,
                         title: '',
                         order: '',
                         date: '',
                         sum: 0
-                    })
+                   })
+             if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Чек на матеріали ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити чек на матеріали!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
                   if (toggleData) toggleData(); 
                }     
             }
@@ -268,12 +287,32 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 
                 if (data) {
                     
-                    await deleteAdvance({
+                  const dataDelete =  await deleteAdvance({
                         projectId: data.projectId, id: data.id,
                         comment: '',
                         date: '',
                         sum: 0
-                    })
+                  })
+                    
+               if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Позицію авансу ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити позицію авансу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
                   if (toggleData) toggleData(); 
                }     
                 }
