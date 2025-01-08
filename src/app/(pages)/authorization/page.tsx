@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Register() {
     return (
-        <div className="w-screen h-screen bg-gray-0 pt-[215px] relative overflow-y-scroll">
+        <div className="w-screen h-screen pl-[203px] bg-gray-0 relative overflow-hidden">
             <Link href="/" className='absolute top-7 left-9'>
                 <Image
                     src={logo}
