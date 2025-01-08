@@ -44,7 +44,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>('Оновлення');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>('Оновлення');
    
 
     
@@ -464,8 +464,26 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
                 setNotificationTitle={setNotificationTitle}
             />)}
 
-            {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
-            {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
+            {isShowDeleteModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDelete}
+                nameComponent='estimate'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
+            {isShowDeletePositionModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDeletePosition}
+                nameComponent='position'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
             {isShowModalSettings && (<SettingsModal
                 project={project}
                 toggle={toggleShow}

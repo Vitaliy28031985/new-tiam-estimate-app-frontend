@@ -20,7 +20,7 @@ interface DeleteModalProps {
     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
-    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
@@ -43,7 +43,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
                     
             if (dataDelete?.status === 200) {  
                if(setMessage)
-                  setMessage(`Роботу ${data.title} успішно Видалено!`);
+                  setMessage(`Роботу ${data.title} успішно видалено!`);
                if(setType)
                    setType('info');
                if(setNotificationTitle)
@@ -67,13 +67,56 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
             }
             
             if (nameComponent === 'project') {
-                if (data?._id) await deleteProject(data._id);
+                if (data?._id) {
+              const dataDelete = await deleteProject(data._id);
+               if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Кошторис ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити кошторис!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }    
+                } 
                 if (toggleData) toggleData();
                 
             }
 
             if (nameComponent === 'estimate') {
-                if (data) await deleteEstimate({ projectId: data.id, estimateId: data.estimateId });
+               if (data) {
+               const dataDelete = await deleteEstimate({ projectId: data.id, estimateId: data.estimateId });
+            
+               if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Таблицю ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити таблицю!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }       
+                } 
                  if (toggleData) toggleData();
             }
 
