@@ -17,15 +17,51 @@ interface DeleteModalProps {
     nameComponent?: string;
     toggle?: () => void;
     toggleData?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення'>>;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, toggleData }) => {
-    const [showMessage, setMessage] = useState(false);
+const DeleteModal: React.FC<DeleteModalProps> = ({
+    data,
+    nameComponent,
+    toggle,
+    toggleData,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
+   
    
     async function OnDelete() {
         try {
             if (nameComponent === 'price') {
-                if (data?.id) await deletePrice(data?.id);
+                if (data?.id) {
+            const dataDelete = await deletePrice(data?.id);
+                    
+            if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Роботу ${data.title} успішно Видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити роботу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
+                    
+                 }
                 if (toggleData) toggleData();
                 
             }
@@ -33,7 +69,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
             if (nameComponent === 'project') {
                 if (data?._id) await deleteProject(data._id);
                 if (toggleData) toggleData();
-                //  window.location.reload();
+                
             }
 
             if (nameComponent === 'estimate') {
@@ -97,10 +133,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
                   if (toggleData) toggleData(); 
                }     
                 }
-            setMessage(true);
-            setTimeout(function () {
-            if(toggle) toggle();  
-             }, 1200);
+            if(toggle) toggle(); 
+           
         } catch {}
     } 
     
@@ -108,7 +142,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            {showMessage ? (<Message />) : (
+         
               <div className="relative bg-white px-[71px] p-8 rounded-[24px] w-[494px] shadow-lg">
              <button type="button" onClick={toggle}  className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black'/></button>
                 <h4 className='text-2xl font-semibold text-center mt-8'>Видалити {data?.title}?</h4> 
@@ -117,8 +151,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ data, nameComponent, toggle, 
                     <button onClick={toggle} className='w-[120px] text-base font-normal text-white  bg-blue-30 py-4 rounded-full hover:bg-blue-20 focus:bg-blue-20' type='button'>Ні</button>
                 </div>   
             </div>   
-            )}
-           
+                       
             
         </div>
     )
