@@ -2,6 +2,7 @@
 import { ProjectItem } from "@/app/interfaces/projects";
 import { User } from "@/app/interfaces/user";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { updateAllow } from "@/app/utils/settingsProject";
 import { getUsers } from "@/app/utils/user";
 import { useEffect, useState } from "react";
@@ -10,9 +11,21 @@ import { useEffect, useState } from "react";
 interface AddEstimateModalProps {
     project: ProjectItem | null
     id?: string | undefined;
-     toggle?: () => void;
+    toggle?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
    }
-const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) => {
+const UpdateAlow: React.FC<AddEstimateModalProps> = ({
+    id,
+    toggle,
+    project,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
     const [userData, setUserData] = useState<User[] | null>(null);
     const [email, setEmail] = useState('');
     const [data, setData] = useState('read');
@@ -120,7 +133,26 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
                 lookAt,
                 lookAtTotals
             };
-            await updateAllow(newData);
+            const data = await updateAllow(newData);
+            if (data.message) {
+            if(setMessage)
+                setMessage(data.message);
+            if(setType)
+                setType('info');
+            if(setNotificationTitle)
+                setNotificationTitle('Доступ');
+            if(setNotificationIsOpen)
+                setNotificationIsOpen(true);
+        } else {
+            if(setMessage)
+                setMessage('Помилка: ' + (forbiddenFormatMessage(data.data.message) || 'Не вдалося оновити доступ цьому користувачу!'));
+            if(setType)           
+                 setType('error');
+                if(setNotificationTitle)
+                setNotificationTitle('Помилка');
+                if(setNotificationIsOpen)
+                 setNotificationIsOpen(true);
+         }
         }
        
         try {

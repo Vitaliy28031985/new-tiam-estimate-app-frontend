@@ -74,9 +74,31 @@ const SettingsModal: React.FC<SettingsProps> = ({
             <section className="relative bg-white px-[20px] p-8 rounded-[24px] w-[908px] shadow-lg">  
               <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black' /></button>
                 <ChangeSettingsProject data={data} changeCheckbox={handleChange} />
-                {page === 'add-allow' && (<AddAlow id={id} toggle={toggle} />)}
-                {page === 'update-allow' && (<UpdateAlow project={project} id={id} toggle={toggle} />)}
-                {page === 'delete-allow' && (<DeleteAlow project={project} id={id} toggle={toggle} />)}
+          {page === 'add-allow' && (<AddAlow
+            id={id}
+            toggle={toggle}
+            setMessage={setMessage}
+            setNotificationIsOpen={setNotificationIsOpen}
+            setType={setType}
+            setNotificationTitle={setNotificationTitle}
+          />)}
+          {page === 'update-allow' && (<UpdateAlow
+            project={project}
+            id={id} toggle={toggle}
+            setMessage={setMessage}
+            setNotificationIsOpen={setNotificationIsOpen}
+            setType={setType}
+            setNotificationTitle={setNotificationTitle}
+          />)}
+          {page === 'delete-allow' && (<DeleteAlow
+            project={project}
+            id={id}
+            toggle={toggle}
+            setMessage={setMessage}
+            setNotificationIsOpen={setNotificationIsOpen}
+            setType={setType}
+            setNotificationTitle={setNotificationTitle}
+          />)}
                 {page === 'discount' && (<AddDiscount
                 id={id}
                 toggle={toggle}

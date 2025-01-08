@@ -1,15 +1,27 @@
 'use client'
 import Checkbox from "@/app/UI/Inputs/Checkbox";
 import { saveProject } from "@/app/utils/actionsProject";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { addAllow } from "@/app/utils/settingsProject";
 import { useState } from "react";
 
 
 interface AddEstimateModalProps {
     id?: string | undefined;
-     toggle?: () => void;
+    toggle?: () => void;
+     setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
    }
-const AddAlow: React.FC<AddEstimateModalProps> = ({ id, toggle }) => {
+const AddAlow: React.FC<AddEstimateModalProps> = ({
+    id,
+    toggle,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
     const [data, setData] = useState('read');
     const [dataLookAt, setDataLookAt] = useState('large')
     const [allowLevel, setAllowLevel] = useState('read');
@@ -86,7 +98,26 @@ const AddAlow: React.FC<AddEstimateModalProps> = ({ id, toggle }) => {
                 lookAt,
                 lookAtTotals
             };
-            await addAllow(newData);
+            const data = await addAllow(newData);
+             if (data.message) {
+             if(setMessage)
+                setMessage(data.message);
+                if(setType)
+                setType('info');
+            if(setNotificationTitle)
+                setNotificationTitle('Доступ');
+            if(setNotificationIsOpen)
+                setNotificationIsOpen(true);
+        } else {
+            if(setMessage)
+                setMessage('Помилка: ' + (forbiddenFormatMessage(data.data.message) || 'Не вдалося надати доступ цьому користувачу!'));
+                            if(setType)           
+                setType('error');
+             if(setNotificationTitle)
+                setNotificationTitle('Помилка');
+             if(setNotificationIsOpen)
+                setNotificationIsOpen(true);
+        }
         }
        
         try {

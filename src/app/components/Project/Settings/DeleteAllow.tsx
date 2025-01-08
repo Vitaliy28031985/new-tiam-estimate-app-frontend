@@ -1,6 +1,7 @@
 'use client'
 import { ProjectItem } from "@/app/interfaces/projects";
 import { User } from "@/app/interfaces/user";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { deleteAllow } from "@/app/utils/settingsProject";
 import { getUsers } from "@/app/utils/user";
 import { useEffect, useState } from "react";
@@ -9,9 +10,21 @@ import { useEffect, useState } from "react";
 interface AddEstimateModalProps {
     project: ProjectItem | null
     id?: string | undefined;
-     toggle?: () => void;
+    toggle?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
    }
-const DeleteAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) => {
+const DeleteAlow: React.FC<AddEstimateModalProps> = ({
+    id,
+    toggle,
+    project,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
     const [userData, setUserData] = useState<User[] | null>(null);
     const [email, setEmail] = useState('');
     
@@ -54,7 +67,28 @@ const DeleteAlow: React.FC<AddEstimateModalProps> = ({ id, toggle, project,  }) 
                 projectId: id,
                 
             };
-            await deleteAllow(newData);
+            const data = await deleteAllow(newData);
+            
+            if (data.message) {
+                            console.log('data', data.message)
+                        if(setMessage)
+                            setMessage(data.message);
+                        if(setType)
+                            setType('info');
+                        if(setNotificationTitle)
+                            setNotificationTitle('Доступ');
+                        if(setNotificationIsOpen)
+                            setNotificationIsOpen(true);
+                    } else {
+                        if(setMessage)
+                            setMessage('Помилка: ' + (forbiddenFormatMessage(data.data.message) || 'Не вдалося видалити доступ цьому користувачу!'));
+                        if(setType)           
+                             setType('error');
+                            if(setNotificationTitle)
+                            setNotificationTitle('Помилка');
+                            if(setNotificationIsOpen)
+                             setNotificationIsOpen(true);
+                     }
         }
        
         try {
