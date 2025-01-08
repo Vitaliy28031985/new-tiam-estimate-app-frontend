@@ -10,7 +10,7 @@ interface AddEstimateModalProps {
     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
-    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
    }
 const AddDiscount: React.FC<AddEstimateModalProps> = ({
     id,
@@ -38,7 +38,6 @@ const AddDiscount: React.FC<AddEstimateModalProps> = ({
                 if(setNotificationIsOpen)
                     setNotificationIsOpen(true);
             } else {
-                console.log(data.data.message)
                 if(setMessage)
                     setMessage('Помилка: ' + (forbiddenFormatMessage(data.data.message) || 'Не вдалося встановити знижку!'));
                 if(setType)           

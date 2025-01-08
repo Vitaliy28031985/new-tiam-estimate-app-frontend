@@ -30,10 +30,13 @@ export async function addAllow(data: Allow) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
 
@@ -57,10 +60,13 @@ export async function updateAllow(data: Allow) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
 
@@ -81,10 +87,13 @@ export async function deleteAllow(data: Allow) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+    }
   } 
 }
 
@@ -135,9 +144,12 @@ export async function addLow(data: { discount: number;  projectId: string}) {
         }
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  }catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
