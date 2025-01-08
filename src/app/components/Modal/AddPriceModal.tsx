@@ -127,14 +127,56 @@
 
 
 'use client'
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState,  useRef, } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {  MicrophoneIcon } from '@heroicons/react/24/solid';
 import { Price } from '@/app/interfaces/PriceInterface';
 import { getMiddlePrices, addPrice } from '@/app/utils/prices';
 import { addProjectPrice } from '@/app/utils/projectPrice';
 import { addLowProjectPrice } from '@/app/utils/priceLow';
-import { forbiddenFormatMessage } from '@/app/utils/formatFunctions';
+import { forbiddenFormatMessage, roundingNumber } from '@/app/utils/formatFunctions';
+
+interface SpeechRecognitionResult {
+    isFinal: boolean;
+    transcript: string;
+    confidence: number;
+}
+
+interface SpeechRecognition {
+    continuous: boolean;
+    lang: string;
+    interimResults: boolean;
+    maxAlternatives: number;
+    onresult: (event: SpeechRecognitionEvent) => void;
+    onerror: (event: SpeechRecognitionErrorEvent) => void;
+    onend: () => void;
+    start: () => void;
+    stop: () => void;
+}
+
+interface SpeechRecognitionEvent {
+    results: SpeechRecognitionResult[][];
+    type: string;
+}
+
+interface SpeechRecognitionErrorEvent {
+    error: string;
+    message: string;
+}
+
+// Декларація глобальних змінних для браузерної підтримки
+declare global {
+  interface Window {
+    SpeechRecognition: SpeechRecognitionConstructor | undefined;
+    webkitSpeechRecognition: SpeechRecognitionConstructor | undefined;
+  }
+}
+
+// Оголошення типу для конструктора класу SpeechRecognition
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognition;
+}
+
 
 
 interface AddPriceModalProps {
@@ -165,8 +207,65 @@ const [data, setData] = useState<Price[] | null>(null);
 const [title, setTitle] = useState<string>('');
 const [price, setPrice] = useState<string>('');
 const [middle, setMiddle] = useState(false);
-
+const [isRecording, setIsRecording] = useState(false);
+const recognitionRef = useRef<any | null>(null);
     
+
+
+// запись
+    const handleStartRecordingClick = () => {
+      handleSpeechRecognition();
+    };
+
+    const handleSpeechRecognition = () => {
+      if (!recognitionRef.current) {
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+          const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+       if (SpeechRecognitionClass) {
+       recognitionRef.current = new SpeechRecognitionClass();
+       recognitionRef.current.continuous = false;
+       recognitionRef.current.lang = 'uk-UA';
+       recognitionRef.current.interimResults = false;
+       recognitionRef.current.maxAlternatives = 1;
+       } else {
+       console.log('Speech recognition is not supported in this browser.');
+       }
+
+          recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+            const transcript = Array.from(event.results)
+              .map(result => result[0].transcript)
+              .join('');
+              
+            const transcriptArr = transcript.split('');
+            transcriptArr[0] = transcript.charAt(0).toUpperCase();
+            setTitle(transcriptArr.join(""));
+            setMiddle(true);
+          };
+
+          recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+            console.error('Speech recognition error', event.error);
+            setIsRecording(false);
+          };
+
+          recognitionRef.current.onend = () => {
+            setIsRecording(false);
+          };
+        } else {
+          console.log('Розпізнавання мови не підтримується в цьому браузері.');
+          return;
+        }
+      }
+
+      if (isRecording) {
+        recognitionRef.current.stop();
+      } else {
+        recognitionRef.current.start();
+      }
+      setIsRecording(!isRecording);
+    };
+
+    // отримання даних
      async function getPrices() {
             const prices = await getMiddlePrices();
             if (prices) {
@@ -283,19 +382,11 @@ const [middle, setMiddle] = useState(false);
                        setNotificationIsOpen(true);
                }
            }
-
            
-        if (isShow) {
-          isShow();
-        }
-          
-                  
+        if (isShow) isShow();                   
   }     
        
-  if (toggle) {
-    toggle(); 
-  }
-
+  if (toggle) toggle(); 
   
 }
     
@@ -313,7 +404,7 @@ const [middle, setMiddle] = useState(false);
 
                 <form className='' onSubmit={sendData} >
                     <div className='relative '>
-                        <button className='absolute right-2 top-11 text-gray-20' type='button'><MicrophoneIcon className='size-6 '/></button>
+                        <button onClick={handleStartRecordingClick} className='absolute right-2 top-11 text-gray-20' type='button'><MicrophoneIcon className='size-6 '/></button>
                     <label htmlFor='title' className='inline-block text-sm text-black font-normal mb-3'> Найменування роботи</label>
                     <input className='w-[480px] h-[48px] block px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center  mb-6 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none' type="text" name='title' id='title' value={title} onChange={handleChange} />
                         {showMiddleList && (
@@ -321,7 +412,15 @@ const [middle, setMiddle] = useState(false);
                             { filteredPrices && filteredPrices.map(({ _id, title, price }) => (
                                 <li className='border border-b-gray-25 border-x-white border-t-white 
                                 py-4 px-3 text-sx font-normal hover:bg-gray-5 focus:bg-gray-5 cursor-default'
-                                    onClick={() => { setTitle(title); setPrice(price.toString()); setMiddle(false)}} key={_id}>{title}</li>      
+                                   onClick={() => {
+                                  setTitle(title);
+                                  const roundedPrice = roundingNumber(price);
+                                  if (roundedPrice !== undefined) {
+                                  setPrice(roundedPrice.toString());
+                                 } else {setPrice('0'); }
+                                 setMiddle(false);
+                                    }}
+                                    key={_id}>{title}</li>      
                             ))}     
                     </ul>     
                        )}
