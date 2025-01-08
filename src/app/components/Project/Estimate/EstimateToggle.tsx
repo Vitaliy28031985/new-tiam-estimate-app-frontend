@@ -7,7 +7,6 @@ import ChangeProject from "@/app/UI/ChangeProject";
 import EstimateSmallItem from "./EstimateSmall";
 import { getCurrentUser } from "@/app/utils/user";
 import { User } from "@/app/interfaces/user";
-import SettingsModal from "../../Modal/SettingsModal";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 
  

@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import Message from './Message';
 import { deletePrice } from '@/app/utils/prices';
 import { deleteProject } from '@/app/utils/projects';
 import { deleteEstimate } from '@/app/utils/Estimates';
