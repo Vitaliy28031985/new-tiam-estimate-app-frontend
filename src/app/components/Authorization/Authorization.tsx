@@ -48,7 +48,7 @@ export default function Authorization() {
   }
 
   return (
-    <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
+    <div className='w-[501px] absolute z-20   bg-white shadow-base px-6 py-10 rounded-[24px]'>
       <AuthorizationCheckbox value={valueRadio} changeCheckbox={handleChange} />
       <ButtonGoogle />
 
