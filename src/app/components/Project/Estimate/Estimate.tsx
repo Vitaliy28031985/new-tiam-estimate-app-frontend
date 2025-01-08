@@ -210,7 +210,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
                 <li><ButtonBlue type="button" title="Створити таблицю Excel"
                     click={handleExcelGeneration}
                 /></li>
-                <li><ButtonBlue type="button" title="Створити PDF файл" /></li>
+                {/* <li><ButtonBlue type="button" title="Створити PDF файл" /></li> */}
             </ul>
             
             <section>

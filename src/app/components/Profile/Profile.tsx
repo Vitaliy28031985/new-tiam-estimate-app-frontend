@@ -12,12 +12,18 @@ import { formatPhoneNumber } from "@/app/utils/formatFunctions";
 import LogoutModal from "../Modal/LogoutModal";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
 import ChangePasswordModal from "../Modal/ChangePasswordModal";
+import Notification from "@/app/UI/Notifications/Notifications";
 
 
 export default function ProfileComponent() {
     const [data, setData] = useState<User | null>(null)
     const [toggle, setToggle] = useState<boolean | null>(false);
     const [toggleModal, setToggleModal] = useState<boolean | null>(false);
+
+     const [message, setMessage] = useState('');
+    const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+    const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' >('Оновлення');
 
     const [changeNameState, setChangeName] = useState(true);
     const [changeEmailState, setChangeEmail] = useState(true);
@@ -64,7 +70,11 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                 break;
             case 'role':
                setRole(value);
-               await changeRole(value);
+            await changeRole(value);
+             setMessage('Роль користувача успішно оновлено!');
+             setType('info');
+             setNotificationTitle('Оновлення');
+             setNotificationIsOpen(true);
                 break;
            }
     }
@@ -105,7 +115,8 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                          setShow(true)   
                         } if(avatar !== null) {
                             setShow(false);
-                            await changeAvatar(avatar);
+                             await changeAvatar(avatar);
+                            
                             setAvatar(null)
                             window.location.reload();
                         }
@@ -148,7 +159,16 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                                          border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
                                          text-base font-normal text-gray-20"
                                             value={name} name="name" onChange={onChange} />
-                                        <button className="absolute top-4 right-4 " type="button" onClick={async () => { setChangeName(true); await changeName(name) } }><PiFloppyDisk className="size-5 text-blue-30" /></button>
+                                        <button className="absolute top-4 right-4 " type="button"
+                                            onClick={async () => {
+                                                await changeName(name);
+                                                setMessage('Ім`я користувача успішно оновлено!');
+                                                setType('info');
+                                                setNotificationTitle('Оновлення');
+                                                setNotificationIsOpen(true);
+                                                setChangeName(true);
+                                            }}>
+                                            <PiFloppyDisk className="size-5 text-blue-30" /></button>
                                     </div>
                             )
                             }
@@ -170,7 +190,23 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                                          border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
                                          text-base font-normal text-gray-20"
                                             value={email} name="email" onChange={onChange} />
-                                        <button className="absolute top-4 right-4 " type="button" onClick={async () => { setChangeEmail(true); await changeEmail(email) } }><PiFloppyDisk className="size-5 text-blue-30" /></button>
+                                        <button className="absolute top-4 right-4 " type="button"
+                                            onClick={async () => {
+                                                
+                                                const data = await changeEmail(email);
+                                                if (data.data.message) {
+                                                 setMessage('Помилка: ' + (data.data?.message));
+                                                 setType('error');
+                                                 setNotificationTitle('Помилка');
+                                                 setNotificationIsOpen(true);
+                                                } else {
+                                                setMessage('E-mail користувача успішно оновлено!');
+                                                setType('info');
+                                                setNotificationTitle('Оновлення');
+                                                setNotificationIsOpen(true);   
+                                                }
+                                                setChangeEmail(true);
+                                            }}><PiFloppyDisk className="size-5 text-blue-30" /></button>
                                     </div>
                             )
                             }
@@ -192,7 +228,16 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                                          border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
                                          text-base font-normal text-gray-20"
                                             value={phone} name="phone" onChange={onChange} />
-                                        <button className="absolute top-4 right-4 " type="button" onClick={async () => { setChangePhoneState(true); await changePhone(phone) } }><PiFloppyDisk className="size-5 text-blue-30" /></button>
+                                        <button className="absolute top-4 right-4 " type="button"
+                                            onClick={async () => {
+                                                
+                                                await changePhone(phone);
+                                                 setMessage('Номер телефону користувача успішно оновлено!');
+                                                setType('info');
+                                                setNotificationTitle('Оновлення');
+                                                setNotificationIsOpen(true);
+                                                setChangePhoneState(true)
+                                            }}><PiFloppyDisk className="size-5 text-blue-30" /></button>
                                     </div>
                             )
                             }
@@ -211,6 +256,15 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                </div>
             </div>
 
+     {notificationIsOpen && (
+          <Notification     
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+
+      )}
             {toggle && (<LogoutModal toggle={changeToggle} />)}
             {toggleModal && (<ChangePasswordModal toggle={changeToggleModal}/>)}
            
