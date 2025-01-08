@@ -12,10 +12,6 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Notification from "@/app/UI/Notifications/Notifications";
 
-
-
-
-
 export default function RecoveryPassword() {
   const [step, setStep] = useState<'email' | 'code' | 'new-password' | 'succes'>('email');
   const [email, setEmail] = useState('');
@@ -68,7 +64,9 @@ export default function RecoveryPassword() {
   const handlePasswordSubmit = async () => {
     if (password !== confirmPassword) {
       setMessage('Пароли не співпадають.');
-      alert('Пароли не співпадають.');
+      setType('error');
+      setNotificationTitle('Помилка');
+      setNotificationIsOpen(true);
       return;
     }
     try {
@@ -122,7 +120,7 @@ export default function RecoveryPassword() {
 
 
           <Link
-            className="flex items-center font-medium text-blue-30 text-sm mb-6"
+            className="flex items-center gap-2 font-medium text-blue-30 text-sm mb-6"
             href="#"
             onClick={(e) => {
               e.preventDefault();

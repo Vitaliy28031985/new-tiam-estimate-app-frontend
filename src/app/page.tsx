@@ -19,19 +19,14 @@ export default function Home() {
 
   return (
     <>
-
       <div className="bg-gray-0 pt-20 pb-20">
         <div className='w-[1249px] ml-auto mr-auto container'>
           <MainSection />
           <OrderAs />
           <Features />
           <Reviews />
-          {/* <ButtonDelete />
-        <ButtonPrint /> */}
           <Questions />
         </div>
-
-
       </div>
       <Footer />
     </>
