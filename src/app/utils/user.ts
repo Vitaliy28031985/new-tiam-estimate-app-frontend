@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import BASE_URL from './base';
 import { User, Passwords } from '@/app/interfaces/user';
 
@@ -96,18 +96,22 @@ export async function changeName(name: string | undefined) {
   }
 
   try {
-   await axios({
+  const response = await axios({
       method: 'put',
       url: `${BASE_URL}api/user/name`,
       headers: {
         'Authorization': `Bearer ${token}`
      },
       data: {name}
-    });
-  } catch (error) {
-    console.error('Error during logout request:', error);
-    
-  }
+   });
+    return response.data;
+  } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
 }
 
 export async function changeEmail(email: string | undefined) {
@@ -118,18 +122,22 @@ export async function changeEmail(email: string | undefined) {
   }
 
   try {
-   await axios({
+ const response =  await axios({
       method: 'put',
       url: `${BASE_URL}api/user/email`,
       headers: {
         'Authorization': `Bearer ${token}`
      },
       data: {email}
-    });
-  } catch (error) {
-    console.error('Error during logout request:', error);
-    
-  }
+ });
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+        return error.response;
+      } else {
+        console.log("Unknown error", error);
+      }
+    }
 }
 
 export async function changePhone(phone: string | undefined) {
@@ -148,10 +156,13 @@ export async function changePhone(phone: string | undefined) {
      },
       data: {phone}
     });
-  } catch (error) {
-    console.error('Error during logout request:', error);
-    
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        return error.response;
+      } else {
+        console.log("Unknown error", error);
+      }
+    }
 }
 
 
@@ -172,7 +183,7 @@ export async function changeAvatar(avatar: File | undefined) {
     formData.append('avatar', avatar);
 
 
-    await axios({
+   const response = await axios({
       method: 'put',
       url: `${BASE_URL}api/user/avatar`,
       headers: {
@@ -181,10 +192,14 @@ export async function changeAvatar(avatar: File | undefined) {
       data: formData,
     });
 
-    console.log('Avatar updated successfully');
-  } catch (error) {
-    console.error('Error during avatar update request:', error);
-  }
+   return response.data;
+  } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
 }
 
 
@@ -204,10 +219,13 @@ export async function changeRole(role: string | undefined) {
      },
       data: {role}
     });
-  } catch (error) {
-    console.error('Error during logout request:', error);
-    
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        return error.response;
+      } else {
+        console.log("Unknown error", error);
+      }
+    }
 }
 
 export async function changePassword(data: Passwords | undefined) {
@@ -226,8 +244,11 @@ export async function changePassword(data: Passwords | undefined) {
      },
       data
     });
-  } catch (error) {
-    console.error('Error during logout request:', error);
-    
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        return error.response;
+      } else {
+        console.log("Unknown error", error);
+      }
+    }
 }

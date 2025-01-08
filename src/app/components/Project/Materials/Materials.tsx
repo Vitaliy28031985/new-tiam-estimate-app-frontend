@@ -26,7 +26,7 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
   const [message, setMessage] = useState('');
   const [notificationIsOpen, setNotificationIsOpen] = useState(false);
   const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>('Оновлення');
 
  
   const toggleRender = (): void | undefined => setIsRender(prev => !prev); 
@@ -200,7 +200,16 @@ const MaterialsItem: React.FC<EstimateProps> = ({ projectId }) => {
           setNotificationIsOpen={setNotificationIsOpen}
           setNotificationTitle={setNotificationTitle}
         />)}
-        {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='material' toggleData={toggleRender}/>)}
+        {isShowDeleteModal && (<DeleteModal
+          data={currentData}
+          toggle={toggleDelete}
+          nameComponent='material'
+          toggleData={toggleRender}
+          setMessage={setMessage}
+          setType={setType}
+          setNotificationIsOpen={setNotificationIsOpen}
+          setNotificationTitle={setNotificationTitle}
+        />)}
             </div>
         
     )

@@ -28,7 +28,7 @@ export default function EstimateList() {
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>('Оновлення');
 
     
    
@@ -213,7 +213,16 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                 setType={setType}
                 setNotificationTitle={setNotificationTitle}
             />)}
-             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='project' toggleData={isRender}/>)}
+            {isShowDeleteModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDelete}
+                nameComponent='project'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
         </section>
     )
 }

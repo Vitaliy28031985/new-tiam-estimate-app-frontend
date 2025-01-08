@@ -20,14 +20,17 @@ import { generateAndDownloadExcel } from "@/app/utils/excelGenerator";
 import Notification from "@/app/UI/Notifications/Notifications";
 import SendEstimatePdf from "./SendEstimate";
 import { handlePrint } from "./printEstimate";
+import SettingsModal from "../../Modal/SettingsModal";
 
 interface EstimateProps {
     projectId: string;
-     user: User | null;
+    user: User | null;
+    toggleShow?: () => void;
+    isShowModalSettings?: boolean;
 }
 
 
-const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
+const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, isShowModalSettings }) => {
    
     const [project, setProject] = useState<ProjectItem | null>(null);
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
@@ -41,7 +44,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>('Оновлення');
    
 
     
@@ -207,7 +210,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                 <li><ButtonBlue type="button" title="Створити таблицю Excel"
                     click={handleExcelGeneration}
                 /></li>
-                <li><ButtonBlue type="button" title="Створити PDF файл" /></li>
+                {/* <li><ButtonBlue type="button" title="Створити PDF файл" /></li> */}
             </ul>
             
             <section>
@@ -460,8 +463,37 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                 setType={setType}
                 setNotificationTitle={setNotificationTitle}
             />)}
-             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='estimate' toggleData={isRender}/>)}
-              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='position' toggleData={isRender}/>)}
+
+            {isShowDeleteModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDelete}
+                nameComponent='estimate'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
+            {isShowDeletePositionModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDeletePosition}
+                nameComponent='position'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
+            {isShowModalSettings && (<SettingsModal
+                project={project}
+                toggle={toggleShow}
+                id={projectId}
+                isShow={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)} 
         </div>
     )
 }

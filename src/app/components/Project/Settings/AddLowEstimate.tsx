@@ -1,18 +1,50 @@
 'use client'
 import { saveProject } from "@/app/utils/actionsProject";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { addLow } from "@/app/utils/settingsProject";
 
 interface AddEstimateModalProps {
     id?: string | undefined;
-     toggle?: () => void;
+    toggle?: () => void;
+     setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
    }
-const AddLowEstimate: React.FC<AddEstimateModalProps> = ({id, toggle}) => {
+const AddLowEstimate: React.FC<AddEstimateModalProps> = ({
+    id,
+    toggle,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
    
     const onSubmit = async (formData: FormData) => {
          const result = await saveProject(formData);
         if (id) {
             const newData: {discount: number, projectId: string} = { discount: Number(result.discount) , projectId: id };
-            await addLow(newData);
+            const data = await addLow(newData);
+            
+             if (data.message) {
+                             if(setMessage)
+                                setMessage(data.message);
+                             if(setType)
+                                setType('info');
+                            if(setNotificationTitle)
+                                setNotificationTitle('Знижений кошторис');
+                            if(setNotificationIsOpen)
+                                setNotificationIsOpen(true);
+                        } else {
+                            if(setMessage)
+                                setMessage('Помилка: ' + (forbiddenFormatMessage(data.data.message) || 'Не вдалося створити знижений кошторис!'));
+                            if(setType)           
+                                setType('error');
+                            if(setNotificationTitle)
+                                setNotificationTitle('Помилка');
+                            if(setNotificationIsOpen)
+                                setNotificationIsOpen(true);
+                        }
         }
        
         try {

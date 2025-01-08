@@ -1,22 +1,57 @@
 'use client'
 import { saveProject } from "@/app/utils/actionsProject";
+import { forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { addDiscount } from "@/app/utils/settingsProject";
 
 interface AddEstimateModalProps {
     id?: string | undefined;
-     toggle?: () => void;
+    toggle?: () => void;
+    isShow?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
    }
-const AddDiscount: React.FC<AddEstimateModalProps> = ({id, toggle}) => {
+const AddDiscount: React.FC<AddEstimateModalProps> = ({
+    id,
+    toggle,
+    isShow,
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
    
     const onSubmit = async (formData: FormData) => {
          const result = await saveProject(formData);
         if (id) {
             const newData: {discount: number, projectId: string} = { discount: Number(result.discount) , projectId: id };
-            await addDiscount(newData);
+            
+            const data = await addDiscount(newData);
+            if (data.message) {
+                 if(setMessage)
+                    setMessage(data.message);
+                 if(setType)
+                    setType('info');
+                if(setNotificationTitle)
+                    setNotificationTitle('Знижка');
+                if(setNotificationIsOpen)
+                    setNotificationIsOpen(true);
+            } else {
+                if(setMessage)
+                    setMessage('Помилка: ' + (forbiddenFormatMessage(data.data.message) || 'Не вдалося встановити знижку!'));
+                if(setType)           
+                    setType('error');
+                if(setNotificationTitle)
+                    setNotificationTitle('Помилка');
+                if(setNotificationIsOpen)
+                    setNotificationIsOpen(true);
+            }
         }
        
         try {
             if (toggle) toggle();
+            if (isShow) isShow();
         } catch {
             console.error('Щось пішло не так!');  
       }

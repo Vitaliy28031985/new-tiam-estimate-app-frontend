@@ -11,7 +11,7 @@ interface AddProjectModalProps {
     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
-    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
 }
 const AddProjectModal: React.FC<AddProjectModalProps> = ({
     toggle,

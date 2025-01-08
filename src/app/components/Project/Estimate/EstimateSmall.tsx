@@ -41,7 +41,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання'>('Оновлення');
+    const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення'  | 'Знижка' | 'Доступ' | 'Знижений кошторис'>('Оновлення');
    
   
     
@@ -204,7 +204,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
             <ul className="mb-8 flex items-center gap-4 justify-center">
                 <li><ButtonBlue click={isShowModal} type="button" title="Додати таблицю" /></li>
                 <li><ButtonBlue click={handleExcelGeneration} type="button" title="Створити таблицю Excel" /></li>
-                <li><ButtonBlue type="button" title="Створити PDF файл" /></li>
+                {/* <li><ButtonBlue type="button" title="Створити PDF файл" /></li> */}
             </ul>
             
             <section>
@@ -445,13 +445,31 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
                 id={projectId}
                 toggle={isShowModal}
                 isShow={isRender}
-                 setMessage={setMessage}
+                setMessage={setMessage}
                 setNotificationIsOpen={setNotificationIsOpen}
                 setType={setType}
                 setNotificationTitle={setNotificationTitle}
             />)}
-             {isShowDeleteModal && (<DeleteModal data={currentData} toggle={toggleDelete} nameComponent='low-estimate' toggleData={isRender}/>)}
-              {isShowDeletePositionModal && (<DeleteModal data={currentData} toggle={toggleDeletePosition} nameComponent='low-position' toggleData={isRender}/>)}
+            {isShowDeleteModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDelete}
+                nameComponent='low-estimate'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
+            {isShowDeletePositionModal && (<DeleteModal
+                data={currentData}
+                toggle={toggleDeletePosition}
+                nameComponent='low-position'
+                toggleData={isRender}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
         </div>
     )
 }
