@@ -199,15 +199,53 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
             }
 
             if (nameComponent === 'project-price') {
-                if (data) {
-                    await deleteProjectPrice(data.projectId ?? null, data.id ?? null);
+               if (data) {
+               const dataDelete = await deleteProjectPrice(data.projectId ?? null, data.id ?? null);
+               if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Роботу ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити роботу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
                     if (toggleData) toggleData();
                 }  
             }
 
                if (nameComponent === 'low-project-price') {
-                if (data) {
-                    await deleteLowProjectPrice(data.projectId ?? null, data.id ?? null);
+               if (data) {
+               const dataDelete = await deleteLowProjectPrice(data.projectId ?? null, data.id ?? null);
+               if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Роботу ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити роботу!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }
                     if (toggleData) toggleData();
                 }  
             }

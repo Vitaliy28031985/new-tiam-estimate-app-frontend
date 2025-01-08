@@ -77,9 +77,13 @@ export async function deleteProjectPrice(id: string | null, priceId: string | nu
       }
     });
    return response;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          console.log(error)
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
