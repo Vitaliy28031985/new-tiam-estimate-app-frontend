@@ -15,9 +15,22 @@ interface SettingsProps {
     id?: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Знижка'>>;
 }
 
-const SettingsModal: React.FC<SettingsProps> = ({ toggle, id, project }) => {
+const SettingsModal: React.FC<SettingsProps> = ({
+  toggle,
+  id,
+  project,
+  isShow,
+  setMessage,
+  setNotificationIsOpen,
+  setType,
+  setNotificationTitle
+}) => {
     const [page, setPage] = useState('add-allow');
     const [data, setData] = useState('add-allow');
 
@@ -64,8 +77,16 @@ const SettingsModal: React.FC<SettingsProps> = ({ toggle, id, project }) => {
                 {page === 'add-allow' && (<AddAlow id={id} toggle={toggle} />)}
                 {page === 'update-allow' && (<UpdateAlow project={project} id={id} toggle={toggle} />)}
                 {page === 'delete-allow' && (<DeleteAlow project={project} id={id} toggle={toggle} />)}
-                {page === 'discount' && (<AddDiscount id={id} toggle={toggle} />)}
-                {page === 'low-estimate' && (<AddLowEstimate id={id} toggle={toggle} />)}
+                {page === 'discount' && (<AddDiscount
+                id={id}
+                toggle={toggle}
+                isShow={isShow}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+          />)}
+                {page === 'low-estimate' && (<AddLowEstimate id={id} toggle={toggle}  />)}
             </section>
         </div>
     )
