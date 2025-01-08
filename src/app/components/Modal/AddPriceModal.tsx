@@ -208,7 +208,7 @@ const [title, setTitle] = useState<string>('');
 const [price, setPrice] = useState<string>('');
 const [middle, setMiddle] = useState(false);
 const [isRecording, setIsRecording] = useState(false);
-const recognitionRef = useRef<any | null>(null);
+const recognitionRef = useRef<SpeechRecognition | null>(null);
     
 
 
@@ -217,45 +217,45 @@ const recognitionRef = useRef<any | null>(null);
       handleSpeechRecognition();
     };
 
-    const handleSpeechRecognition = () => {
-      if (!recognitionRef.current) {
-        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-          const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+ const handleSpeechRecognition = () => {
+    if (!recognitionRef.current) {
+      // Перевірка на підтримку SpeechRecognition або webkitSpeechRecognition
+      const SpeechRecognitionConstructor =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
 
-       if (SpeechRecognitionClass) {
-       recognitionRef.current = new SpeechRecognitionClass();
-       recognitionRef.current.continuous = false;
-       recognitionRef.current.lang = 'uk-UA';
-       recognitionRef.current.interimResults = false;
-       recognitionRef.current.maxAlternatives = 1;
-       } else {
-       console.log('Speech recognition is not supported in this browser.');
-       }
+      if (SpeechRecognitionConstructor) {
+        recognitionRef.current = new SpeechRecognitionConstructor();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.lang = 'uk-UA';
+        recognitionRef.current.interimResults = false;
+        recognitionRef.current.maxAlternatives = 1;
 
-          recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
-            const transcript = Array.from(event.results)
-              .map(result => result[0].transcript)
-              .join('');
-              
-            const transcriptArr = transcript.split('');
-            transcriptArr[0] = transcript.charAt(0).toUpperCase();
-            setTitle(transcriptArr.join(""));
-            setMiddle(true);
-          };
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+          // Отримуємо результат
+          const transcript = Array.from(event.results)
+            .map(result => result[0].transcript)
+            .join('');
 
-          recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
-            console.error('Speech recognition error', event.error);
-            setIsRecording(false);
-          };
+          // Перетворюємо перший символ в великий
+          const transcriptArr = transcript.split('');
+          transcriptArr[0] = transcript.charAt(0).toUpperCase();
+          setTitle(transcriptArr.join(""));
+          setMiddle(true);
+        };
 
-          recognitionRef.current.onend = () => {
-            setIsRecording(false);
-          };
-        } else {
-          console.log('Розпізнавання мови не підтримується в цьому браузері.');
-          return;
-        }
+        recognitionRef.current.onerror = (event) => {
+          console.error('Speech recognition error', event.error);
+          setMiddle(false);
+        };
+
+        recognitionRef.current.onend = () => {
+         
+        };
+      } else {
+        console.log('Розпізнавання мови не підтримується в цьому браузері.');
+        return;
       }
+    }
 
       if (isRecording) {
         recognitionRef.current.stop();
@@ -263,7 +263,8 @@ const recognitionRef = useRef<any | null>(null);
         recognitionRef.current.start();
       }
       setIsRecording(!isRecording);
-    };
+  };
+
 
     // отримання даних
      async function getPrices() {
