@@ -121,17 +121,80 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
             }
 
             if (nameComponent === "low-estimate") {
-                if(data) await deleteLowEstimate({ projectId: data.id, estimateId: data.estimateId })
+                if (data) {
+               const dataDelete = await deleteLowEstimate({ projectId: data.id, estimateId: data.estimateId });
+               if (dataDelete?.status === 200) {  
+               if(setMessage)
+                  setMessage(`Таблицю ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити таблицю!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }       
+                } 
                 if (toggleData) toggleData();
             }
 
             if (nameComponent === 'position') {
-                if (data) await deletePosition({ projectId: data.id, estimateId: data.estimateId, positionId: data.positionId });
+                if (data) {
+                const dataDelete = await deletePosition({ projectId: data.id, estimateId: data.estimateId, positionId: data.positionId });     
+                if (dataDelete.message) {
+                if(setMessage)
+                setMessage(`Рядок ${data.title} успішно видалено!`);
+               if(setType)
+                   setType('info');
+               if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+               if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити рядок!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }       
+                } 
                 if (toggleData) toggleData();
             }
 
             if (nameComponent === 'low-position') {
-                if (data) await deleteLowPosition({ projectId: data.id, estimateId: data.estimateId, positionId: data.positionId })
+                if (data) {
+                const dataDelete = await deleteLowPosition({ projectId: data.id, estimateId: data.estimateId, positionId: data.positionId });
+                if (dataDelete.message) {
+                if(setMessage)
+                setMessage(`Рядок ${data.title} успішно видалено!`);
+                if(setType)
+                   setType('info');
+                if(setNotificationTitle)
+                   setNotificationTitle('Видалення');
+                if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+                } else {
+                    if(setMessage)
+                      setMessage('Помилка: ' + (dataDelete?.data?.message || 'Не вдалося видалити рядок!'));
+                    if(setType)                       
+                       setType('error');
+                    if(setNotificationTitle)
+                       setNotificationTitle('Помилка');
+                    if(setNotificationIsOpen)
+                       setNotificationIsOpen(true);
+               }       
+                } 
                 if (toggleData) toggleData();
             }
 
