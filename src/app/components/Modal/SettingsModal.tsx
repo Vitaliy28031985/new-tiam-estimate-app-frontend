@@ -15,6 +15,7 @@ interface SettingsProps {
     id?: string | undefined;
     toggle?: () => void;
     isShow?: () => void;
+    isUserRender?: () => void;
     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
@@ -25,6 +26,7 @@ const SettingsModal: React.FC<SettingsProps> = ({
   toggle,
   id,
   project,
+  isUserRender,
   isShow,
   setMessage,
   setNotificationIsOpen,

@@ -6,7 +6,8 @@ import { addLow } from "@/app/utils/settingsProject";
 interface AddEstimateModalProps {
     id?: string | undefined;
     toggle?: () => void;
-     setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    isUserRender?: () => void;
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
     setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
@@ -14,6 +15,7 @@ interface AddEstimateModalProps {
 const AddLowEstimate: React.FC<AddEstimateModalProps> = ({
     id,
     toggle,
+    isUserRender,
     setMessage,
     setNotificationIsOpen,
     setType,
@@ -48,6 +50,7 @@ const AddLowEstimate: React.FC<AddEstimateModalProps> = ({
         }
        
         try {
+            if (isUserRender) isUserRender();
             if (toggle) toggle();
         } catch {
             console.error('Щось пішло не так!');  

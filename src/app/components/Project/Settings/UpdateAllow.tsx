@@ -12,6 +12,7 @@ interface AddEstimateModalProps {
     project: ProjectItem | null
     id?: string | undefined;
     toggle?: () => void;
+    isUserRender?: () => void;
     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
@@ -21,6 +22,7 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({
     id,
     toggle,
     project,
+    isUserRender,
     setMessage,
     setNotificationIsOpen,
     setType,
@@ -156,6 +158,7 @@ const UpdateAlow: React.FC<AddEstimateModalProps> = ({
         }
        
         try {
+            if (isUserRender) isUserRender();
             if (toggle) toggle();
         } catch {
             console.error('Щось пішло не так!');
