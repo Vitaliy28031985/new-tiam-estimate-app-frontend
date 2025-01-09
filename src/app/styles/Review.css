@@ -56,3 +56,21 @@
     background-color: white;
 
 }
+
+.swiper-pagination-bullet {
+ display: flex;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 700;
+    border-radius: 0%;
+}
+
+.swiper-pagination-bullet-active {
+ background-color: white;
+
+}

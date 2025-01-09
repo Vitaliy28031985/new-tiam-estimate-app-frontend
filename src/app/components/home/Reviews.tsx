@@ -80,13 +80,14 @@ export default function Reviews() {
                             let paginationNumbers = "";
                             for (let i = 1; i <= total; i++) {
                                 paginationNumbers += `
-                                <button class="${i === current ? 'active' : ''}" style="display: flex; justify-content: center;align-items: center; margin: 0px; font-size: 14px; width: 32px; height: 32px; font-weight:700; color: ${i === current ? '#0C4A6E' : '#A3A3A3'};">
-                                    ${i}
+                                <button class="${i === current ? 'swiper-pagination-bullet-active' : 'swiper-pagination-bullet'}" style="display: flex; justify-content: center;align-items: center; margin: 0px; font-size: 14px; width: 32px; height: 32px; font-weight:700; color: ${i === current ? '#0C4A6E' : '#A3A3A3'};">
+                                 ${i}
                                 </button>
                             `;
                             }
                             return paginationNumbers;
                         },
+                        bulletClass: 'swiper-pagination-bullet',
                         clickable: true,
                     }}
                     modules={[Pagination, Navigation]}
