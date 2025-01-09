@@ -30,7 +30,7 @@ export default function Authorization() {
   }
 
   return (
-    <div className='w-[501px] absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2 z-20   bg-white shadow-base px-6 py-6 rounded-[24px]'>
+    <div className='w-[501px] max-h-screen absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2 z-20   bg-white shadow-base px-6 py-6 rounded-[24px] overflow-y-auto'>
       <AuthorizationCheckbox value={valueRadio} changeCheckbox={handleChange} />
       <ButtonGoogle />
 

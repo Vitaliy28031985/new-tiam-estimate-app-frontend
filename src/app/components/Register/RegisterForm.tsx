@@ -249,7 +249,7 @@ export default function RegisterForm() {
 
         <div className='relative mb-2'>
           <label className="inline-block text-bas text-black font-normal mb-2">Пароль*</label>
-          <input type={passwordVisible ? "text" : "password"} className={errors?.password ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+          <input type={passwordVisible ? "text" : "password"} className={errors?.password ? `w-full h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
             : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("password")} placeholder="Very#5" />
           {errors?.password ? (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -260,7 +260,7 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute top-12 right-5"
+            className="absolute top-11 right-5"
           >
             {passwordVisible ? (
               <EyeSlashIcon className={errors?.password ? `size-6 text-red-0` : `size-6 text-blue-20`} />
@@ -272,7 +272,7 @@ export default function RegisterForm() {
 
         <div className='relative mb-2'>
           <label className="inline-block text-bas text-black font-normal mb-2">Повторіть пароль*</label>
-          <input type={repeatPasswordVisible ? "text" : "password"} className={errors?.repeatPassword ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+          <input type={repeatPasswordVisible ? "text" : "password"} className={errors?.repeatPassword ? `w-full h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
             : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("repeatPassword")} placeholder="Very#5" />
           {errors?.repeatPassword ? (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -283,7 +283,7 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={toggleRepeatPasswordVisibility}
-            className="absolute top-12 right-5"
+            className="absolute top-11 right-5"
           >
             {repeatPasswordVisible ? (
               <EyeSlashIcon className={errors?.repeatPassword ? `size-6 text-red-0` : `size-6 text-blue-20`} />

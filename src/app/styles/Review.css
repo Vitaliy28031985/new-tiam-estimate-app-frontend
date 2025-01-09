@@ -40,23 +40,6 @@
     margin: 0;
 }
 
-.pagination button {
-    display: flex;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    font-size: 14px;
-    line-height: 17px;
-    font-weight: 700;
-}
-
-.pagination button.active {
-    background-color: white;
-
-}
-
 .swiper-pagination-bullet {
  display: flex;
     width: 32px;
@@ -68,9 +51,19 @@
     line-height: 17px;
     font-weight: 700;
     border-radius: 0%;
+    color: white;
 }
 
 .swiper-pagination-bullet-active {
- background-color: white;
-
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    margin: 0px; 
+    font-size: 14px; 
+    width: 32px; 
+    height: 32px; 
+    font-weight:700; 
+    border-radius: 0%;
+    background-color: white;
+    color: #0C4A6E;
 }
