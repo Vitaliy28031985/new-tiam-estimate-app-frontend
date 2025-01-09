@@ -20,7 +20,7 @@ export default function ProfileComponent() {
     const [toggle, setToggle] = useState<boolean | null>(false);
     const [toggleModal, setToggleModal] = useState<boolean | null>(false);
 
-     const [message, setMessage] = useState('');
+    const [message, setMessage] = useState('');
     const [notificationIsOpen, setNotificationIsOpen] = useState(false);
     const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
     const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Оновлення' >('Оновлення');
@@ -231,12 +231,20 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                                         <button className="absolute top-4 right-4 " type="button"
                                             onClick={async () => {
                                                 
-                                                await changePhone(phone);
-                                                 setMessage('Номер телефону користувача успішно оновлено!');
+                                                const data = await changePhone(phone);
+                                                if (!data.status) {
+                                                setMessage('Номер телефону користувача успішно оновлено!');
                                                 setType('info');
                                                 setNotificationTitle('Оновлення');
                                                 setNotificationIsOpen(true);
-                                                setChangePhoneState(true)
+                                                setChangePhoneState(true)   
+                                                } else {
+                                                 setMessage('Помилка: ' + (data.data?.message));
+                                                 setType('error');
+                                                 setNotificationTitle('Помилка');
+                                                 setNotificationIsOpen(true); 
+                                                }
+                                               
                                             }}><PiFloppyDisk className="size-5 text-blue-30" /></button>
                                     </div>
                             )
@@ -266,7 +274,13 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
 
       )}
             {toggle && (<LogoutModal toggle={changeToggle} />)}
-            {toggleModal && (<ChangePasswordModal toggle={changeToggleModal}/>)}
+            {toggleModal && (<ChangePasswordModal
+                toggle={changeToggleModal}
+                setMessage={setMessage}
+                setNotificationIsOpen={setNotificationIsOpen}
+                setType={setType}
+                setNotificationTitle={setNotificationTitle}
+            />)}
            
        </section>
    ) 
