@@ -79,6 +79,7 @@ const SettingsModal: React.FC<SettingsProps> = ({
           {page === 'add-allow' && (<AddAlow
             id={id}
             toggle={toggle}
+            isUserRender={isUserRender}
             setMessage={setMessage}
             setNotificationIsOpen={setNotificationIsOpen}
             setType={setType}
@@ -87,6 +88,7 @@ const SettingsModal: React.FC<SettingsProps> = ({
           {page === 'update-allow' && (<UpdateAlow
             project={project}
             id={id} toggle={toggle}
+            isUserRender={isUserRender}
             setMessage={setMessage}
             setNotificationIsOpen={setNotificationIsOpen}
             setType={setType}
@@ -96,6 +98,7 @@ const SettingsModal: React.FC<SettingsProps> = ({
             project={project}
             id={id}
             toggle={toggle}
+            isUserRender={isUserRender}
             setMessage={setMessage}
             setNotificationIsOpen={setNotificationIsOpen}
             setType={setType}
@@ -113,6 +116,7 @@ const SettingsModal: React.FC<SettingsProps> = ({
           {page === 'low-estimate' && (<AddLowEstimate
             id={id}
             toggle={toggle}
+            isUserRender={isUserRender}
             setMessage={setMessage}
             setNotificationIsOpen={setNotificationIsOpen}
             setType={setType}
