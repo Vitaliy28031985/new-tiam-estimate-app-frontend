@@ -25,12 +25,13 @@ import SettingsModal from "../../Modal/SettingsModal";
 interface EstimateProps {
     projectId: string;
     user: User | null;
+    isUserRender?: () => void;
     toggleShow?: () => void;
     isShowModalSettings?: boolean;
 }
 
 
-const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, isShowModalSettings }) => {
+const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, isShowModalSettings, isUserRender }) => {
    
     const [project, setProject] = useState<ProjectItem | null>(null);
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
@@ -489,6 +490,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
                 toggle={toggleShow}
                 id={projectId}
                 isShow={isRender}
+                isUserRender={isUserRender}
                 setMessage={setMessage}
                 setNotificationIsOpen={setNotificationIsOpen}
                 setType={setType}
