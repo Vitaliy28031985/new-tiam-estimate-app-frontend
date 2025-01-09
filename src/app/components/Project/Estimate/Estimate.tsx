@@ -21,6 +21,7 @@ import Notification from "@/app/UI/Notifications/Notifications";
 import SendEstimatePdf from "./SendEstimate";
 import { handlePrint } from "./printEstimate";
 import SettingsModal from "../../Modal/SettingsModal";
+import Loader from "@/app/UI/Loader";
 
 interface EstimateProps {
     projectId: string;
@@ -206,7 +207,9 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
     
     return (
         <div className="mx-auto">
-            <ul className="mb-8 flex items-center gap-4 justify-center">
+            {data ? (
+                <>
+                  <ul className="mb-8 flex items-center gap-4 justify-center">
                 <li><ButtonBlue click={isShowModal} type="button" title="Додати таблицю" /></li>
                 <li><ButtonBlue type="button" title="Створити таблицю Excel"
                     click={handleExcelGeneration}
@@ -443,6 +446,9 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
                 <SendEstimatePdf data={project}/>
                 <ButtonPrint click={() => handlePrint(project)}/>
             </div>
+                </>
+            ) : (<Loader/>)}
+          
 
     {notificationIsOpen && (
           <Notification     
