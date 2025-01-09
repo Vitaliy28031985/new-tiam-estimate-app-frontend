@@ -51,3 +51,41 @@
 * {
   font-family: "Montserrat", sans-serif;
 }
+
+@keyframes draw {
+  0% {
+    stroke-dasharray: 0 300;
+    stroke-dashoffset: 0;
+    fill-opacity: 0;
+  }
+  50% {
+    fill-opacity: 0;
+  }
+  100% {
+    stroke-dasharray: 300 300;
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}
+
+@keyframes fill {
+  0% {
+    fill-opacity: 0;
+  }
+  100% {
+    fill-opacity: 1;
+  }
+}
+
+.animate-draw {
+  stroke: white;
+  stroke-width: 1;
+  fill: white;
+  fill-opacity: 0;
+  animation: draw 1.5s ease-in-out forwards;
+}
+
+.animate-fill {
+  fill-opacity: 0;
+  animation: fill 1s ease-in-out 0.5s forwards;
+}
