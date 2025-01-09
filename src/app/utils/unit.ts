@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import BASE_URL from "./base";
 import Unit from "../interfaces/unitInterface";
 
@@ -40,10 +40,13 @@ export async function addUnit(title: string) {
         data: { title}
     });
    return response.data;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+          return error.response;
+        } else {
+          console.log("Unknown error", error);
+        }
+      }
   } 
 }
 
@@ -61,9 +64,12 @@ export async function deleteUnit(id: string | null) {
       }
     });
    return response;
-  } catch (error) {
-      console.error('Error during request:', error);
-      return null;
-  }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+        return error.response;
+      } else {
+        console.log("Unknown error", error);
+      }
+    }
   } 
 }
