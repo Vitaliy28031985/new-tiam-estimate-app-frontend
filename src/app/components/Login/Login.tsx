@@ -5,15 +5,24 @@ import { useForm, Resolver } from "react-hook-form";
 import { loginApi } from '@/app/utils/auth';
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/app/context/UserContext';
-import Notification from '@/app/UI/Notifications/Notifications';
 import { AxiosError } from 'axios';
 import Link from 'next/link';
 
+
+interface AddAdvanceModalProps {
+  
+    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Успіх'>>;
+}
 
 type FormValues = {
   email: string;
   password: string;
 };
+
+
 
 const resolver: Resolver<FormValues> = async (values) => {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -78,14 +87,13 @@ const resolver: Resolver<FormValues> = async (values) => {
 };
 
 
-export default function Login() {
+const Login: React.FC<AddAdvanceModalProps> = ({
+    setMessage,
+    setNotificationIsOpen,
+    setType,
+    setNotificationTitle
+}) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [message, setMessage] = useState('');
-  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
-  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Успіх' >('Успіх');
-
-
 
 
   const { setUser } = useUser();
@@ -117,20 +125,29 @@ export default function Login() {
         localStorage.setItem('refreshToken', response.data.refreshToken);
 
       }
+      if(setMessage)
       setMessage('Вхід в систему пройшов успшно!');
+      if(setType)
       setType('success');
+      if(setNotificationTitle)
       setNotificationTitle('Успіх');
+      if(setNotificationIsOpen)
       setNotificationIsOpen(true);
       reset();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response) {
+        if(setMessage)
         setMessage('Помилка: ' + (error.response?.data?.message || 'Не вдалося увійти в систему'));
+        if(setType)
         setType('error');
+        if(setNotificationTitle)
         setNotificationTitle('Помилка');
+        if(setNotificationIsOpen)
         setNotificationIsOpen(true);
         } else {
-          setMessage("No response from server");
+        if(setMessage)
+         setMessage("No response from server");
         }
       
       } else {
@@ -187,14 +204,9 @@ export default function Login() {
 
       </form>
 
-       {notificationIsOpen && (
-          <Notification  
-          type={type}
-          title={notificationTitle}
-          text={message}
-          onClose={() => setNotificationIsOpen(false)}
-        />
-      )}
+    
     </div>
   );
 }
+
+export default Login;

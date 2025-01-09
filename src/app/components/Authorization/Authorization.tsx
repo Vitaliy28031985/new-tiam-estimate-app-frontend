@@ -4,11 +4,17 @@ import AuthorizationCheckbox from "@/app/UI/AuthorizationCheckbox";
 import ButtonGoogle from "@/app/UI/Buttons/ButtonGoogle";
 import RegisterForm from "../Register/RegisterForm";
 import Login from "../Login/Login";
+import Notification from "@/app/UI/Notifications/Notifications";
 
 
 export default function Authorization() {
 
   const [valueRadio, setValue] = useState('login');
+
+  const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Успіх' >('Успіх');
 
   function changeParams() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -40,8 +46,21 @@ export default function Authorization() {
         <div className='w-[199px] h-[1px] bg-gray-20 '></div>
       </div>
 
-      {valueRadio === 'login' ? (<Login />) : (<RegisterForm />)}
+      {valueRadio === 'login' ? (<Login
+      setMessage={setMessage}
+      setNotificationIsOpen={setNotificationIsOpen}
+      setType={setType}
+      setNotificationTitle={setNotificationTitle}
+      />) : (<RegisterForm />)}
 
+         {notificationIsOpen && (
+          <Notification  
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+      )}
     </div>
   )
 }
