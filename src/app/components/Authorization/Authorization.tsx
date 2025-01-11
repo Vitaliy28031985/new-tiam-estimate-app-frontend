@@ -5,6 +5,8 @@ import ButtonGoogle from "@/app/UI/Buttons/ButtonGoogle";
 import RegisterForm from "../Register/RegisterForm";
 import Login from "../Login/Login";
 import Notification from "@/app/UI/Notifications/Notifications";
+import authService from "@/app/utils/auth.service";
+import { authenticateWithGoogle } from "@/app/actions/auth";
 
 
 export default function Authorization() {
@@ -34,11 +36,31 @@ export default function Authorization() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value);
   }
+  // const handleGoogleLogin = async () => {
+  //   try {
+  //     const data = await authService.initiateGoogleAuth()
+  //     await authService.handleGoogleCallback()
+  //     console.log(data)
+
+  //     // The above function will redirect to Google, so no need to do anything here
+  //   } catch (error) {
+  //     console.error('Failed to initiate Google login:', error)
+  //   }
+  // }
+
+    const handleGoogleLogin = async () => {
+    try {
+      await authenticateWithGoogle(); // Ініціюємо Google авторизацію
+    } catch (error) {
+      console.error('Failed to initiate Google login:', error);
+    }
+  };
 
   return (
     <div className='w-[501px] absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2 z-20   bg-white shadow-base px-6 py-6 rounded-[24px]'>
       <AuthorizationCheckbox value={valueRadio} changeCheckbox={handleChange} />
-      <ButtonGoogle />
+       <form action={handleGoogleLogin}><ButtonGoogle /></form>
+      
 
       <div className='flex items-center gap-2'>
         <div className='w-[199px] h-[1px] bg-gray-20 '></div>
