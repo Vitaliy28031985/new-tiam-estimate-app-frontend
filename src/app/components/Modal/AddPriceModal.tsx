@@ -210,8 +210,25 @@ const [middle, setMiddle] = useState(false);
 const [isRecording, setIsRecording] = useState(false);
 const recognitionRef = useRef<SpeechRecognition | null>(null);
     
+       useEffect(() => {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      } 
+      }, []);
+    
+  
+    const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.code === 'Escape') {
+      if(toggle) toggle();
+    }
+  };
 
-
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  if (e.currentTarget === e.target) {
+     if(toggle) toggle();
+  }
+};
 // запись
     const handleStartRecordingClick = () => {
       handleSpeechRecognition();
@@ -398,7 +415,7 @@ const recognitionRef = useRef<SpeechRecognition | null>(null);
     
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div onClick={handleBackdropClick} className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <section className="relative bg-white px-[71px] p-8 rounded-[24px] w-[611px] shadow-lg">
                 <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black'/></button>
                 <h3 className="font-semibold text-2xl text-black text-center mb-6">Форма для створення роботи</h3>

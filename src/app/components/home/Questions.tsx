@@ -28,7 +28,7 @@ export default function Questions() {
 
     return (
         <section>
-            <h3 className='text-5xl font-alternates font-bold text-gray-30 mb-16'>Найчастіші питання</h3>
+            <h3 className='text-5xl font-alternates font-bold text-black mb-16'>Найчастіші питання</h3>
             
             <ul>
                 {questionData.map(({ _id, title, description, isShow = false }) => (
