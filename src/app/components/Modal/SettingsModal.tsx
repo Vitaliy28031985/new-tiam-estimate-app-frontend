@@ -1,6 +1,6 @@
 import ChangeSettingsProject from "@/app/UI/ChangeSettingsProject";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddDiscount from "../Project/Settings/AddDiscount";
 import AddLowEstimate from "../Project/Settings/AddLowEstimate";
 import AddAlow from "../Project/Settings/AddAllow";
@@ -36,6 +36,27 @@ const SettingsModal: React.FC<SettingsProps> = ({
     const [page, setPage] = useState('add-allow');
     const [data, setData] = useState('add-allow');
 
+  //Закрити модaлку
+    
+     useEffect(() => {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      } 
+      }, []);
+    
+  
+    const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.code === 'Escape') {
+      if(toggle) toggle();
+    }
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  if (e.currentTarget === e.target) {
+     if(toggle) toggle();
+  }
+};
   
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +93,9 @@ const SettingsModal: React.FC<SettingsProps> = ({
   }
 
     return (
-         <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center z-50"> 
+      <div
+        onClick={handleBackdropClick}
+        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center z-50"> 
             <section className="relative bg-white px-[20px] p-8 rounded-[24px] w-[908px] shadow-lg">  
               <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black' /></button>
                 <ChangeSettingsProject data={data} changeCheckbox={handleChange} />

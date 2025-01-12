@@ -1,3 +1,5 @@
+'use client'
+import { useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { deletePrice } from '@/app/utils/prices';
 import { deleteProject } from '@/app/utils/projects';
@@ -9,6 +11,7 @@ import { deleteAdvance } from '@/app/utils/advances';
 import { deleteLowEstimate } from '@/app/utils/lowEstimate';
 import { deleteLowPosition } from '@/app/utils/lowPosition';
 import { deleteLowProjectPrice } from '@/app/utils/priceLow';
+
 
 interface DeleteModalProps {
     data?: { _id?: string, projectId?: string | undefined, id?: string | undefined, estimateId?: string | undefined; positionId?: string | undefined; title: string | undefined } | null;
@@ -31,7 +34,29 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     setType,
     setNotificationTitle
 }) => {
+  
    
+    //Закрити модaлку
+   
+         useEffect(() => {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      } 
+      }, []);
+    
+  
+    const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.code === 'Escape') {
+      if(toggle) toggle();
+    }
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  if (e.currentTarget === e.target) {
+     if(toggle) toggle();
+  }
+};
    
     async function OnDelete() {
         try {
@@ -319,10 +344,9 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         } catch {}
     } 
     
-    // console.log(data)
-
+   
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div onClick={handleBackdropClick } className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
          
               <div className="relative bg-white px-[71px] p-8 rounded-[24px] w-[494px] shadow-lg">
              <button type="button" onClick={toggle}  className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black'/></button>

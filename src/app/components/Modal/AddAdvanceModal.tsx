@@ -1,9 +1,11 @@
 'use client'
+import { useEffect } from "react";
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import { saveProject } from "../../utils/actionsProject";
 import { Advance } from "@/app/interfaces/projects";
 import { dataFormat, forbiddenFormatMessage } from "@/app/utils/formatFunctions";
 import { addAdvance } from "@/app/utils/advances";
+
 
 
 
@@ -26,6 +28,28 @@ const AddAdvanceModal: React.FC<AddAdvanceModalProps> = ({
     setType,
     setNotificationTitle
 }) => {
+
+    //Закрити модaлку
+    
+           useEffect(() => {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      } 
+      }, []);
+    
+  
+    const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.code === 'Escape') {
+      if(toggle) toggle();
+    }
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  if (e.currentTarget === e.target) {
+     if(toggle) toggle();
+  }
+};
 
     const onSubmit = async (formData: FormData) => {
         const result = await saveProject(formData);
@@ -68,7 +92,7 @@ const AddAdvanceModal: React.FC<AddAdvanceModalProps> = ({
     }
 
     return (
-         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+         <div onClick={handleBackdropClick} className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <section className="relative bg-white px-[71px] p-8 rounded-[24px] w-[608px] shadow-lg">
                 <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black'/></button>
                 

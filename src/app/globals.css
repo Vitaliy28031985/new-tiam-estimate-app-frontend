@@ -1,12 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /*Montserrat 400 */
 
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/Montserrat-Regular.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -14,14 +15,14 @@
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/Montserrat-Medium.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: 500;
   font-style: normal;
 }
 /*Montserrat 600 */
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/Montserrat-SemiBold.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: 600;
   font-style: normal;
 }
 
@@ -29,7 +30,7 @@
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/Montserrat-Bold.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal;
 }
 
@@ -37,14 +38,14 @@
 @font-face {
   font-family: "Montserrat Alternates";
   src: url("/fonts/MontserratAlternates-SemiBold.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: 600;
   font-style: normal;
 }
 /*MontserratAlternates 700 */
 @font-face {
   font-family: "Montserrat Alternates";
   src: url("/fonts/MontserratAlternates-Bold.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal;
 }
 

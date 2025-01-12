@@ -9,7 +9,7 @@ import { AxiosError } from 'axios';
 import Link from 'next/link';
 
 
-interface AddAdvanceModalProps {
+interface LoginProps {
   
     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -87,7 +87,7 @@ const resolver: Resolver<FormValues> = async (values) => {
 };
 
 
-const Login: React.FC<AddAdvanceModalProps> = ({
+const Login: React.FC<LoginProps> = ({
     setMessage,
     setNotificationIsOpen,
     setType,
