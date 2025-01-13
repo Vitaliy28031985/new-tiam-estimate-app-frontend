@@ -73,7 +73,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const margins = 10;
-    const contentWidth = pageWidth - (2 * margins);
+    // const contentWidth = pageWidth - (2 * margins);
     const lineHeight = 10;
 
     // Add title
