@@ -1,0 +1,11 @@
+.animate-fade-in {
+  animation: fadeIn 5s ease infinite;
+}
+
+.delay-1 {
+  animation-delay: 1s;
+}
+
+.delay-2 {
+  animation-delay: 2s;
+}
