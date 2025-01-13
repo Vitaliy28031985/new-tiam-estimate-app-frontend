@@ -198,7 +198,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
 
        const handleExcelGeneration = () => {
         if (project && data) {
-            generateAndDownloadExcel(project, data);
+            generateAndDownloadExcel(project, data, 'large');
         } else {
             console.error('Project or estimate data is missing');
         }
