@@ -25,7 +25,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
  
 
     return (
-      <div className="print-content px-20">
+      <div className="print-content px-20 opacity-0">
 
         <h3 className="font-bold font-alternates text-5xl mb-10 text-center">Прайс робіт</h3>
    
@@ -88,13 +88,14 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
 
     // Add table headers
     pdf.setFontSize(12);
-    pdf.setTextColor(100);
+    pdf.setTextColor(0);
+    const rowHeight = 10;
     pdf.text('Найменування роботи', margins, 40);
     pdf.text('Ціна за одиницю (грн)', pageWidth - margins, 40, { align: 'right' });
-
+    pdf.rect(margins - 2, 35, pageWidth - 1.5 * margins, rowHeight);
     // Add table content
     let y = 50;
-    pdf.setTextColor(0);
+    pdf.setTextColor(100);
 
     for (const item of data) {
       if (y + lineHeight > pageHeight - margins) {
@@ -104,7 +105,8 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
 
       pdf.text(item.title, margins, y);
       pdf.text(item.price.toString(), pageWidth - margins, y, { align: 'right' });
-
+      
+       pdf.rect(margins - 2, y - 6, pageWidth - 1.5 * margins, rowHeight);
       y += lineHeight;
     }
 
