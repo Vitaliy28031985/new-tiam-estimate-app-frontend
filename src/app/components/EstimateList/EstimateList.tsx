@@ -112,8 +112,9 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     
     return (
         <section>
-            <div className='flex items-center justify-center gap-1 mb-16'>
-                <h3 className="font-bold font-alternates text-5xl">Список кошторисів</h3>
+            <div className='flex items-center justify-center  mb-16'>
+                <h3 className="font-bold font-alternates 
+                desktop:text-5xl tabletBig:text-5xl tablet:text-5xl mobile:text-2xl ">Список кошторисів</h3>
                 <button className=''
                     onClick={isToggle}
                 >
@@ -122,9 +123,9 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             </div>
 
 
-            <ul className={data && data?.length <= 1 ? "mb-6 flex flex-wrap gap-8 justify-center" : "mb-6 flex flex-wrap gap-8"}>
+            <ul className="mb-6 flex flex-wrap desktop:gap-8 tabletBig:gap-4 tablet:gap-8 mobile:gap-8 justify-center">
                 {Array.isArray(data) && data?.map(({ _id, title, description, isShow, isDelete }) => (
-                  <li className="w-[608px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
+                  <li className="desktop:w-[608px] tabletBig:w-[490px] tablet:w-[608px] mobile:w-[360px] px-8 py-8 bg-white rounded-3xl shadow-base" key={_id}>
                     <div className="mb-6 flex items-center gap-6">
 
                            <button
@@ -173,13 +174,15 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
                     </div>
                     
                         <span className="flex items-center gap-4 mb-7">
-                            <p className="font-semibold text-2xl">Назва кошторису:</p>
+                            <p
+                                className=" mobile:w-1/2
+                                font-semibold desktop:text-2xl tabletBig:text-2xl tablet:text-2xl mobile:text-xl">Назва кошторису:</p>
                             {!isShow ? (<p className="font-normal text-base">{title}</p>) : 
                            (<input id={_id} maxLength={10} name='title' className="font-normal text-base focus:outline-none"  value={title} disabled={!isShow} onChange={onChange} />)}
                             
                         </span>
                         <span className="flex items-center gap-10 mb-7">
-                            <p className="font-semibold text-2xl">Адреса об’єкту:</p>
+                            <p className="font-semibold desktop:text-2xl tabletBig:text-2xl tablet:text-2xl mobile:text-xl">Адреса об’єкту:</p>
                             {!isShow ? ( <p className="font-normal text-base">{description}</p>) : 
                             (<input id={_id} maxLength={30} name='description' className="font-normal text-base focus:outline-none" value={description} disabled={!isShow} onChange={onChange} />)}
                            
