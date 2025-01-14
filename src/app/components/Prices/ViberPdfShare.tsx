@@ -25,7 +25,7 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
  
 
     return (
-      <div className="print-content px-20 opacity-0">
+      <div className="print-content px-20 hidden">
 
         <h3 className="font-bold font-alternates text-5xl mb-10 text-center">Прайс робіт</h3>
    
