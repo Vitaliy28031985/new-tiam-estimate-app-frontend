@@ -134,7 +134,7 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                             alt="avatar" width={150} height={150} quality={100} /> 
                     </div> 
                     ) : (
-                            <div className="w-[150px] h-[150px] mb-6 mx-auto relative">
+                            <div className="desktop:w-[150px] tabletBig:w-[150px] tablet:w-[150px] h-[150px] mb-6 mx-auto relative">
                                 <Image className='w-full h-full rounded-full overflow-hidden object-cover '
                                     src={avatar && URL.createObjectURL(avatar) ? URL.createObjectURL(avatar) :'https://res.cloudinary.com/ddzcjknmj/image/upload/v1731220706/Group_427321632_xsewqc.png'}
                             alt="avatar" width={150} height={150} quality={100} /> 
@@ -148,14 +148,14 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                         <li className="mb-6">
                             <div className="px-4 mb-2"><p className="text-base font-normal">Ім’я</p></div>
                             {changeNameState ? (
-                               <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
+                               <div className="desktop:w-[559px] tabletBig:w-[559px] tablet:w-[559px] mobile:w-[330px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
                                 <p className="text-base font-normal"> {data && data?.name }</p>
                                 <button type="button" onClick={() => setChangeName(false)}><PencilSquareIcon className="size-5 text-blue-30" /></button>
                             </div>   
                             ) : 
                                 (
                                     <div className="relative">
-                                        <input className="w-[559px] flex items-center justify-between p-4 bg-white
+                                        <input className="desktop:w-[559px] tabletBig:w-[559px] tablet:w-[559px] mobile:w-[330px] flex items-center justify-between p-4 bg-white
                                          border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
                                          text-base font-normal text-gray-20"
                                             value={name} name="name" onChange={onChange} />
@@ -179,14 +179,14 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                          <li className="mb-6">
                             <div className="px-4 mb-2"><p className="text-base font-normal">E-mail</p></div>
                             {changeEmailState ? (
-                              <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
+                              <div className="desktop:w-[559px] tabletBig:w-[559px] tablet:w-[559px] mobile:w-[330px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
                                 <p className="text-base font-normal"> {data && data?.email }</p>
                                 <button type="button" onClick={() => setChangeEmail(false)}><PencilSquareIcon className="size-5 text-blue-30" /></button>
                             </div>   
                             ) : 
                               (
                                     <div className="relative">
-                                        <input className="w-[559px] flex items-center justify-between p-4 bg-white
+                                        <input className="desktop:w-[559px] tabletBig:w-[559px] tablet:w-[559px] mobile:w-[330px] flex items-center justify-between p-4 bg-white
                                          border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
                                          text-base font-normal text-gray-20"
                                             value={email} name="email" onChange={onChange} />
@@ -217,14 +217,14 @@ const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>): void => {
                          <li className="mb-6">
                             <div className="px-4 mb-2"><p className="text-base font-normal">Hомер телефону</p></div>
                             {changePhoneState ? (
-                             <div className="w-[559px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
+                             <div className="desktop:w-[559px] tabletBig:w-[559px] tablet:w-[559px] mobile:w-[330px] flex items-center justify-between p-4 bg-blue-5 rounded-full shadow-pricesTablet">
                                 <p className="text-base font-normal"> {data && formatPhoneNumber(data?.phone) }</p>
                                 <button onClick={() => setChangePhoneState(false)} type="button"><PencilSquareIcon className="size-5 text-blue-30" /></button>
                             </div>    
                             ) :
                              (
                                     <div className="relative">
-                                        <input className="w-[559px] flex items-center justify-between p-4 bg-white
+                                        <input className="desktop:w-[559px] tabletBig:w-[559px] tablet:w-[559px] mobile:w-[330px] flex items-center justify-between p-4 bg-white
                                          border border-gray-20 focus:border-blue-20 focus:outline-none rounded-full
                                          text-base font-normal text-gray-20"
                                             value={phone} name="phone" onChange={onChange} />

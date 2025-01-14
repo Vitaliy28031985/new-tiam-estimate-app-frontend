@@ -101,7 +101,7 @@ import Notification from "@/app/UI/Notifications/Notifications";
         <form onSubmit={handleSubmit} >
             <div className='mb-6'>
             <label className="inline-block font-normal text-base mb-3" htmlFor="unit">Додати одиницю</label>
-                <input className="w-[520px] h-[61px] border border-gray-15 px-4 py-5 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                <input className="desktop:w-[520px] tabletBig:w-[520px] tablet:w-[520px] mobile:w-[300px] h-[61px] border border-gray-15 px-4 py-5 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
              placeholder="Введіть свою одиницю виміру"
                     type="text" name="unit" id="unit" onChange={handleChange} value={unit} />
             </div>
@@ -110,7 +110,7 @@ import Notification from "@/app/UI/Notifications/Notifications";
                 
 
               <select
-                     className="w-[520px] h-[61px] border border-gray-15 px-4 py-5 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                     className="desktop:w-[520px] tabletBig:w-[520px] tablet:w-[520px] mobile:w-[300px] h-[61px] border border-gray-15 px-4 py-5 rounded-full text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
                      name="delete"
                      id="delete"
                      onChange={handleChange}>
@@ -124,7 +124,7 @@ import Notification from "@/app/UI/Notifications/Notifications";
                 
 
                 </div>
-                <button className="w-[520px] h-[50px] text-center bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10" 
+                <button className="desktop:w-[520px] tabletBig:w-[520px] tablet:w-[520px] mobile:w-[300px] h-[50px] text-center bg-blue-30 py-3 px-8 font-bold text-base text-white rounded-full hover:bg-blue-20 focus:bg-blue-20 disabled:text-gray-10" 
                 type="submit" >{unit !== '' ? "Зберегти" : "Видалити"}
             </button>
                 
