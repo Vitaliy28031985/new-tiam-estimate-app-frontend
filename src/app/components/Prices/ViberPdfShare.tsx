@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { jsPDF } from "jspdf";
 import { Price } from '@/app/interfaces/PriceInterface';
-import formatDate from '@/app/utils/formatDate';
+import { getFreshDate } from '@/app/utils/formatFunctions';
 
 interface ViberPdfShareProps {
   data: Price[] | null;
@@ -80,11 +80,10 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
     pdf.setFontSize(24);
     pdf.text('Прайс робіт', pageWidth / 2, 20, { align: 'center' });
 
-    const dataLength: number = data !== null ? data?.length - 1 : 0;
-    const createDate: string = formatDate(data[dataLength].createdAt)
-    if (createDate) {
+
+    if (data) {
   pdf.setFontSize(10); // встановлюємо розмір шрифта
-  pdf.text(`Станом на ${createDate}`, pageWidth - 10, 20, { align: 'right' }); // текст справа
+  pdf.text(`Станом на ${getFreshDate(data)}`, pageWidth - 10, 20, { align: 'right' }); // текст справа
 }
 
     // Add table headers
