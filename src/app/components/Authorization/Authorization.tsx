@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import AuthorizationCheckbox from "@/app/UI/AuthorizationCheckbox";
-import ButtonGoogle from "@/app/UI/Buttons/ButtonGoogle";
+// import ButtonGoogle from "@/app/UI/Buttons/ButtonGoogle";
 import RegisterForm from "../Register/RegisterForm";
 import Login from "../Login/Login";
 
