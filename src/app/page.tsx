@@ -9,7 +9,7 @@ import Reviews from './components/home/Reviews';
 
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Головна",
   description: "Головна сторінка інструменту для створення кошторисів Estimate app",
 };
 
@@ -17,8 +17,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="bg-gray-0 pt-20 pb-20">
-        <div className='w-[1249px] ml-auto mr-auto container'>
+      <div className="bg-gray-0 pt-20 pb-20 ">
+        <div className='desktop:w-[1249px] tabletBig:w-[1000px] mx-auto'>
           <MainSection />
           <OrderAs />
           <Features />

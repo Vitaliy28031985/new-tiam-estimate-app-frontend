@@ -146,11 +146,14 @@ export default function Login() {
     <div>
       <form onSubmit={onSubmit}>
         <div>
-          <label className="inline-block text-bas text-black font-normal mb-3">E-mail</label>
+          <label className="block text-bas text-black font-normal mb-3">E-mail</label>
           <input
             className={
-              errors?.email ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-3 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-                : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+              errors?.email ? `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+               h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-3 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+                : `desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+                 h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("email")} placeholder="email@org.ua" />
           {errors?.email &&
             (<div className='flex items-center'><ExclamationCircleIcon className='size-5 text-red-0 mr-3 mb-3' />
@@ -158,10 +161,14 @@ export default function Login() {
         </div>
 
         <div className='relative mb-14' >
-          <label className="inline-block text-bas text-black font-normal mb-3">Пароль</label>
+          <label className="block text-bas text-black font-normal mb-3">Пароль</label>
           <input type={passwordVisible ? "text" : "password"} className={
-            errors?.password ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-3 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-              : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+            errors?.password ? `
+             desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+            h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-3 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+              : `
+               desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("password")} placeholder="Very#5" />
           {errors?.password && (<div className='flex items-center'><ExclamationCircleIcon className='size-5 text-red-0 mr-3 mb-3' />
             <p className="w-5/6 text-red-500 text-xs font-normal">{errors.password.message}</p></div>)}
@@ -180,7 +187,7 @@ export default function Login() {
 
         <Link href="authorization/recovery" className='text-blue-30 text-sm font-normal hover:text-blue-20 focus:text-blue-20 mb-6'>Забули пароль?</Link>
 
-        <button type="submit" className={`w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
+        <button type="submit" className={`desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
        text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10` } >
           Увійти
         </button>

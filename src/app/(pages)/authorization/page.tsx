@@ -6,7 +6,7 @@ import logo from '../../assets/logo_mob.svg';
 import Authorization from '@/app/components/Authorization/Authorization';
 
 export const metadata: Metadata = {
-    title: "Реєстрація",
+    title: "Авторизація",
     description: "Сторінка входу",
 };
 

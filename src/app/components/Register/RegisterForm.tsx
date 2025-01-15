@@ -222,8 +222,12 @@ export default function RegisterForm() {
         <div>
           <label className="inline-block text-bas text-black font-normal mb-2">Ім&apos;я*</label>
           <input
-            className={errors?.name ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-              : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+            className={errors?.name ? `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+              : `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("name")} placeholder="Іван" />
           {errors?.name ?
             (<div className='flex items-center mb-2'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -236,8 +240,12 @@ export default function RegisterForm() {
         <div>
           <label className="inline-block text-bas text-black font-normal mb-2">E-mail*</label>
           <input
-            className={errors?.email ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-              : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+            className={errors?.email ? `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+              : `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("email")} placeholder="email@org.ua" />
           {errors?.email ?
             (<div className='flex items-center mb-2'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -249,8 +257,12 @@ export default function RegisterForm() {
 
         <div className='relative mb-2'>
           <label className="inline-block text-bas text-black font-normal mb-2">Пароль*</label>
-          <input type={passwordVisible ? "text" : "password"} className={errors?.password ? `w-full h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-            : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+          <input type={passwordVisible ? "text" : "password"} className={errors?.password ? `
+          desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+          h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+            : `
+            desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+            h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("password")} placeholder="Very#5" />
           {errors?.password ? (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
             <p className="w-5/6 text-red-500 text-xs font-normal">{errors.password.message}</p></div>) :
@@ -272,8 +284,12 @@ export default function RegisterForm() {
 
         <div className='relative mb-2'>
           <label className="inline-block text-bas text-black font-normal mb-2">Повторіть пароль*</label>
-          <input type={repeatPasswordVisible ? "text" : "password"} className={errors?.repeatPassword ? `w-full h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-            : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+          <input type={repeatPasswordVisible ? "text" : "password"} className={errors?.repeatPassword ? `
+          desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+          h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+            : `
+            desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+            h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("repeatPassword")} placeholder="Very#5" />
           {errors?.repeatPassword ? (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
             <p className="text-red-500 text-xs font-normal">{errors.repeatPassword.message}</p></div>) :
@@ -298,8 +314,12 @@ export default function RegisterForm() {
           <label className="inline-block text-bas text-black font-normal mb-2">Введіть номер телефону*</label>
           <input
             type="phone"
-            className={errors?.phone ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
-              : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
+            className={errors?.phone ? `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+              : `
+              desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+              h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("phone")} placeholder="+380670000000" />
           {errors?.phone ?
             (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -311,12 +331,14 @@ export default function RegisterForm() {
 
         <div className="flex gap-3 mt-5">
           <h5 className="ml-6 text-base font-normal text-black">Роль:</h5>
-          <div className="flex gap-10">
+          <div className="flex desktop:gap-10 tabletBig:gap-10 tablet:gap-10 mobile:gap-5">
             <Checkbox title="Замовник" type="radio" name="role" value="customer" data={role} changeCheckbox={handleChange} />
             <Checkbox title="Виконавець" type="radio" name="role" value="executor" data={role} changeCheckbox={handleChange} />
           </div>
         </div>
-        <input type="submit" value="Зареєструватись" className={`w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
+        <input type="submit" value="Зареєструватись" className={`
+        desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[345px]
+        bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl
        text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10`} />
 
       </form>
