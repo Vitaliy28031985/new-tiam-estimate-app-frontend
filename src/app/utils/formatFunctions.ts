@@ -1,3 +1,5 @@
+import { Price } from "../interfaces/PriceInterface";
+
 export function formatPhoneNumber(phone: string): string {
   if (phone) {
     const phoneArr = phone.split('');
@@ -73,3 +75,18 @@ export function forbiddenFormatMessage(message: string): string {
   }
 }
 
+
+export function getFreshDate(data: Price[]): string {
+   
+    const latest = data.reduce((max, item) => {
+        const currentDate = new Date(item.updatedAt);
+        return currentDate > max ? currentDate : max;
+    }, new Date(0)); 
+
+   
+    const day = String(latest.getDate()).padStart(2, '0');
+    const month = String(latest.getMonth() + 1).padStart(2, '0'); 
+    const year = latest.getFullYear();
+
+    return `${day}.${month}.${year}`;
+}

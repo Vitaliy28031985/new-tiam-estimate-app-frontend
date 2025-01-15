@@ -20,13 +20,15 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId, }) => {
   const [project, setProject] = useState<ProjectItem | null>(null);
   const [data, setData] = useState('large');
   const [sizeEstimate, setSizeEstimate] = useState(true);
+  const [isRenderUser, setIsRenderUser] = useState<boolean | null | undefined>(false);
 
-   const toggleShow = () => setIsShowModal(toggle => !toggle);
+  const toggleShow = () => setIsShowModal(toggle => !toggle);
+  const isUserRender = () => setIsRenderUser(render => !render);
       
       useEffect(() => {
         getEstimate()
         fetchUser()
-      }, []);
+      }, [isRenderUser]);
       
         async function getEstimate() {
         if (projectId !== null) {  
@@ -85,11 +87,11 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId, }) => {
                     
             
            {user?._id === project?.owner && (
-                <div> {sizeEstimate ? (<EstimateItem toggleShow={toggleShow} isShowModalSettings={isShowModal} user={user} projectId={projectId} />) : (<EstimateSmallItem user={user} projectId={projectId}/>)}</div>
+                <div> {sizeEstimate ? (<EstimateItem toggleShow={toggleShow} isShowModalSettings={isShowModal} user={user} projectId={projectId} isUserRender={isUserRender} />) : (<EstimateSmallItem user={user} projectId={projectId}/>)}</div>
             )}
             
             {isAllow && isAllow[0]?.lookAt === 'all' && (
-                 <div> {sizeEstimate ? (<EstimateItem toggleShow={toggleShow} isShowModalSettings={isShowModal} user={user} projectId={projectId} />) : (<EstimateSmallItem user={user} projectId={projectId}/>)}</div>
+                 <div> {sizeEstimate ? (<EstimateItem toggleShow={toggleShow} isShowModalSettings={isShowModal} user={user} projectId={projectId} isUserRender={isUserRender} />) : (<EstimateSmallItem user={user} projectId={projectId}/>)}</div>
             )}
 
             {isAllow && isAllow[0]?.lookAt === 'small' && (
@@ -97,7 +99,7 @@ const EstimateToggle: React.FC<EstimateToggleProps> = ({ projectId, }) => {
             )}
            
              {isAllow && isAllow[0]?.lookAt === 'large' && (
-                <EstimateItem toggleShow={toggleShow} isShowModalSettings={isShowModal} user={user} projectId={projectId} />
+                <EstimateItem toggleShow={toggleShow} isShowModalSettings={isShowModal} user={user} projectId={projectId} isUserRender={isUserRender} />
             )}
         
         </div>
