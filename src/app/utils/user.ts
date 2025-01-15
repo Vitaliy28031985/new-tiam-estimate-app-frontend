@@ -148,7 +148,7 @@ export async function changePhone(phone: string | undefined) {
   }
 
   try {
-   await axios({
+ const response =  await axios({
       method: 'put',
       url: `${BASE_URL}api/user/phone`,
       headers: {
@@ -156,8 +156,9 @@ export async function changePhone(phone: string | undefined) {
      },
       data: {phone}
     });
+  return response.data;
   } catch (error: unknown) {
-      if (error instanceof AxiosError) {
+    if (error instanceof AxiosError) {
         return error.response;
       } else {
         console.log("Unknown error", error);
@@ -211,7 +212,7 @@ export async function changeRole(role: string | undefined) {
   }
 
   try {
-   await axios({
+  const response = await axios({
       method: 'put',
       url: `${BASE_URL}api/user/role`,
       headers: {
@@ -219,8 +220,9 @@ export async function changeRole(role: string | undefined) {
      },
       data: {role}
     });
+  return response.data;
   } catch (error: unknown) {
-      if (error instanceof AxiosError) {
+    if (error instanceof AxiosError) {
         return error.response;
       } else {
         console.log("Unknown error", error);
@@ -236,14 +238,15 @@ export async function changePassword(data: Passwords | undefined) {
   }
 
   try {
-   await axios({
+ const response =  await axios({
       method: 'put',
       url: `${BASE_URL}api/user/password`,
       headers: {
         'Authorization': `Bearer ${token}`
      },
       data
-    });
+ });
+    return response.data;
   } catch (error: unknown) {
       if (error instanceof AxiosError) {
         return error.response;

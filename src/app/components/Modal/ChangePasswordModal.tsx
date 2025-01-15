@@ -1,12 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { changePassword } from "@/app/utils/user";
 
 interface AddPriceModalProps {
-    toggle?: () => void;
+  toggle?: () => void;
+  setMessage?: React.Dispatch<React.SetStateAction<string>>;
+  setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
+  setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення'>>;
 }
 type FormValues = {
   oldPassword: string;
@@ -76,12 +80,39 @@ const resolver: Resolver<FormValues> = async (values) => {
   };
 };
 
-const ChangePasswordModal: React.FC<AddPriceModalProps> = ({ toggle }) => {
+const ChangePasswordModal: React.FC<AddPriceModalProps> = ({
+  toggle,
+  setMessage,
+  setNotificationIsOpen,
+  setType,
+  setNotificationTitle
+}) => {
     const [oldPasswordVisible, setOldPasswordVisible] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(false);
     const togglePasswordVisibility = () => setPasswordVisible((prev) => !prev);
     const toggleOldPasswordVisibility = () => setOldPasswordVisible((prev) => !prev);
     
+  //Закрити модaлку
+       useEffect(() => {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      } 
+      }, []);
+    
+  
+    const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.code === 'Escape') {
+      if(toggle) toggle();
+    }
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  if (e.currentTarget === e.target) {
+     if(toggle) toggle();
+  }
+};
+  
       const {
         register,
         handleSubmit,
@@ -94,8 +125,29 @@ const ChangePasswordModal: React.FC<AddPriceModalProps> = ({ toggle }) => {
     
       const onSubmit = handleSubmit(async (data) => {
           try {
-              await changePassword(data);
-              if (toggle) toggle();
+            const passwordsData = await changePassword(data);
+            console.log(passwordsData);
+            if (!passwordsData.status) {
+               if(setMessage)
+                setMessage('Пароль користувача успішно оновлено!');
+                if(setType)
+                setType('info');
+                if(setNotificationTitle)
+                setNotificationTitle('Оновлення');
+                if (setNotificationIsOpen)
+                setNotificationIsOpen(true);
+                                              
+            } else {
+             if(setMessage)
+                setMessage('Помилка: ' + (passwordsData.data?.message));
+              if(setType)
+                setType('error');
+              if(setNotificationTitle)
+                setNotificationTitle('Помилка');
+              if (setNotificationIsOpen)
+                setNotificationIsOpen(true); 
+            }
+          if (toggle) toggle();
           reset();
           } catch (error) {
           if (toggle) toggle();
@@ -106,7 +158,7 @@ const ChangePasswordModal: React.FC<AddPriceModalProps> = ({ toggle }) => {
     
     
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div onClick={handleBackdropClick} className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <section className="relative bg-white px-[71px] p-8 rounded-[24px] w-[611px] shadow-lg">
                 <button type="button" onClick={toggle} className='absolute top-3 right-3'><XMarkIcon className='size-6 text-black'/></button>
                 <h3 className="font-semibold text-2xl text-black text-center mb-6">Форма для зміни паролю</h3>
