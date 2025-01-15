@@ -1,0 +1,19 @@
+.skeleton-text {
+    animation: pulse-left-to-right 5s infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes pulse-left-to-right {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+
+        opacity: 0;
+    }
+}

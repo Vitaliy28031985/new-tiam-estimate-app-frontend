@@ -41,7 +41,7 @@
 }
 
 .swiper-pagination-bullet {
- display: flex;
+    display: flex;
     width: 32px;
     height: 32px;
     justify-content: center;
@@ -55,14 +55,14 @@
 }
 
 .swiper-pagination-bullet-active {
-    display: flex; 
+    display: flex;
     justify-content: center;
-    align-items: center; 
-    margin: 0px; 
-    font-size: 14px; 
-    width: 32px; 
-    height: 32px; 
-    font-weight:700; 
+    align-items: center;
+    margin: 0px;
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+    font-weight: 700;
     border-radius: 0%;
     background-color: white;
     color: #0C4A6E;

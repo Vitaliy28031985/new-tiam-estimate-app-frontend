@@ -9,6 +9,7 @@ import RatingStars from "@/app/UI/RatingStars/RaitingStars";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import formatDate from '../../utils/formatDate';
 import AddReviewModal from "../Modal/AddReviewModal";
+import ReviewsSkeleton from '../../sceleton/reviewsSceleton';
 
 
 
@@ -25,6 +26,7 @@ export default function Reviews() {
     const [reviews, setReviews] = useState<Reviews[]>([]);
     const [slidesPerView, setSlidesPerView] = useState<number>(3);
     const [isOpenAddReviewModal, setIsOpenAddReviewModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchReviews = async () => {
         try {
@@ -34,6 +36,7 @@ export default function Reviews() {
             }
             const data: Reviews[] = await response.json();
             setReviews(data);
+            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching reviews:", error);
         }
@@ -61,6 +64,12 @@ export default function Reviews() {
         window.addEventListener('resize', updateSlidesPerView);
         return () => window.removeEventListener('resize', updateSlidesPerView);
     }, []);
+
+    if (isLoading) {
+        return (
+            <ReviewsSkeleton />
+        );
+    }
 
     return (
         <section>

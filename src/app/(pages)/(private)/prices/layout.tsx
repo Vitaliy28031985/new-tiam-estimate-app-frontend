@@ -3,10 +3,6 @@ import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { isLoginUser } from "@/app/utils/user";
 
-
-
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
