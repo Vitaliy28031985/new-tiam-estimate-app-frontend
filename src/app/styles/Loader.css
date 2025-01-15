@@ -1,11 +1,75 @@
-.animate-fade-in {
-  animation: fadeIn 5s ease infinite;
+.svg-elem-1 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
 }
 
-.delay-1 {
+.svg-elem-2 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 0.2s;
+}
+
+.svg-elem-3 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 0.4s;
+}
+
+.svg-elem-4 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 0.6s;
+}
+
+.svg-elem-5 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 0.8s;
+}
+
+.svg-elem-6 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
   animation-delay: 1s;
 }
 
-.delay-2 {
-  animation-delay: 2s;
+.svg-elem-7 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 1.2s;
+}
+
+.svg-elem-8 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 1.4s;
+}
+
+.svg-elem-9 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 1.6s;
+}
+
+.svg-elem-10 {
+  animation: pulsate 4s ease-out;
+  animation-iteration-count: infinite;
+  animation-delay: 1.8s;
+}
+
+
+@keyframes pulsate {
+  0% {
+
+    opacity: 0.0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+
+    opacity: 0;
+  }
 }
