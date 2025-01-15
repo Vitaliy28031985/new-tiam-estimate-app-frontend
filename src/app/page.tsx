@@ -1,12 +1,10 @@
+import { Metadata } from 'next';
 import MainSection from './components/home/MainSection';
 import OrderAs from './components/home/OrderAs';
 import Features from './components/home/Features';
-// import ButtonDelete from './UI/Buttons/ButtonDelete';
-// import ButtonPrint from './UI/Buttons/ButtonPrint';
-import { Metadata } from 'next';
-import Reviews from './components/home/Reviews';
 import Questions from './components/home/Questions';
 import Footer from './components/Footer/Footer';
+import Reviews from './components/home/Reviews';
 
 
 
@@ -24,8 +22,12 @@ export default function Home() {
           <MainSection />
           <OrderAs />
           <Features />
+
           <Reviews />
+
+
           <Questions />
+
         </div>
       </div>
       <Footer />

@@ -9,6 +9,7 @@ import RatingStars from "@/app/UI/RatingStars/RaitingStars";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import formatDate from '../../utils/formatDate';
 import AddReviewModal from "../Modal/AddReviewModal";
+import ReviewsSkeleton from '../../sceleton/reviewsSceleton';
 
 
 
@@ -25,6 +26,7 @@ export default function Reviews() {
     const [reviews, setReviews] = useState<Reviews[]>([]);
     const [slidesPerView, setSlidesPerView] = useState<number>(3);
     const [isOpenAddReviewModal, setIsOpenAddReviewModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchReviews = async () => {
         try {
@@ -34,6 +36,7 @@ export default function Reviews() {
             }
             const data: Reviews[] = await response.json();
             setReviews(data);
+            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching reviews:", error);
         }
@@ -62,6 +65,12 @@ export default function Reviews() {
         return () => window.removeEventListener('resize', updateSlidesPerView);
     }, []);
 
+    if (isLoading) {
+        return (
+            <ReviewsSkeleton />
+        );
+    }
+
     return (
         <section>
             <h2 className="text-5xl font-alternates font-bold text-black mb-[60px] w-[427px]">
@@ -80,13 +89,14 @@ export default function Reviews() {
                             let paginationNumbers = "";
                             for (let i = 1; i <= total; i++) {
                                 paginationNumbers += `
-                                <button class="${i === current ? 'active' : ''}" style="display: flex; justify-content: center;align-items: center; margin: 0px; font-size: 14px; width: 32px; height: 32px; font-weight:700; color: ${i === current ? '#0C4A6E' : '#A3A3A3'};">
-                                    ${i}
+                                <button class="${i === current ? 'swiper-pagination-bullet-active' : 'swiper-pagination-bullet'}" >
+                                 ${i}
                                 </button>
                             `;
                             }
                             return paginationNumbers;
                         },
+                        bulletClass: 'swiper-pagination-bullet',
                         clickable: true,
                     }}
                     modules={[Pagination, Navigation]}

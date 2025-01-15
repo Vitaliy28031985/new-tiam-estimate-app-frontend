@@ -179,9 +179,7 @@ const handlePrint = () => {
         <section>
           
              <div className='flex items-center justify-center gap-1 mb-2'>
-          <h3 className="font-bold font-alternates 
-                desktop:text-5xl tabletBig:text-5xl tablet:text-5xl mobile:text-2xl
-                ">Прайс робіт</h3>
+                <h3 className="font-bold font-alternates text-5xl">Прайс робіт</h3>
                 <button className='' onClick={isToggle}>
                  <PlusIcon className='size-10 text-black'/>   
                 </button>
@@ -193,7 +191,7 @@ const handlePrint = () => {
             <div className='relative w-max'>
                 <MagnifyingGlassIcon className='size-6 absolute left-2 top-3 text-gray-20'/>
                 <input onChange={filterChange} value={filter} 
-                    className='desktop:w-[589px] tabletBig:w-[589px] tablet:w-[589px] mobile:w-[300px] h-[49px] px-10  rounded-3xl border border-gray-20 
+                    className='w-[589px] h-[49px] px-10  rounded-3xl border border-gray-20 
                      text-gray-20 text-base font-normal focus:border-blue-20 focus:outline-none'
                     placeholder='Пошук'
                     type="text" name="filter" />
@@ -201,20 +199,20 @@ const handlePrint = () => {
             </div>
 
             <div className=''>
-                <div className='desktop:w-[661px] tabletBig:w-[661px] tablet:w-[601px]'>
+                <div className='w-[661px] '>
 
-                    <div className='flex items-center desktop:gap-3 tabletBig:gap-3 tablet:gap-3 mobile:gap-14 mb-2'>
-                        <div className='desktop:w-80 tabletBig:w-80 tablet:w-80 mobile:w-32'><p className='font-normal text-base text-black text-start'>Найменування роботи</p></div>
-                        <div className='desktop:w-52 tabletBig:w-52 tablet:w-40 mobile:w-20'><p className='font-normal text-base text-black text-start tablet:text-center'>Ціна за одиницю (грн)</p></div>
+                    <div className='flex items-center gap-3 mb-2'>
+                        <div className='w-80'><p className='font-normal text-base text-black text-start'>Найменування роботи</p></div>
+                        <div className='w-52'><p className='font-normal text-base text-black text-start'>Ціна за одиницю (грн)</p></div>
                     </div>
 
                     {data && filteredPrices?.map(({ id, title, price, isShow, isDelete  }) => (
-                     <div className='flex items-center desktop:gap-4 tabletBig:gap-4 tablet:gap-4 mobile:gap-2 mb-3' key={id}>
+                     <div className='flex items-center gap-4 mb-3' key={id}>
                        
-                        <div className='desktop:w-80 tabletBig:w-80 tablet:w-80 mobile:w-40 relative'>
+                        <div className='w-80 relative'>
                             
                                 {isShow ? (
-                                    <input className='desktop:w-80 tabletBig:w-80 tablet:w-72 mobile:w-40 bg-blue-5 pl-4 pr-4 py-3 rounded-full font-normal
+                                    <input className='w-80 bg-blue-5 pl-4 pr-4 py-3 rounded-full font-normal
                                  text-base text-gray-35 shadow-pricesTablet' id={id} name='title' onChange={onChange} type='text' value={title} />
                                 ): (
                               <div className='border border-blue-20 pl-4 pr-4 py-3 rounded-full'>
@@ -225,10 +223,10 @@ const handlePrint = () => {
 
                         </div>
 
-                            <div className='desktop:w-52 tabletBig:w-52 tablet:w-40 mobile:w-24'>
+                            <div className='w-52'>
                                 
                                 {isShow ? (
-                                <input className='desktop:w-48 tabletBig:w-48 tablet:w-32 mobile:w-20 bg-blue-5 desktop:pl-20 tabletBig:pl-20 tablet:pl-12 mobile:pl-5 pr-4 py-3 rounded-full font-normal
+                                <input className='w-48 bg-blue-5 pl-20 pr-4 py-3 rounded-full font-normal
                                  text-base text-gray-35 shadow-pricesTablet' id={id} name='price' onChange={onChange} type='number' value={price} />
                                 ): (
                                  <div className='border border-blue-20 px-5 py-3 rounded-full'>
@@ -263,17 +261,12 @@ const handlePrint = () => {
                                     }
                                 
                           
-                                  className={isShow ?
-                                    `w-12 h-12
-                                   bg-blue-5 rounded-full hover:bg-blue-15 focus:bg-blue-15` :
-                                  `w-12 h-12 border
-                                   border-blue-20 rounded-full hover:bg-blue-5 focus:bg-blue-5
+                                  className={isShow ? `w-12 h-12 bg-blue-5 rounded-full hover:bg-blue-15 focus:bg-blue-15` :
+                                  `w-12 h-12 border border-blue-20 rounded-full hover:bg-blue-5 focus:bg-blue-5
                                   hover:border-0 focus:border-0`
                                    }
                                 type='button'>
-                          {isShow ? (
-                            <PiFloppyDisk className='size-6  text-gray-30 mx-auto' />) :
-                            (<PencilSquareIcon className='size-6  text-gray-30 mx-auto' />)}
+                                {isShow ? (<PiFloppyDisk className='size-6 text-gray-30 mx-auto'/>) : (<PencilSquareIcon className='size-6 text-gray-30 mx-auto'/>)}
                                  
                             </button>
 

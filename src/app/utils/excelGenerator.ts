@@ -6,7 +6,7 @@ function roundingNumber(value: number): number {
 }
 
 
-export async function generateAndDownloadExcel(project: ProjectItem, estimates: Estimate[], component: "small" | "large") {
+export async function generateAndDownloadExcel(project: ProjectItem, estimates: Estimate[]) {
   const workbook = XLSX.utils.book_new();
 
   const headerStyle = {
@@ -64,32 +64,13 @@ export async function generateAndDownloadExcel(project: ProjectItem, estimates: 
 
   // Додаємо підсумкові дані проекту
   wsData.push([]); // Пустий рядок для відступу
-  if (component === 'large') {
-   wsData.push(['Загальна сума:', ' ', ' ', ' ', ' ', roundingNumber(project.total ?? 0)]); 
-  } else {
-   wsData.push(['Загальна сума:', ' ', ' ', ' ', ' ', roundingNumber(project.lowTotal ?? 0)]); 
-  }
-  
- 
-  if (project.discount !== 0 && project.discount) {
+  wsData.push(['Загальна сума:', ' ', ' ', ' ', ' ', roundingNumber(project.total ?? 0)]);
+  if (project.discount !== 0) {
     wsData.push(['Знижка:', ' ', ' ', ' ', ' ', roundingNumber(project.discount ?? 0)]);
   }
-  if (project.advancesTotal !== 0 && project.advancesTotal) {
-   wsData.push(['Аванс:', ' ', ' ', ' ', ' ', project.advancesTotal ?? 0]); 
-  }
-  if (project.materialsTotal !== 0 && project.materialsTotal) {
-  wsData.push(['Витрачено на матеріали:', ' ', ' ', ' ', ' ', project.materialsTotal ?? 0]);  
-  }
-  
-  
-  if (component === 'large') {
-    if(project.general !== 0 && project.general)
-    wsData.push(['До сплати:', ' ', ' ', ' ', ' ', roundingNumber(project.general ?? 0)]);
-  } else {
-    if(project.lowGeneral !== 0 && project.lowGeneral)
-    wsData.push(['До сплати:', ' ', ' ', ' ', ' ', roundingNumber(project.lowGeneral ?? 0)]);
-  }
-  
+  wsData.push(['Аванс:', ' ', ' ', ' ', ' ', project.advancesTotal ?? 0]);
+  wsData.push(['Витрачено на матеріали:', ' ', ' ', ' ', ' ', project.materialsTotal ?? 0]);
+  wsData.push(['До сплати:', ' ', ' ', ' ', ' ', roundingNumber(project.general ?? 0)]);
 
   // Створення аркуша з усіма даними
   const ws = XLSX.utils.aoa_to_sheet(wsData); // Створюємо аркуш з таблицею

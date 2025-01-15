@@ -9,8 +9,7 @@ import { useState } from "react";
 interface AddEstimateModalProps {
     id?: string | undefined;
     toggle?: () => void;
-    isUserRender?: () => void;
-    setMessage?: React.Dispatch<React.SetStateAction<string>>;
+     setMessage?: React.Dispatch<React.SetStateAction<string>>;
     setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
     setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Оновлення' | 'Додавання' | 'Видалення' | 'Знижка' | 'Доступ' | 'Знижений кошторис'>>;
@@ -18,7 +17,6 @@ interface AddEstimateModalProps {
 const AddAlow: React.FC<AddEstimateModalProps> = ({
     id,
     toggle,
-    isUserRender,
     setMessage,
     setNotificationIsOpen,
     setType,
@@ -123,7 +121,6 @@ const AddAlow: React.FC<AddEstimateModalProps> = ({
         }
        
         try {
-            if(isUserRender) isUserRender()
             if (toggle) toggle();
         } catch {
             console.error('Щось пішло не так!');  

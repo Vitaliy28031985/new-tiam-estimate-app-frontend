@@ -21,18 +21,16 @@ import Notification from "@/app/UI/Notifications/Notifications";
 import SendEstimatePdf from "./SendEstimate";
 import { handlePrint } from "./printEstimate";
 import SettingsModal from "../../Modal/SettingsModal";
-import Loader from "@/app/UI/Loader";
 
 interface EstimateProps {
     projectId: string;
     user: User | null;
-    isUserRender?: () => void;
     toggleShow?: () => void;
     isShowModalSettings?: boolean;
 }
 
 
-const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, isShowModalSettings, isUserRender }) => {
+const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, isShowModalSettings }) => {
    
     const [project, setProject] = useState<ProjectItem | null>(null);
     const [data, setData] = useState<Estimate[] | null | undefined>(null);
@@ -198,7 +196,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
 
        const handleExcelGeneration = () => {
         if (project && data) {
-            generateAndDownloadExcel(project, data, 'large');
+            generateAndDownloadExcel(project, data);
         } else {
             console.error('Project or estimate data is missing');
         }
@@ -207,9 +205,7 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
     
     return (
         <div className="mx-auto">
-            {data ? (
-                <>
-                  <ul className="mb-8 flex items-center gap-4 justify-center">
+            <ul className="mb-8 flex items-center gap-4 justify-center">
                 <li><ButtonBlue click={isShowModal} type="button" title="Додати таблицю" /></li>
                 <li><ButtonBlue type="button" title="Створити таблицю Excel"
                     click={handleExcelGeneration}
@@ -446,9 +442,6 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
                 <SendEstimatePdf data={project}/>
                 <ButtonPrint click={() => handlePrint(project)}/>
             </div>
-                </>
-            ) : (<Loader/>)}
-          
 
     {notificationIsOpen && (
           <Notification     
@@ -496,7 +489,6 @@ const EstimateItem: React.FC<EstimateProps> = ({ projectId, user, toggleShow, is
                 toggle={toggleShow}
                 id={projectId}
                 isShow={isRender}
-                isUserRender={isUserRender}
                 setMessage={setMessage}
                 setNotificationIsOpen={setNotificationIsOpen}
                 setType={setType}

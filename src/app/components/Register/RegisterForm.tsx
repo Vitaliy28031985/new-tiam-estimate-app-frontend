@@ -4,16 +4,11 @@ import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/2
 import { useForm, Resolver } from "react-hook-form";
 import Checkbox from "@/app/UI/Inputs/Checkbox";
 import { registerApi } from "@/app/utils/auth";
+import Notification from "@/app/UI/Notifications/Notifications";
 import { AxiosError } from "axios";
 
 
-interface RegisterProps {
-  
-    setMessage?: React.Dispatch<React.SetStateAction<string>>;
-    setNotificationIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-    setType?: React.Dispatch<React.SetStateAction<'success' | 'error' | 'warning' | 'info'>>;
-    setNotificationTitle?: React.Dispatch<React.SetStateAction<'Помилка' | 'Успіх'>>;
-}
+
 
 type FormValues = {
   name: string;
@@ -147,12 +142,7 @@ const resolver: Resolver<FormValues> = async (values) => {
   };
 };
 
- const RegisterForm: React.FC<RegisterProps> = ({
-    setMessage,
-    setNotificationIsOpen,
-    setType,
-    setNotificationTitle
-}) => {
+export default function RegisterForm() {
   const messagePassword = 'Пароль має містити щонайменше 6 символів, включаючи літери та спеціальні знаки (, #, & тощо)';
   const messageEmail = 'Потрібно ввести E-mail у наступному форматі: email@org.ua.';
   const messageName = 'Ім`я є обов`язковим полем.';
@@ -161,7 +151,10 @@ const resolver: Resolver<FormValues> = async (values) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [repeatPasswordVisible, setRepeatPasswordVisible] = useState(false);
   const [role, setRole] = useState('customer');
-
+  const [message, setMessage] = useState('');
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [notificationTitle, setNotificationTitle] = useState<'Помилка' | 'Успіх'>('Успіх');
 
 
   const togglePasswordVisibility = () => {
@@ -199,28 +192,19 @@ const resolver: Resolver<FormValues> = async (values) => {
 
     try {
       await registerApi(registerData);
-      if(setMessage)
       setMessage('Реєстрація пройшла успшно! Пепейдіть на свою скриньку щоб підтвердити реєстрацію!');
-      if(setType)
       setType('success');
-      if(setNotificationTitle)
       setNotificationTitle('Успіх');
-      if(setNotificationIsOpen)
       setNotificationIsOpen(true);
       reset();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response) {
-          if(setMessage)
           setMessage('Помилка: ' + (error.response?.data?.message || 'Не вдалося зареєструватися в систему'));
-          if(setType)
           setType('error');
-          if(setNotificationTitle)
           setNotificationTitle('Помилка');
-          if(setNotificationIsOpen)
           setNotificationIsOpen(true);
         } else {
-          if(setMessage)
           setMessage("No response from server");
         }
       } else {
@@ -265,7 +249,7 @@ const resolver: Resolver<FormValues> = async (values) => {
 
         <div className='relative mb-2'>
           <label className="inline-block text-bas text-black font-normal mb-2">Пароль*</label>
-          <input type={passwordVisible ? "text" : "password"} className={errors?.password ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+          <input type={passwordVisible ? "text" : "password"} className={errors?.password ? `w-full h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
             : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("password")} placeholder="Very#5" />
           {errors?.password ? (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -276,7 +260,7 @@ const resolver: Resolver<FormValues> = async (values) => {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute top-12 right-5"
+            className="absolute top-11 right-5"
           >
             {passwordVisible ? (
               <EyeSlashIcon className={errors?.password ? `size-6 text-red-0` : `size-6 text-blue-20`} />
@@ -288,7 +272,7 @@ const resolver: Resolver<FormValues> = async (values) => {
 
         <div className='relative mb-2'>
           <label className="inline-block text-bas text-black font-normal mb-2">Повторіть пароль*</label>
-          <input type={repeatPasswordVisible ? "text" : "password"} className={errors?.repeatPassword ? `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
+          <input type={repeatPasswordVisible ? "text" : "password"} className={errors?.repeatPassword ? `w-full h-[49px] px-4 py-3 rounded-3xl border border-red-0 justify-start items-center inline-flex mb-2 text-red-0 text-sm font-normal focus:border-red-0 focus:outline-none`
             : `w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-2 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none`}
             {...register("repeatPassword")} placeholder="Very#5" />
           {errors?.repeatPassword ? (<div className='flex items-center'><ExclamationCircleIcon className='size-4 text-red-0 mr-3' />
@@ -299,7 +283,7 @@ const resolver: Resolver<FormValues> = async (values) => {
           <button
             type="button"
             onClick={toggleRepeatPasswordVisibility}
-            className="absolute top-12 right-5"
+            className="absolute top-11 right-5"
           >
             {repeatPasswordVisible ? (
               <EyeSlashIcon className={errors?.repeatPassword ? `size-6 text-red-0` : `size-6 text-blue-20`} />
@@ -336,9 +320,16 @@ const resolver: Resolver<FormValues> = async (values) => {
        text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20 disabled:text-gray-10`} />
 
       </form>
+
+      {notificationIsOpen && (
+        <Notification
+          type={type}
+          title={notificationTitle}
+          text={message}
+          onClose={() => setNotificationIsOpen(false)}
+        />
+      )}
     </div>
   )
 }
-
-
-export default RegisterForm
+//

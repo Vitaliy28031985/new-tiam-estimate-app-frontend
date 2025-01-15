@@ -24,7 +24,6 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
     const [auth, setAuth] = useState<boolean>(false);
     const router = useRouter();
 
-
     useEffect(() => {
         const fetchUser = async () => {
             const auth = await isLoginUser();
@@ -36,27 +35,6 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
         fetchUser();
 
     }, []);
-
-    
-         useEffect(() => {
-      window.addEventListener('keydown', handleKeyDown);
-      return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      } 
-      }, []);
-    
-  
-    const handleKeyDown = (e: KeyboardEvent): void => {
-    if (e.code === 'Escape') {
-      if(onClose) onClose();
-    }
-  };
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-  if (e.currentTarget === e.target) {
-     if(onClose) onClose();
-  }
-};
 
     if (!isOpen) return null;
 
@@ -91,7 +69,7 @@ const AddReviewModal: FC<AddReviewModalProps> = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div onClick={handleBackdropClick} className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
             {auth ?
                 (<div className="bg-[#DFDFDF] px-[71px] py-[53.5px] rounded-[24px] w-[912px] shadow-lg">

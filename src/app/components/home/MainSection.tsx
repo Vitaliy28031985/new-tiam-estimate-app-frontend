@@ -4,14 +4,13 @@ import ButtonBlueLink from '@/app/UI/Buttons/ButtonBlueLink';
 import homeOne from '../../assets/home-1.png';
 import homeTwo from '../../assets/home-2.png';
 import homeTree from '../../assets/home-3.png'
-
 export default function MainSection() {
     
   return (
     <section id='main' className='flex gap-24 items-center'>
         <div className=''>
           <p className='text-2xl font-semibold text-blue-20 mb-3'>Estimate app</p>
-          <h3 className='text-5xl font-alternates font-bold text-black mb-3 '>
+          <h3 className='text-5xl font-alternates font-semibold text-gray-30 mb-3 '>
             Найкращий інструмент для створення кошторисів
           </h3>
           <p className='text-gray-25 font-extralight text-xl mb-10 '>

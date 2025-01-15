@@ -18,7 +18,7 @@ export default function OrderAs() {
                 </div>
             </div>
             <div className='flex-1'>
-                <h3  className='text-5xl font-alternates font-bold text-black mb-3'>Чому обирають нас?</h3>
+                <h3  className='text-5xl font-alternates font-semibold text-gray-30 mb-3'>Чому обирають нас?</h3>
                 <p className='text-gray-25 font-extralight text-2xl mb-10'>Розповідаємо, чим ми відрізняємось від інших та що допомагає нам виділятися</p>
 
                 <ul className='ml-12'>

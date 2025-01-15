@@ -12,17 +12,17 @@ export interface User {
   name: string;
   email: string;
   phone: string;
-  password?: string;
+  password: string;
   avatar: string;
   role: string;
   token: string;
   refreshToken: string;
-  verifyCode?: string;
-  verify?: boolean;
-  verificationToken?: string | null;
+  verifyCode: string;
+  verify: boolean;
+  verificationToken: string | null;
   projectIds: ProjectId[];
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Passwords {

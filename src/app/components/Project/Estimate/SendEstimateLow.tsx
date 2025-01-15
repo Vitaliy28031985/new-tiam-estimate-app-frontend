@@ -73,25 +73,18 @@ const SendLowEstimatePdf: React.FC<SendEstimatePdfProps> = ({ data }) => {
               <p className="text-lg font-normal">{data?.lowTotal && roundingNumber(data?.lowTotal)}</p>
           </div> 
           
-          {data?.advancesTotal && (
-           <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4">
             <p className="text-lg font-normal">Аванс:</p>
             <p className="text-lg font-normal">{data?.advancesTotal}</p>
-          </div> 
-          )}
-          {data?.materialsTotal && (
-            <div className="flex items-center justify-between mb-4">
+          </div>
+          <div className="flex items-center justify-between mb-4">
             <p className="text-lg font-normal">Витрачено на матеріали:</p>
             <p className="text-lg font-normal">{data?.materialsTotal}</p>
-          </div> 
-          )}
-          {data?.lowGeneral && (
-             <div className="flex items-center justify-between p-6 bg-gray-5 rounded-full">
+          </div>
+          <div className="flex items-center justify-between p-6 bg-gray-5 rounded-full">
             <p className="text-xl font-semibold">До сплати:</p>
             <p className="text-xl font-semibold">{data?.lowGeneral && roundingNumber(data?.lowGeneral)}</p>
-          </div> 
-         )}
-        
+          </div>
         </div>
       </>
     );

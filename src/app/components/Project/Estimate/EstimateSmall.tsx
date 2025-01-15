@@ -193,7 +193,7 @@ const EstimateSmallItem: React.FC<EstimateProps> = ({ projectId, user }) => {
     
        const handleExcelGeneration = () => {
             if (project && data) {
-                generateAndDownloadExcel(project, data, "small");
+                generateAndDownloadExcel(project, data);
             } else {
                 console.error('Project or estimate data is missing');
             }

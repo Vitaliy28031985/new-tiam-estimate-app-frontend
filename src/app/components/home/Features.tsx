@@ -3,7 +3,7 @@ import worker from '../../assets/worker-2.png';
 export default function Features() {
     return (
         <section className='mb-24'>
-            <h3 className='text-5xl font-alternates font-bold text-black mb-16'>Особливості Estimate</h3>
+            <h3 className='text-5xl font-alternates font-semibold text-gray-30 mb-16'>Особливості Estimate</h3>
             <div className='flex items-center gap-8'>
             <ul className="w-7/12">
                 <li className="flex items-center mb-4 gap-5">

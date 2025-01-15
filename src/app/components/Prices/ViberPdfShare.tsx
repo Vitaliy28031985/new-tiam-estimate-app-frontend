@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { jsPDF } from "jspdf";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { Price } from '@/app/interfaces/PriceInterface';
-import { getFreshDate } from '@/app/utils/formatFunctions';
 
 interface ViberPdfShareProps {
   data: Price[] | null;
@@ -22,13 +22,10 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
     if (!data || data.length === 0) {
       return <p>Дані не доступні</p>;
     }
- 
 
     return (
-      <div className="print-content px-20 hidden">
-
+      <div className="print-content ml-20">
         <h3 className="font-bold font-alternates text-5xl mb-10 text-center">Прайс робіт</h3>
-   
         <div className='flex items-center gap-4 mb-2'>
           <div className='w-96'>
             <p className='font-normal text-base text-black text-center'>Найменування роботи</p>
@@ -56,9 +53,12 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
   };
 
   const generatePDF = async (): Promise<Blob> => {
-    if (!data) {
-      throw new Error('Data is empty');
+    if (!contentRef.current) {
+      throw new Error('Content not found');
     }
+
+    const canvas = await html2canvas(contentRef.current);
+    const imgData = canvas.toDataURL('image/png');
 
     const pdf = new jsPDF({
       orientation: 'portrait',
@@ -66,49 +66,11 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
       format: 'a4',
     });
 
-    // Add a custom font that supports Cyrillic characters
-    pdf.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf', 'Roboto', 'normal');
-    pdf.setFont('Roboto');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margins = 10;
-    // const contentWidth = pageWidth - (2 * margins);
-    const lineHeight = 10;
-
-    // Add title
-    pdf.setFontSize(24);
-    pdf.text('Прайс робіт', pageWidth / 2, 20, { align: 'center' });
-
-
-    if (data) {
-  pdf.setFontSize(10); // встановлюємо розмір шрифта
-  pdf.text(`Станом на ${getFreshDate(data)}`, pageWidth - 10, 20, { align: 'right' }); // текст справа
-}
-
-    // Add table headers
-    pdf.setFontSize(12);
-    pdf.setTextColor(0);
-    const rowHeight = 10;
-    pdf.text('Найменування роботи', margins, 40);
-    pdf.text('Ціна за одиницю (грн)', pageWidth - margins, 40, { align: 'right' });
-    pdf.rect(margins - 2, 35, pageWidth - 1.5 * margins, rowHeight);
-    // Add table content
-    let y = 50;
-    pdf.setTextColor(100);
-
-    for (const item of data) {
-      if (y + lineHeight > pageHeight - margins) {
-        pdf.addPage();
-        y = margins + 10;
-      }
-
-      pdf.text(item.title, margins, y);
-      pdf.text(item.price.toString(), pageWidth - margins, y, { align: 'right' });
-      
-       pdf.rect(margins - 2, y - 6, pageWidth - 1.5 * margins, rowHeight);
-      y += lineHeight;
-    }
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
     return pdf.output('blob');
   };
@@ -160,4 +122,3 @@ const ViberPdfShare: React.FC<ViberPdfShareProps> = ({ data }) => {
 };
 
 export default ViberPdfShare;
-
