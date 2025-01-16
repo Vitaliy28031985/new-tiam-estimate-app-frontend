@@ -2,7 +2,9 @@ import Image from 'next/image';
 import worker from '../../assets/worker-2.png';
 export default function Features() {
     return (
-        <section className='mb-24'>
+        <section className='relative mb-24 pl-2
+        desktop:pt-0 tabletBig:pt-0 tablet:pt-0 mobile:pt-48
+        '>
             <h3 className='text-5xl font-alternates font-semibold text-gray-30 mb-16'>Особливості Estimate</h3>
             <div className='flex items-center gap-8'>
             <ul className="w-7/12">
@@ -41,9 +43,18 @@ export default function Features() {
                     </div>
                 </li>
                 </ul>
-                <div className="relative w-[463px] h-[330px] flex-1 bg-blue-30  rounded-l-full overflow-visible">
+                <div className='desktop:static tabletBig:static tablet:static mobile:absolute -top-14'>
+                    <div className="relative 
+                 desktop:w-[463px] tabletBig:w-[463px] tablet:w-[363px] mobile:w-[363px] 
+                 desktop:h-[330px] tabletBig:h-[330px] tablet:h-[230px] mobile:h-[230px]
+                 h-[330px]
+                 flex-1 bg-blue-30  rounded-l-full overflow-visible">
                 <div className="absolute bottom-0 right-0">
-            <Image
+                <Image
+                className='
+                desktop:w-[409px] tabletBig:w-[369px] tablet:w-[369px] mobile:w-[359px] 
+                desktop:h-[442px] tabletBig:h-[402px] tablet:h-[302px]  mobile:h-[292px]
+                '          
                 src={worker} 
                 alt="worker" 
                 width={409}                 
@@ -51,7 +62,9 @@ export default function Features() {
                 quality={100}                   
                     />
                 </div>
-                </div>  
+                </div>    
+                </div>
+                 
             </div>
         </section>
     )
