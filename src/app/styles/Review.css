@@ -25,16 +25,10 @@
     word-wrap: break-word;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    margin: 0;
-}
-
 .swiper-pagination-custom {
     all: unset;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 4px;
     margin: 0;

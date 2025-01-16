@@ -2,7 +2,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import RatingStars from '../UI/RatingStars/RaitingStars';
 import '../styles/SceletonReviews.css';
 
-const ReviewsSkeleton = () => {
+const ReviewsSkeleton = (slidesPerView) => {
     return (
         <section>
             <h2 className="text-5xl font-alternates font-bold text-black mb-[60px] w-[427px]" >
@@ -13,7 +13,7 @@ const ReviewsSkeleton = () => {
                 <div className="swiper-container skeleton" >
                     <div className="swiper-wrapper" >
                         {
-                            Array(3).fill(0).map((_, index) => (
+                            Array(slidesPerView).fill(0).map((_, index) => (
                                 <div key={index} className="w-[395px] h-[220px] bg-[#DFDFDF] rounded-3xl px-6 py-7 mx-2">
                                     <div className="flex flex-col">
                                         <div className="skeleton-text flex justify-between mb-4">

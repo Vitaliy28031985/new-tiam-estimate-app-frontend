@@ -17,6 +17,7 @@
   font-weight: bold;
   font-style: normal;
 }
+
 /*Montserrat 600 */
 @font-face {
   font-family: "Montserrat";
@@ -40,6 +41,7 @@
   font-weight: bold;
   font-style: normal;
 }
+
 /*MontserratAlternates 700 */
 @font-face {
   font-family: "Montserrat Alternates";
@@ -50,4 +52,10 @@
 
 * {
   font-family: "Montserrat", sans-serif;
+}
+
+section {
+  width: 100%;
+  padding: 0 24px;
+  overflow-x: hidden;
 }

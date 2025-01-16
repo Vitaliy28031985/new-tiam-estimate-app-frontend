@@ -54,20 +54,20 @@ export default function Reviews() {
     const updateSlidesPerView = () => {
         const width = window.innerWidth;
         if (width < 768) setSlidesPerView(1);
-        else if (width < 1024) setSlidesPerView(2);
+        else if (width < 1280) setSlidesPerView(2);
         else setSlidesPerView(3);
     };
 
     useEffect(() => {
-        fetchReviews();
         updateSlidesPerView();
         window.addEventListener('resize', updateSlidesPerView);
+        fetchReviews();
         return () => window.removeEventListener('resize', updateSlidesPerView);
     }, []);
 
     if (isLoading) {
         return (
-            <ReviewsSkeleton />
+            <ReviewsSkeleton slidesPerView={slidesPerView} />
         );
     }
 
@@ -130,7 +130,7 @@ export default function Reviews() {
             </div>
             <div className="flex justify-center mt-8 mb-[38px]">
                 <button
-                    className="px-[148px] py-4 border border-[#0C4A6E] rounded-3xl text-[#0C4A6E] text-xl font-semibold hover:bg-blue-30 hover:text-white focus:bg-blue-30 focus:text-white"
+                    className="px-[64px] md:px-[148px] py-4 border border-[#0C4A6E] rounded-3xl text-[#0C4A6E] text-xl font-semibold hover:bg-blue-30 hover:text-white focus:bg-blue-30 focus:text-white"
                     onClick={handleOpenAddReviewModal}
                 >
                     Залишити відгук
