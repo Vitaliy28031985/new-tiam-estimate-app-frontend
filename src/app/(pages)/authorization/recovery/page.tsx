@@ -115,8 +115,9 @@ export default function RecoveryPassword() {
           priority
         />
       </Link>
-      <div className='w-[1249px] ml-auto mr-auto container pb-[115px]'>
-        <div className='w-[501px] relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
+      <div className='w-screen h-screen ml-auto mr-auto container pb-[115px]'>
+        <div className='w-[501px] desktop:w-[501px] tabletBig:w-[501px] tablet:w-[501px] mobile:w-[375px]
+         relative z-20 bg-white shadow-base px-6 py-10 rounded-[24px]'>
 
 
           <Link
@@ -142,14 +143,18 @@ export default function RecoveryPassword() {
                 <input
                   type="email"
                   placeholder="Введіть email"
-                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                  className="
+                  desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                   h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <button
                   onClick={handleEmailSubmit}
-                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20">
-                  Отправить код
+                  className="
+                  desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                  bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20">
+                  Надіслати код
                 </button>
               </>
             )}
@@ -162,13 +167,17 @@ export default function RecoveryPassword() {
                 <input
                   type="text"
                   placeholder="Код*"
-                  className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                  className="
+                  desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                  h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
                 <button
                   onClick={handleCodeSubmit}
-                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 mb-6 focus:bg-blue-20"
+                  className="
+                  desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                  bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 mb-6 focus:bg-blue-20"
                 >
                   Далі
                 </button>
@@ -195,7 +204,9 @@ export default function RecoveryPassword() {
                 <div className='relative mb-6' >
                   <label className="text-regular text-black mb-3">Введіть новий пароль</label>
                   <input type={passwordVisible ? "text" : "password"}
-                    className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                    className="
+                    desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                    h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -203,7 +214,9 @@ export default function RecoveryPassword() {
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute top-1/2 -translate-y-1/3  right-5"
+                    className="absolute top-1/2 -translate-y-1/3  
+                    desktop:right-5 tabletBig:right-5 tablet:right-5 mobile:right-0
+                    "
                   >
                     {!passwordVisible ? (
                       <EyeSlashIcon className={`size-6 text-blue-20`} />
@@ -215,7 +228,9 @@ export default function RecoveryPassword() {
                 <div className='relative mb-6' >
                   <label className="text-regular text-black mb-3">Повторіть пароль</label>
                   <input type={passwordVisible ? "text" : "password"}
-                    className="w-[453px] h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
+                    className="
+                    desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                    h-[49px] px-4 py-3 rounded-3xl border border-gray-15 justify-start items-center inline-flex mb-3 text-gray-20 text-sm font-normal focus:border-blue-20 focus:outline-none"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
@@ -223,7 +238,8 @@ export default function RecoveryPassword() {
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute top-1/2 -translate-y-1/3 right-5"
+                    className="absolute top-1/2 -translate-y-1/3 
+                    desktop:right-5 tabletBig:right-5 tablet:right-5 mobile:right-0"
                   >
                     {!passwordVisible ? (
                       <EyeSlashIcon className={`size-6 text-blue-20`} />
@@ -235,7 +251,9 @@ export default function RecoveryPassword() {
 
                 <button
                   onClick={handlePasswordSubmit}
-                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
+                  className="
+                  desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                  bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
                 >
                   Далі
                 </button>
@@ -247,7 +265,9 @@ export default function RecoveryPassword() {
                 <h2 className="text-2xl font-bold text-center mb-6">{message}</h2>
                 <button
                   onClick={() => router.push('/')}
-                  className="w-[453px] bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
+                  className="
+                  desktop:w-[453px] tabletBig:w-[453px] tablet:w-[453px] mobile:w-[343px]
+                  bg-blue-30 pt-4 pb-4 pl-8 pr-8 font-semibold text-xl text-white rounded-3xl hover:bg-blue-20 mt-6 focus:bg-blue-20"
                 >
                   Повернутися на головну
                 </button>
