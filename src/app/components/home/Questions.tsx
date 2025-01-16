@@ -33,7 +33,9 @@ export default function Questions() {
             <ul>
                 {questionData.map(({ _id, title, description, isShow = false }) => (
                     <li key={_id} className='mb-5 relative'>
-                        <div className='desktop:w-[1251px] tabletBig:w-[990px] py-5 relative z-10 shadow-questionsSection rounded-tr-md rounded-l-lg bg-gray-0 font-semibold text-lg text-black'>
+                        <div className='
+                        desktop:w-[1251px] tabletBig:w-[990px] tablet:w-[760px] mobile:w-[370px]
+                        py-5 relative z-10 shadow-questionsSection rounded-tr-md rounded-l-lg bg-gray-0 font-semibold text-lg text-black'>
                             <div className='w-3 h-full bg-blue-20 absolute top-0 left-0 z-20 rounded-l-lg'></div>
                             <p className='ml-8'>{title}</p>
                             <button 
@@ -46,7 +48,9 @@ export default function Questions() {
                             </button>
                         </div>
                         {isShow && ( 
-                            <div className='desktop:w-[1251px] tabletBig:w-[990px] relative py-5 px-8 shadow-questionSectionTwo bg-gray-0 font-normal text-sm text-black'>
+                            <div className='
+                            desktop:w-[1251px] tabletBig:w-[990px] tablet:w-[760px] mobile:w-[370px]
+                            relative py-5 px-8 shadow-questionSectionTwo bg-gray-0 font-normal text-sm text-black'>
                                 {description}
                             </div>
                         )}
