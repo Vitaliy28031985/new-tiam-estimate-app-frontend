@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <>
       <div className="bg-gray-0 pt-20 pb-20 ">
-        <div className='desktop:w-[1249px] tabletBig:w-[1000px] mx-auto'>
+        <div className='desktop:w-[1249px] tabletBig:w-[1000px] tablet:w-[768px] mobile:w-[375px] mx-auto'>
           <MainSection />
           <OrderAs />
           <Features />
